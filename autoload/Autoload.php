@@ -4,6 +4,7 @@
  * 
  * @copyright Gordian Solutions and Gordon McVey
  * @license http://www.apache.org/licenses/LICENSE-2.0.txt Apache license V2.0
+ * @author Gordon McVey
  */
 
 namespace gordian\reefknot\autoload;
@@ -16,10 +17,14 @@ namespace gordian\reefknot\autoload;
  * filesystem, relative to the root path as defined by the NS_ROOT constant.  
  * It's this assumption that allows for such a lightweight autoloader.  
  * 
- * You can reuse this autoloader in your own projects by subclassing it and 
- * replacing the values of the class constants.  You should be able to subclass 
- * this autoloader for any class structure that utilises a simple 1:1 mapping 
- * of a namespace structure to a directory structure. 
+ * You can reuse the autoloader to provide autoloading services in your own 
+ * projects by simply creating a new instance with the namespace and location 
+ * of your project files as arguments.  If no arguments are provided then the 
+ * new instance will default to the settings for loading Reefknot classes.  You
+ * can also use this class to autoload "pseudo-namespaced" classes such as the
+ * scheme used in PEAR and Zend Framework 1.x by specifying a different
+ * namespace character.  Finally, you can subclass the autoloader for complete
+ * control over its operation
  */
 class Autoload implements iface\Autoload
 {
@@ -33,7 +38,12 @@ class Autoload implements iface\Autoload
 	protected
 		
 		/**
-		 * Character to use as the namespace separator. Defaults to '\'
+		 * Character to use as the namespace separator.  If you're working with 
+		 * PHP >= 5.3 then you will normally want to use the \ character as
+		 * the namespace seperator.  If you're working with legacy code that 
+		 * uses PEAR style pseudo-namespacing then you will probably want to 
+		 * change this to the _ character, or to whatever convention you've 
+		 * used in your code.  
 		 * 
 		 * @var string 
 		 */
@@ -64,18 +74,76 @@ class Autoload implements iface\Autoload
 		$fileSuffix		= '',
 		
 		/**
-		 * Flag to determine if this instance of the autoloader has been registered
+		 * Flag to determine if this instance of the autoloader has been 
+		 * registered onto the SPL autoload stack
 		 * 
 		 * @var bool 
 		 */
 		$registered		= false;
 	
 	/**
-	 * Autoloader for the framework
+	 * Determine if the given class is within the remit of this instance of the
+	 * autoloader
 	 * 
-	 * This autoloader method determines if the requested class is part of the 
-	 * framework.  If it is, it will be included.  Otherwise, it will be up to
-	 * another SPL autoloader to handle loading the requested class
+	 * @param string $name
+	 * @return bool 
+	 */
+	protected function inRemit ($name)
+	{
+		return ((strpos ($name, $this -> namespaceSep) !== false)
+			&& (strpos ($name, $this -> namespaceRoot) === 0));
+	}
+	
+	/**
+	 * Generate the path from a namespaced class/interface name
+	 * 
+	 * This method determines where to expect a file containing the requested
+	 * class/interface to be located in the filesystem.  This implementation 
+	 * does this by replacing the namespace seperator with the directory 
+	 * seperator, appending an expected filename suffix and prepending a path
+	 * to treat as the root path for classes. 
+	 * 
+	 * @param string $name 
+	 * @return string
+	 */
+	protected function calculatePath ($name)
+	{
+		/* 
+		 * We only want to use this autoloader on classes that are within the 
+		 * specified namespace and use the correct namespace separator.  If the
+		 * given name doesn't meet these specifications then it should be up to
+		 * another autoloader to handle it. 
+		 */
+		return ($this -> pathRoot 
+			. str_replace ($this -> namespaceSep, static::DS, str_replace ($this -> namespaceRoot, '', $name)) 
+			. $this -> fileSuffix);
+	}
+	
+	/**
+	 * Determine if a class/interface was loaded successfully
+	 * 
+	 * Once the autoloader has included the file that is expected to contain 
+	 * the class/method that's being requested, this method will check that the 
+	 * requested resource is now actually available to PHP.  
+	 * 
+	 * @param string $name
+	 * @return bool 
+	 */
+	protected function resourceLoaded ($name)
+	{
+		return (class_exists ($name, false) 
+			|| interface_exists ($name, false));
+		
+	}
+	
+	/**
+	 * Class/Interface autoloader
+	 * 
+	 * The autoloader expects to recieve a fully-namespaced class/interface name 
+	 * as an argument.  It will check that the namespace for the class is within 
+	 * its remit.  If it is then it will attempt to load the class/interface.  
+	 * Otherwise, it will return false and leave autoloading of the class up to
+	 * some other autoloader to handle.  
 	 * 
 	 * @param string $name The class to load, including namespace
 	 */
@@ -83,24 +151,14 @@ class Autoload implements iface\Autoload
 	{
 		$found	= false;
 		
-		/* 
-		 * We only want to use this autoloader on classes that are within the 
-		 * specified namespace and use the correct namespace separator
-		 */
-		if ((strpos ($name, $this -> namespaceSep) !== false)
-		&& (strpos ($name, $this -> namespaceRoot) === 0))
+		if ($this -> inRemit ($name))
 		{
-			// Calculate the file path
-			$file	= $this -> pathRoot 
-					. str_replace ($this -> namespaceSep, static::DS, str_replace ($this -> namespaceRoot, '', $name)) 
-					. $this -> fileSuffix;
+			$file	= $this -> calculatePath ($name);
 			// Include the file if it exists and report success
 			if (is_file ($file))
 			{
 				include_once ($file);
-				// We only want to return true if the class/interface we tried to autoload now exists
-				$found	= class_exists ($name, false) 
-						|| interface_exists ($name, false);
+				$found	= $this -> resourceLoaded ($name);
 			}
 		}
 		
@@ -158,6 +216,9 @@ class Autoload implements iface\Autoload
 		$this -> register ();
 	}
 	
+	/**
+	 * Do autoloader cleanup 
+	 */
 	public function __destruct ()
 	{
 		$this -> unregister ();
