@@ -34,6 +34,7 @@ use gordian\reefknot\storage;
  * the same instance of the class to the objects that need it instead.  
  *
  * @author gordonmcvey
+ * @todo implement Iterator interface
  */
 class Session implements storage\iface\Crud, iface\Session
 {
@@ -89,8 +90,8 @@ class Session implements storage\iface\Crud, iface\Session
 	 */
 	public function readItem ($key)
 	{
-		return (array_key_exists ($key, $this -> storage)? 
-			$this -> storage ['key']: 
+		return ($this -> storage !== NULL && array_key_exists ($key, $this -> storage)? 
+			$this -> storage [$key]: 
 			NULL);
 	}
 	
@@ -123,16 +124,6 @@ class Session implements storage\iface\Crud, iface\Session
 	{
 		$this -> storage = NULL;
 		return ($this);
-	}
-	
-	/**
-	 * Retrieve all data stored in the session
-	 * 
-	 * @return array 
-	 */
-	public function getAll ()
-	{
-		return ($this -> storage);
 	}
 	
 	/**
