@@ -3,7 +3,7 @@
 namespace gordian\reefknot\storage\session;
 
 // This must be in place, as the session class is unable to start the session once output has been sent
-session_start ();
+ob_start ();
 
 /**
  * Test class for Session.
@@ -35,6 +35,34 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 		
 	}
 
+	public function testConstructInvalidNamespaceThrowsException ()
+	{
+		$ex	= NULL;
+		try
+		{
+			$test	= new Session ('');
+		}
+		catch (\Exception $e)
+		{
+			$ex	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+	}
+	
+	public function testConstructInvalidNamespaceThrowsException2 ()
+	{
+		$ex	= NULL;
+		try
+		{
+			$test	= new Session (array (1, 2, 3));
+		}
+		catch (\Exception $e)
+		{
+			$ex	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+	}
+	
 	/**
 	 * @todo Implement testCreateItem().
 	 */
@@ -46,7 +74,35 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse (empty ($_SESSION ['unittest']));
 		$this -> assertFalse (empty ($_SESSION ['unittest']['test']));
 	}
-
+	
+	public function testCreateItemInvalidKeyThrowsException ()
+	{
+		$ex	= NULL;
+		try
+		{
+			$this -> object -> createItem ('asdfdsa', array (1, 2, 3));
+		}
+		catch (\Exception $e)
+		{
+			$ex	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+	}
+	
+	public function testCreateItemInvalidKeyThrowsException2 ()
+	{
+		$ex	= NULL;
+		try
+		{
+			$this -> object -> createItem ('asdfdsa', NULL);
+		}
+		catch (\Exception $e)
+		{
+			$ex	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+	}
+	
 	/**
 	 * @todo Implement testReadItem().
 	 */
@@ -111,5 +167,35 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 		$this -> object ->  createItem ('This is a test', 'test');
 		$this -> assertFalse (empty ($_SESSION ['unittest']));
 		$this -> assertTrue ($this -> object -> hasData ());
+	}
+	
+	public function testCount ()
+	{
+		$this -> assertEquals (count ($this -> object), 0);
+		$this -> assertEquals ($this -> object -> count (), 0);
+		$this -> object -> createItem (1, 1);
+		$this -> object -> createItem (2, 2);
+		$this -> object -> createItem (3, 3);
+		$this -> object -> createItem (4, 4);
+		$this -> object -> createItem (5, 5);
+		$this -> assertEquals (count ($this -> object), 5);
+		$this -> assertEquals ($this -> object -> count (), 5);
+	}
+	
+	public function testIterate ()
+	{
+		$this -> object -> createItem (1, 1);
+		$this -> object -> createItem (2, 2);
+		$this -> object -> createItem (3, 3);
+		$this -> object -> createItem (4, 4);
+		$this -> object -> createItem (5, 5);
+		
+		$count = 1;
+		foreach ($this -> object as $key => $val)
+		{
+			$this -> assertEquals ($key, $count);
+			$this -> assertEquals ($val, $count);
+			$count++;
+		}
 	}
 }
