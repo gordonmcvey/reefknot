@@ -36,13 +36,90 @@ use gordian\reefknot\storage;
  * @author gordonmcvey
  * @todo implement Iterator interface
  */
-class Session implements storage\iface\Crud, iface\Session
+class Session implements storage\iface\Crud, iface\Session, \Countable, \Iterator
 {
 	
 	protected
+		
+		/**
+		 * The 'namespace' for the session data.  Maps to $_SESSION [$namespace]
+		 * 
+		 * @var string
+		 */
 		$namespace	= '',
+		
+		/**
+		 * The alias that this instance of the class will use to access the 
+		 * session data.  
+		 * 
+		 * @var &array 
+		 */
 		$storage	= NULL;
 	
+	/**
+	 * Implementation of iterator rewind 
+	 * 
+	 * @return mixed
+	 */
+	public function rewind ()
+	{
+		return (\reset ($this -> storage));
+	}
+	
+	/**
+	 * Implementation of iterator current
+	 * 
+	 * @return mixed 
+	 */
+	public function current ()
+	{
+		return (\current ($this -> storage));
+	}
+	
+	/**
+	 * Implementation of iterator key
+	 * 
+	 * @return mixed
+	 */
+	public function key ()
+	{
+		return (\key ($this -> storage));
+	}
+	
+	/**
+	 * implementation of iterator next
+	 * 
+	 * @return mixed 
+	 */
+	public function next ()
+	{
+		return (\next ($this -> storage));
+	}
+	
+	/**
+	 * Implementation of iterator valid
+	 * 
+	 * @return bool
+	 */
+	public function valid ()
+	{
+		$key	= \key ($this -> storage);
+		return (($key !== NULL) && ($key !== false));
+	}
+	
+	// -[ Countable implementation starts here ]--------------------------------
+	
+	/**
+	 * Implementation of countable count
+	 * 
+	 * @return type 
+	 */
+	public function count ()
+	{
+		return (count ($this -> storage));
+	}
+	
+	// -[ Session implementation starts here ]----------------------------------
 	
 	/**
 	 * Add a new item to the session
@@ -54,18 +131,16 @@ class Session implements storage\iface\Crud, iface\Session
 	 */
 	public function createItem ($data, $key)
 	{
-		if (!empty ($key))
+		if (is_scalar ($key))
 		{
-			$key	= (string) $key;
-			if (($this -> storage === NULL)
-			|| (!array_key_exists ($key, $this -> storage)))
+			if (!array_key_exists ($key, $this -> storage))
 			{
 				$this -> storage [$key]	= $data;
 			}
 		}
 		else
 		{
-			throw new \Exception ('No valid key given');
+			throw new \InvalidArgumentException ('No valid key given');
 		}
 		return ($this);
 	}
@@ -90,7 +165,7 @@ class Session implements storage\iface\Crud, iface\Session
 	 */
 	public function readItem ($key)
 	{
-		return ($this -> storage !== NULL && array_key_exists ($key, $this -> storage)? 
+		return (array_key_exists ($key, $this -> storage)? 
 			$this -> storage [$key]: 
 			NULL);
 	}
@@ -103,11 +178,6 @@ class Session implements storage\iface\Crud, iface\Session
 	 */
 	public function updateItem ($data, $key)
 	{
-		if ($this -> storage === NULL)
-		{
-			throw new \RuntimeException ('Session contains no data');
-		}
-		
 		if (array_key_exists ($key, $this -> storage))
 		{
 			$this -> storage [$key]	= $data;
@@ -122,7 +192,7 @@ class Session implements storage\iface\Crud, iface\Session
 	 */
 	public function reset ()
 	{
-		$this -> storage = NULL;
+		$this -> storage = array ();
 		return ($this);
 	}
 	
@@ -170,6 +240,11 @@ class Session implements storage\iface\Crud, iface\Session
 			}
 			// Alias our instance storage to the named $_SESSION variable
 			$this -> storage	=& $_SESSION [$this -> namespace];
+			// Make sure the session is in a usable state
+			if (!$this -> hasData ())
+			{
+				$this -> reset ();
+			}
 		}
 		return ($this -> hasData ());
 	}
@@ -182,7 +257,8 @@ class Session implements storage\iface\Crud, iface\Session
 	 */
 	public function __construct ($namespace)
 	{
-		if (!empty ($namespace))
+		if ((is_scalar ($namespace))
+		&& (!empty ($namespace)))
 		{
 			$this -> namespace	= $namespace;
 			$this -> initStorage ();
