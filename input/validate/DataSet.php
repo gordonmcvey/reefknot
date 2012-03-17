@@ -64,6 +64,14 @@ class DataSet extends Field implements iface\DataSet
 		return ($this);
 	}
 	
+	public function getField ($name)
+	{
+
+		return (isset ($this -> fields [$name])? 
+				$this -> fields [$name]: 
+				NULL);
+	}
+	
 	/**
 	 * Get a list of all fields currently registered with this dataset
 	 * 

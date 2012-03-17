@@ -38,4 +38,12 @@ interface DataSet extends Node
 	 * @return array
 	 */
 	public function getFields ();
+	
+	/**
+	 * Get named field
+	 * 
+	 * @param string $name
+	 * @return Field
+	 */
+	public function getField ($name);
 }
