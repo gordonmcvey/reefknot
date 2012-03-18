@@ -37,7 +37,7 @@ class Match extends abstr\prop\TextMatch implements iface\Prop
 				$valid	= strpos ($data, $cfg ['needle']) !== false;
 			break;
 			default			:
-				throw new \InvalidArgumentException ('This validator can only be used on strings');
+				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
 		

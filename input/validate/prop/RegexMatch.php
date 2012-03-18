@@ -37,7 +37,7 @@ class RegexMatch extends abstr\prop\TextMatch implements iface\Prop
 				$valid	= preg_match ($cfg ['needle'], $data) > 0;
 			break;
 			default			:
-				throw new \InvalidArgumentException ();
+				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
 		

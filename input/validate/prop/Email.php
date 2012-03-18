@@ -48,7 +48,7 @@ class Email extends abstr\Prop implements iface\Prop
 				$valid	= (filter_var ($data, FILTER_VALIDATE_EMAIL)) !== false;
 			break;
 			default			:
-				throw new \InvalidArgumentException ('Email validation can only be done on a string');
+				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
 		

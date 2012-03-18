@@ -51,7 +51,7 @@ class Luhn extends abstr\Prop implements iface\Prop
 			break;
 			default			:
 				// An attempt was made to apply the check to an invalid data type
-				throw new \InvalidArgumentException ('A luhn check cannot be applied to data of this type');
+				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
 		

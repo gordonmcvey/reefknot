@@ -67,7 +67,7 @@ class Uri extends abstr\Prop implements iface\Prop
 				}
 			break;
 			default			:
-				throw new \InvalidArgumentException ('URL/URI validation can only be done on a string');
+				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
 		return ($valid);

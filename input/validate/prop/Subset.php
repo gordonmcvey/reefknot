@@ -63,7 +63,7 @@ class Subset extends abstr\Prop implements iface\Prop
 				$valid	= empty ($diffs);
 			break;
 			default			: 
-				throw new \InvalidArgumentException ('Data must be an array');
+				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
 		return ($valid);
