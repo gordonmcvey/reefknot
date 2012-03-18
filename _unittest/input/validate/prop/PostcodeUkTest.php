@@ -76,6 +76,36 @@ class PostcodeUkTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	public function testIsValidFails ()
+	{
+		$this -> object -> setData ('m1 1ba');
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails2 ()
+	{
+		$this -> object -> setData (' M1 1BA');
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails3 ()
+	{
+		$this -> object -> setData ('M1 1BA ');
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails4 ()
+	{
+		$this -> object -> setData ('MM MBA');
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails5 ()
+	{
+		$this -> object -> setData ('11 111');
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
 	public function testIsValidWrongTypeThrowsException ()
 	{
 		$exception	= NULL;
