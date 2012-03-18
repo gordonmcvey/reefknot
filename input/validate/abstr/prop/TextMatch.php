@@ -28,7 +28,7 @@ abstract class TextMatch extends Prop implements iface\prop
 		}
 		else
 		{
-			throw new \InvalidArgumentException;
+			throw new \InvalidArgumentException ('Invalid needle');
 		}
 	}
 }
