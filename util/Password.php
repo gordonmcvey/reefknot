@@ -75,4 +75,14 @@ class Password
 			throw new \InvalidArgumentException ('Maximum password length cannot be less than minimum password length');
 		}
 	}
+	
+	/**
+	 * ToString behaviour
+	 * 
+	 * @return string 
+	 */
+	public function __toString ()
+	{
+		return ($this -> getPassword ());
+	}
 }
