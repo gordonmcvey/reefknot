@@ -16,11 +16,33 @@ namespace gordian\reefknot\util;
 class Password
 {
 	const 
+	
+		/**
+		 * Pool of characters from which passwords will be generated
+		 */
 		CHARLIST	= '1234567890qwertyuiopasdfghjklzxcvbnm_-QWERTYUIOPASDFGHJKLZXCVBNM';
 	
 	protected 
+		
+		/**
+		 * The lower length limit for the generated passsword 
+		 * 
+		 * @var int
+		 */
 		$min		= 12,
+		
+		/**
+		 * The upper length limit for the generated password 
+		 * 
+		 * @var int
+		 */
 		$max		= 16,
+		
+		/**
+		 * Generated password cache
+		 * 
+		 * @var string
+		 */
 		$password	= '';
 	
 	/**
