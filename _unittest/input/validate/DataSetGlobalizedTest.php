@@ -11,7 +11,7 @@ require_once dirname(__FILE__) . '/../../../input/validate/DataSetGlobalized.php
 class DataSetGlobalizedTest extends \PHPUnit_Framework_TestCase {
 
 	/**
-	 * @var DataSetGlobalized
+	 * @var gordian\reefknot\input\validate\DataSetGlobalized
 	 */
 	protected $object;
 
@@ -20,7 +20,8 @@ class DataSetGlobalizedTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = new DataSetGlobalized;
+		$arrMock	= $this -> getMock ('\gordian\reefknot\input\validate\type\IsArray');
+		$this -> object = new DataSetGlobalized ($arrMock);
 	}
 
 	/**
