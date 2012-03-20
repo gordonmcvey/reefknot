@@ -46,25 +46,4 @@ interface DataSet extends Node
 	 * @return Field
 	 */
 	public function getField ($name);
-	
-	/**
-	 * Add a global property
-	 * 
-	 * Global properties allow the same validation rule to be applied to all 
-	 * fields within the DataSet.  This is useful when you are expecting your 
-	 * data to all be of a uniform format. 
-	 * 
-	 * @param Prop $prop 
-	 * @return DataSet
-	 */
-	public function addGlobalProp (Prop $newProp);
-	
-	public function deleteGlobalProp ($propName);
-	
-	/**
-	 * Get the global preperties
-	 * 
-	 * @return array 
-	 */
-	public function getGlobalProps ();
 }
