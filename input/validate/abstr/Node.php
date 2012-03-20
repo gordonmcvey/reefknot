@@ -50,7 +50,7 @@ abstract class Node extends Validatable implements iface\Node
 	 */
 	public function addProp (iface\Prop $newProp)
 	{
-		if (!in_array ($newProp, $this -> props))
+		if (!in_array ($newProp, $this -> props, true))
 		{
 			$this -> props [get_class ($newProp)]	= $newProp;
 			$newProp -> setParent ($this);
