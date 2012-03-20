@@ -19,7 +19,11 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	protected
 		
 		/**
-		 * 
+		 * @var iface\Type 
+		 */
+		$globalType		= NULL,
+		
+		/**
 		 * @var array
 		 */
 		$globalProps	= array ();
@@ -83,25 +87,54 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		return ($this -> globalProps);
 	}
 	
+	public function setGlobalType (iface\Type $newType)
+	{
+		$this		-> globalType	= $newType;
+		$newType	-> setParent ($this);
+		return ($this);
+	}
+	
+	public function getGlobalType ()
+	{
+		return ($this -> globalType);
+	}
+	
+	public function getGlobalRules ()
+	{
+		$type	= $this -> getGlobalType ();
+		return (array_merge (array (get_class ($type) => $type), $this -> getGlobalProps ()));
+	}
+	
 	public function isValid ()
 	{
-		// Run the global validation
+		// Run the standard validation
+		parent::isValid ();
 		
-		$props	= $this -> getGlobalProps ();
-		foreach ($this -> getData() as $dataKey => $data)
+		// Run the global validation
+		$rules	= $this -> getGlobalRules ();
+		
+		var_dump (array_keys ($rules), array_map (function ($elem){return (get_class ($elem));}, $rules));
+		
+		$data	= $this -> getData ();
+		if (is_array($data))
 		{
-			foreach ($props as $propKey => $prop)
+			foreach ($data as $dataKey => $data)
 			{
-				$prop -> setData ($data);
-				if (!$prop -> isValid ())
+				$invalids	= array ();
+				foreach ($rules as $propKey => $prop)
 				{
-					$this -> invalids [$dataKey][] = $propKey;
+					$prop -> setData ($data);
+					if (!$prop -> isValid ())
+					{
+						$invalids [] = $propKey;
+					}
+				}
+				if (!empty ($invalids))
+				{
+					$this -> invalids [$dataKey]	= $invalids;
 				}
 			}
 		}
-		
-		// Run the standard validation
-		parent::isValid ();
 		
 		// Return validity
 		return (!$this -> hasInvalids ());
