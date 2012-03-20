@@ -112,7 +112,8 @@ abstract class Node extends Validatable implements iface\Node
 	
 	public function getRules ()
 	{
-		return (array_merge (array ($this -> getType ()), $this -> getProps ()));
+		$type	= $this -> getType ();
+		return (array_merge (array (get_class ($type) => $type), $this -> getProps ()));
 	}
 	
 	/**
