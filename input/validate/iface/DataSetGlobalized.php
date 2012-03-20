@@ -23,10 +23,15 @@ interface DataSetGlobalized extends DataSet
 	 * data to all be of a uniform format. 
 	 * 
 	 * @param Prop $prop 
-	 * @return DataSet
+	 * @return DataSetGlobalized
 	 */
 	public function addGlobalProp (Prop $newProp);
 	
+	/**
+	 * Remove the named global property 
+	 * 
+	 * @return DataSetGlobalized
+	 */
 	public function deleteGlobalProp ($propName);
 	
 	/**
@@ -35,4 +40,21 @@ interface DataSetGlobalized extends DataSet
 	 * @return array 
 	 */
 	public function getGlobalProps ();
+	
+	/**
+	 * Set the global data type 
+	 * 
+	 * @return DataSetGlobalized
+	 */
+	public function setGlobalType (Type $type);
+	
+	/**
+	 * @return Type 
+	 */
+	public function getGlobalType ();
+	
+	/**
+	 * @return array 
+	 */
+	public function getGlobalRules ();
 }
