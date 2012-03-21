@@ -27,7 +27,16 @@ class DataSet extends Field implements iface\DataSet
 		 * 
 		 * @var array
 		 */
-		$fields	= array ();
+		$fields				= array (), 
+		
+		/**
+		 * Flag that indicates whether the dataset meets the basic requirements
+		 * specified for the dataset props (The data must be an array or null, 
+		 * and it must meet any other props that have been applied) 
+		 * 
+		 * @var bool
+		 */
+		$dataIsProcessable	= false;
 		
 	/**
 	 * Register a field with the dataset
@@ -67,6 +76,12 @@ class DataSet extends Field implements iface\DataSet
 		return ($this);
 	}
 	
+	/**
+	 * Get the named field
+	 * 
+	 * @param string $name
+	 * @return iface\Field 
+	 */
 	public function getField ($name)
 	{
 
@@ -109,6 +124,17 @@ class DataSet extends Field implements iface\DataSet
 	}
 	
 	/**
+	 * Reset the dataset validation state
+	 * 
+	 * @return DataSet 
+	 */
+	function resetInvalids ()
+	{
+		$this -> dataIsProcessable	= false;
+		return (parent::resetInvalids ());
+	}
+	
+	/**
 	 * Validate the data set
 	 * 
 	 * This method iterates over all the fields that have been defined for this 
@@ -129,6 +155,7 @@ class DataSet extends Field implements iface\DataSet
 		// Check that the supplied data meets its general validation constraints
 		if (parent::isValid ())
 		{
+			$this -> dataIsProcessable	= true;
 			/*
 		 	 * Check each field that makes up the collection is valid
 			 * @var $field iface\Field 
@@ -141,6 +168,7 @@ class DataSet extends Field implements iface\DataSet
 				}
 			}
 		}
+		
 		return (!$this -> hasInvalids ());
 	}
 }
