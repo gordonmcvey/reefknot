@@ -25,7 +25,12 @@ namespace gordian\reefknot\input\validate;
  * significantly different.  
  * 
  * In the event that a field in the set has a validation rule of the same type
- * as a global rule, the field's rule will take priority.  
+ * as a global rule, the field's rule will take priority.  For example, if you 
+ * set a global Min prop of 12 then all text fields will be expected to be at 
+ * least 12 characters and all array will be expected to have at least 12 
+ * elements.  However, if one of the fields in the set has its own Min prop
+ * set to 32, then that field will be expected to be at least 32 characters or
+ *  elements long. 
  * 
  * @author Gordon McVey
  */
@@ -50,14 +55,6 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 * A global property is a validation rule that gets applied to every field
 	 * in the DataSet.  They are intended to allow easy validation of data that
 	 * is expected to be quite uniform in nature.  
-	 * 
-	 * If a field in the set has a prop of the same type to it, then the field's
-	 * prop will take presidence over the global prop.  For example, if you set
-	 * a global Min prop of 12 then all text fields will be expected to be at 
-	 * least 12 characters and all array will be expected to have at least 12
-	 * elements.  However, if one of the fields in the set has its own Min prop
-	 * set to 32, then that field will be expected to be at least 32 characters
-	 * or elements long.  
 	 * 
 	 * @param iface\Prop $newProp
 	 * @return type
@@ -156,18 +153,35 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	}
 	
 	/**
-	 *
+	 * Run the validation rules
+	 * 
+	 * This method runs the field rules, then applies the globalized rules. 
+	 * 
 	 * @return bool 
 	 */
 	public function isValid ()
 	{
 		// Run the standard validation
+		
+		/**
+		 * @todo We want the subclass validation to proceed when the superclass
+		 * validation for the dataset in general passes, even if individual 
+		 * fields fail to validate.  However, if the superclass validation for
+		 * the dataset in general fails then we don't want to proceed.  
+		 */
 		parent::isValid ();
 		
 		// Run the global validation
 		$rules	= $this -> getGlobalRules ();
 		$data	= $this -> getData ();
 		
+		/*
+		 * Unlike a standard dataset (shich is expected to only contain 
+		 * the defined fields), a globalized dataset can contain any number
+		 * of fields.  They all get the same rules applied to them.  
+		 * Therefore we want to iterate over the data instead of the field
+		 * objects to apply the validation rules.  
+		 */
 		if (is_array ($data))
 		{
 			foreach ($data as $fieldName => $fieldData)
