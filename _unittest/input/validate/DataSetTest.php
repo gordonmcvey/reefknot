@@ -38,8 +38,12 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAddField ()
 	{
-		$this -> object -> addField ('testfield', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'));
-		//var_dump ($this -> object -> getFields ());
+		$field	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
+		$this -> assertInstanceOf ('\gordian\reefknot\input\validate\iface\Field', $field);
+		$this -> assertEmpty ($this -> object -> getFields ());
+		$this -> object -> addField ('testfield', $field);
+		$this -> assertNotEmpty ($this -> object -> getFields ());
+		$this -> assertTrue (array ('testfield' => $field) === $this -> object -> getFields ());
 	}
 
 	/**
@@ -47,10 +51,12 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDeleteField ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$field	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
+		$this -> assertInstanceOf ('\gordian\reefknot\input\validate\iface\Field', $field);
+		$this -> object -> addField ('testfield', $field);
+		$this -> assertNotEmpty ($this -> object -> getFields ());
+		$this -> object -> deleteField ('testfield');
+		$this -> assertEmpty ($this -> object -> getFields ());
 	}
 
 	/**
