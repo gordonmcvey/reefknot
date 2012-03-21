@@ -138,8 +138,6 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 			$fieldRules	= $field -> getRules ();
 		}
 		
-		var_dump ($fieldRules);
-		
 		// Apply the global rules to the field
 		foreach ($rules as $ruleKey => $rule)
 		{
@@ -168,9 +166,6 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		
 		// Run the global validation
 		$rules	= $this -> getGlobalRules ();
-		
-		var_dump (array_keys ($rules), array_map (function ($elem){return (get_class ($elem));}, $rules));
-		
 		$data	= $this -> getData ();
 		
 		if (is_array ($data))
