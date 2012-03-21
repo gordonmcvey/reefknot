@@ -11,6 +11,21 @@ namespace gordian\reefknot\input\validate;
 /**
  * Globalized Data Set
  * 
+ * A globalized data set is an extention of the standard data set, which adds
+ * global rules.  A global rule is a test that will be applied to every member
+ * of the data set being validated.  This allows you to quickly and easily 
+ * build relatively simple validators for collections of data you expect to have
+ * fairly regular content.  
+ * 
+ * Globalized datasets provide all the same functionality as the regular 
+ * dataset does, so you can also apply specific rules to individual fields that
+ * will be applied as well.  This means that the globalized dataset can also
+ * be used in situations where most of the fields in a set are expected to 
+ * have a uniform format, but one or two of them are expected to be 
+ * significantly different.  
+ * 
+ * In the event that a field in the set has a validation rule of the same type
+ * as a global rule, the field's rule will take priority.  
  * 
  * @author Gordon McVey
  */
@@ -105,6 +120,47 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		return (array_merge (array (get_class ($type) => $type), $this -> getGlobalProps ()));
 	}
 	
+	/**
+	 *
+	 * @param array $rules
+	 * @param string $fieldName
+	 * @param mixed $fieldData
+	 * @return array 
+	 */
+	protected function applyRules (array $rules, $fieldName, $fieldData)
+	{
+		$invalids	= array ();
+		$fieldRules	= array ();
+		
+		// Get any rules that may exist for the field.
+		if (($field = $this -> getField ($fieldName)) !== NULL)
+		{
+			$fieldRules	= $field -> getRules ();
+		}
+		
+		var_dump ($fieldRules);
+		
+		// Apply the global rules to the field
+		foreach ($rules as $ruleKey => $rule)
+		{
+			// Check that the current field doesn't already have a rule of the same kind applied
+			if (!in_array ($rule, $fieldRules, true))
+			{
+				$rule -> setData ($fieldData);
+				if (!$rule -> isValid ())
+				{
+					$invalids [] = $ruleKey;
+				}
+			}
+		}
+				
+		return ($invalids);
+	}
+	
+	/**
+	 *
+	 * @return bool 
+	 */
 	public function isValid ()
 	{
 		// Run the standard validation
@@ -116,22 +172,16 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		var_dump (array_keys ($rules), array_map (function ($elem){return (get_class ($elem));}, $rules));
 		
 		$data	= $this -> getData ();
-		if (is_array($data))
+		
+		if (is_array ($data))
 		{
-			foreach ($data as $dataKey => $data)
+			foreach ($data as $fieldName => $fieldData)
 			{
-				$invalids	= array ();
-				foreach ($rules as $propKey => $prop)
+				if ($invalids = $this -> applyRules ($rules, $fieldName, $fieldData))
 				{
-					$prop -> setData ($data);
-					if (!$prop -> isValid ())
-					{
-						$invalids [] = $propKey;
-					}
-				}
-				if (!empty ($invalids))
-				{
-					$this -> invalids [$dataKey]	= $invalids;
+					$this -> invalids [$fieldName]	= isset ($this -> invalids [$fieldName])? 
+						array_merge ($this -> data [$fieldData], $invalids):
+						$invalids;
 				}
 			}
 		}
