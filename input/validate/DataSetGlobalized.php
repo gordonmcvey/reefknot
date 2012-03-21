@@ -99,6 +99,12 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		return ($this -> globalProps);
 	}
 	
+	/**
+	 * Set the type that all fields in the dataset are expected to be.  
+	 * 
+	 * @param iface\Type $newType
+	 * @return DataSetGlobalized 
+	 */
 	public function setGlobalType (iface\Type $newType)
 	{
 		$this		-> globalType	= $newType;
@@ -106,11 +112,25 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		return ($this);
 	}
 	
+	/**
+	 * Get the globalized type
+	 * 
+	 * @return iface\Type 
+	 */
 	public function getGlobalType ()
 	{
 		return ($this -> globalType);
 	}
 	
+	/**
+	 * Get the validation rules that all fields in the dataset are expected to match
+	 * 
+	 * This method returns an array of Rule objects, the first one of which is 
+	 * the Type.  The others are the props.  This collection of rules will be
+	 * applied to all fields in the dataset when the validation runs.  
+	 * 
+	 * @return array 
+	 */
 	public function getGlobalRules ()
 	{
 		$type	= $this -> getGlobalType ();
@@ -118,7 +138,8 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	}
 	
 	/**
-	 *
+	 * Apply the global rules to the given field
+	 * 
 	 * @param array $rules
 	 * @param string $fieldName
 	 * @param mixed $fieldData
@@ -162,35 +183,31 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	public function isValid ()
 	{
 		// Run the standard validation
-		
-		/**
-		 * @todo We want the subclass validation to proceed when the superclass
-		 * validation for the dataset in general passes, even if individual 
-		 * fields fail to validate.  However, if the superclass validation for
-		 * the dataset in general fails then we don't want to proceed.  
-		 */
 		parent::isValid ();
 		
-		// Run the global validation
-		$rules	= $this -> getGlobalRules ();
-		$data	= $this -> getData ();
-		
-		/*
-		 * Unlike a standard dataset (shich is expected to only contain 
-		 * the defined fields), a globalized dataset can contain any number
-		 * of fields.  They all get the same rules applied to them.  
-		 * Therefore we want to iterate over the data instead of the field
-		 * objects to apply the validation rules.  
-		 */
-		if (is_array ($data))
+		if ($this -> dataIsProcessable)
 		{
-			foreach ($data as $fieldName => $fieldData)
+			// Run the global validation
+			$rules	= $this -> getGlobalRules ();
+			$data	= $this -> getData ();
+
+			/*
+			 * Unlike a standard dataset (shich is expected to only contain 
+			 * the defined fields), a globalized dataset can contain any number
+			 * of fields.  They all get the same rules applied to them.  
+			 * Therefore we want to iterate over the data instead of the field
+			 * objects to apply the validation rules.  
+			 */
+			if (is_array ($data))
 			{
-				if ($invalids = $this -> applyRules ($rules, $fieldName, $fieldData))
+				foreach ($data as $fieldName => $fieldData)
 				{
-					$this -> invalids [$fieldName]	= isset ($this -> invalids [$fieldName])? 
-						array_merge ($this -> data [$fieldData], $invalids):
-						$invalids;
+					if ($invalids = $this -> applyRules ($rules, $fieldName, $fieldData))
+					{
+						$this -> invalids [$fieldName]	= isset ($this -> invalids [$fieldName])? 
+							array_merge ($this -> data [$fieldData], $invalids):
+							$invalids;
+					}
 				}
 			}
 		}
