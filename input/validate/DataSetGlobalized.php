@@ -39,15 +39,27 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	protected
 		
 		/**
+		 * Flag that indicates whether any fields in the given data should be 
+		 * stripped out. We want this to be false by default instead of true by
+		 * default in the superclass.
+		 * 
+		 * @var bool
+		 */
+		$stripUnspecifiedData	= false,
+
+		/**
+		 * Expected type for all fields
+		 * 
 		 * @var iface\Type 
 		 */
-		$globalType		= NULL,
+		$globalType				= NULL,
 		
 		/**
+		 * Props to apply to all fields
+		 * 
 		 * @var array
 		 */
-		$globalProps	= array ();
-		
+		$globalProps			= array ();
 	
 	/**
 	 * Add a global property
