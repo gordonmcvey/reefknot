@@ -39,13 +39,41 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	public function testAddField ()
 	{
 		$field	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
-		$this -> assertInstanceOf ('\gordian\reefknot\input\validate\iface\Field', $field);
 		$this -> assertEmpty ($this -> object -> getFields ());
 		$this -> object -> addField ('testfield', $field);
 		$this -> assertNotEmpty ($this -> object -> getFields ());
 		$this -> assertTrue (array ('testfield' => $field) === $this -> object -> getFields ());
 	}
-
+	
+	public function testAddFieldThrowsException ()
+	{
+		$exception	= NULL;
+		$field		= $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
+		
+		try
+		{
+			$this -> object -> addField ('testfield', $field)
+							-> addField ('testfield2', $field);
+		}
+		catch (\Exception $e)
+		{
+			$exception	= $e;
+		}
+		
+		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
+		$this -> assertTrue (array ('testfield' => $field) === $this -> object -> getFields ());
+	}
+	
+	public function testGetField ()
+	{
+		$this -> object	-> addField ('field1', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'))
+						-> addField ('field2', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'))
+						-> addField ('field3', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'));
+		
+		$this -> assertInstanceOf ('\gordian\reefknot\input\validate\iface\Field', $this -> object -> getField ('field2'));
+		$this -> assertNull ($this -> object -> getField ('field4'));
+	}
+	
 	/**
 	 * @todo Implement testDeleteField().
 	 */
