@@ -22,6 +22,10 @@ class DataSet extends Field implements iface\DataSet
 {
 	protected
 		
+		$config				= array (
+			'stripUnspecified'	=> true
+		),
+		
 		/**
 		 * Collection of fields that belong to this dataset
 		 * 
@@ -36,16 +40,19 @@ class DataSet extends Field implements iface\DataSet
 		 * 
 		 * @var bool
 		 */
-		$dataIsProcessable	= false, 
-		
-		/**
-		 * Flag that indicates whether any fields in the given data should be 
-		 * stripped out
-		 * 
-		 * @var bool
-		 */
-		$stripUnspecifiedData	= true;
-		
+		$dataIsProcessable	= false;
+	
+	public function getConfig ()
+	{
+		return ($this -> config);
+	}
+	
+	public function setConfig (array $config = array ())
+	{
+		$this -> config	= $config;
+		return ($this);
+	}
+	
 	/**
 	 * Register a field with the dataset
 	 * 
@@ -136,9 +143,12 @@ class DataSet extends Field implements iface\DataSet
 	 */
 	public function setData ($data = NULL)
 	{
+		$cfg	= $this ->getConfig ();
 		$isArr	= is_array ($data);
-
-		if ($this -> stripUnspecifiedData)
+		
+		if (($isArr)
+		&& (isset ($cfg ['stripUnspecified']))
+		&& ($cfg ['stripUnspecified']))
 		{
 			$data	= $this -> stripUnspecifiedFields ($data);
 		}
