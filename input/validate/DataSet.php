@@ -36,7 +36,15 @@ class DataSet extends Field implements iface\DataSet
 		 * 
 		 * @var bool
 		 */
-		$dataIsProcessable	= false;
+		$dataIsProcessable	= false, 
+		
+		/**
+		 * Flag that indicates whether any fields in the given data should be 
+		 * stripped out
+		 * 
+		 * @var bool
+		 */
+		$stripUnspecifiedData	= true;
 		
 	/**
 	 * Register a field with the dataset
@@ -101,6 +109,22 @@ class DataSet extends Field implements iface\DataSet
 	}
 	
 	/**
+	 * Strip any data from the input that doesn't have a field specified in the
+	 * rules
+	 * 
+	 * @param type $data 
+	 */
+	protected function stripUnspecifiedFields ($data = NULL)
+	{
+		if (is_array ($data))
+		{
+			$fields	= $this -> getFields ();
+			$data	= array_intersect_key ($fields, $data);
+		}
+		return ($data);
+	}
+	
+	/**
 	 * Load data into fields
 	 * 
 	 * This method iterates over the fields assigned to the dataset and attempts
@@ -113,6 +137,11 @@ class DataSet extends Field implements iface\DataSet
 	public function setData ($data = NULL)
 	{
 		$isArr	= is_array ($data);
+
+		if ($this -> stripUnspecifiedData)
+		{
+			$data	= $this -> stripUnspecifiedFields ($data);
+		}
 		
 		foreach ($this -> getFields () as $key => $field)
 		{
