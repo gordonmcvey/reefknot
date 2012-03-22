@@ -32,10 +32,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	{
 		
 	}
-
-	/**
-	 * @todo Implement testAddField().
-	 */
+	
 	public function testAddField ()
 	{
 		$field	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
@@ -92,10 +89,18 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetFields ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
+		$fields	= array (
+			'field1'	=> $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'),
+			'field2'	=> $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'),
+			'field3'	=> $this -> getMock ('\gordian\reefknot\input\validate\iface\Field')
 		);
+		
+		foreach ($fields as $key => $field)
+		{
+			$this -> object -> addField ($key, $field);
+		}
+		
+		$this -> assertTrue ($this -> object -> getFields () === $fields);
 	}
 
 	/**
@@ -103,10 +108,14 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetData ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> object ->setConfig (array ('stripUnspecified' => false));
+		$this -> object -> setData ('test');
+		$this -> assertEquals ('test', $this -> object -> getData ());
+		$this -> object -> setData (pi ());
+		$this -> assertEquals (pi (), $this -> object -> getData ());
+		$this -> object -> setData (array (1, 3, 5));
+		var_dump ($this -> object -> getData ());
+		$this -> assertEquals (array (1, 3, 5), $this -> object -> getData ());
 	}
 
 	/**
