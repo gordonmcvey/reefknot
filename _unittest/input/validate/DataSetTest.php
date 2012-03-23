@@ -108,13 +108,12 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetData ()
 	{
-		$this -> object ->setConfig (array ('stripUnspecified' => false));
+		$this -> object -> addField ('test', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'));
 		$this -> object -> setData ('test');
 		$this -> assertEquals ('test', $this -> object -> getData ());
 		$this -> object -> setData (pi ());
 		$this -> assertEquals (pi (), $this -> object -> getData ());
 		$this -> object -> setData (array (1, 3, 5));
-		var_dump ($this -> object -> getData ());
 		$this -> assertEquals (array (1, 3, 5), $this -> object -> getData ());
 	}
 
