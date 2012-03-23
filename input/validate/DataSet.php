@@ -22,10 +22,6 @@ class DataSet extends Field implements iface\DataSet
 {
 	protected
 		
-		$config				= array (
-			'stripUnspecified'	=> true
-		),
-		
 		/**
 		 * Collection of fields that belong to this dataset
 		 * 
@@ -41,17 +37,6 @@ class DataSet extends Field implements iface\DataSet
 		 * @var bool
 		 */
 		$dataIsProcessable	= false;
-	
-	public function getConfig ()
-	{
-		return ($this -> config);
-	}
-	
-	public function setConfig (array $config = array ())
-	{
-		$this -> config	= $config;
-		return ($this);
-	}
 	
 	/**
 	 * Register a field with the dataset
@@ -116,22 +101,6 @@ class DataSet extends Field implements iface\DataSet
 	}
 	
 	/**
-	 * Strip any data from the input that doesn't have a field specified in the
-	 * rules
-	 * 
-	 * @param type $data 
-	 */
-	protected function stripUnspecifiedFields ($data = NULL)
-	{
-		if (is_array ($data))
-		{
-			$fields	= $this -> getFields ();
-			$data	= array_intersect_key ($fields, $data);
-		}
-		return ($data);
-	}
-	
-	/**
 	 * Load data into fields
 	 * 
 	 * This method iterates over the fields assigned to the dataset and attempts
@@ -143,22 +112,16 @@ class DataSet extends Field implements iface\DataSet
 	 */
 	public function setData ($data = NULL)
 	{
-		$cfg	= $this ->getConfig ();
 		$isArr	= is_array ($data);
-		
-		if (($isArr)
-		&& (isset ($cfg ['stripUnspecified']))
-		&& ($cfg ['stripUnspecified']))
-		{
-			$data	= $this -> stripUnspecifiedFields ($data);
-		}
 		
 		foreach ($this -> getFields () as $key => $field)
 		{
+			var_dump ($key);
 			$field -> setData (($isArr) && (isset ($data [$key]))? 
 				$data [$key]: 
 				NULL);
 		}
+		
 		return (parent::setData ($data));
 	}
 	
@@ -169,7 +132,6 @@ class DataSet extends Field implements iface\DataSet
 	 */
 	function resetInvalids ()
 	{
-		$this -> dataIsProcessable	= false;
 		return (parent::resetInvalids ());
 	}
 	
