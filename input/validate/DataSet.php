@@ -116,7 +116,6 @@ class DataSet extends Field implements iface\DataSet
 		
 		foreach ($this -> getFields () as $key => $field)
 		{
-			var_dump ($key);
 			$field -> setData (($isArr) && (isset ($data [$key]))? 
 				$data [$key]: 
 				NULL);
