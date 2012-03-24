@@ -2,7 +2,8 @@
 
 namespace gordian\reefknot\input\validate\abstr;
 
-require_once dirname (__FILE__) . '/../../../../input/validate/abstr/Validatable.php';
+use gordian\reefknot\input\validate, 
+	gordian\reefknot\input\validate\type;
 
 /**
  * Test class for Validatable.
@@ -58,6 +59,63 @@ class ValidatableTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
+	/**
+	 * @todo Implement testSetParent().
+	 */
+	public function testSetParent ()
+	{
+		$testField	= new validate\Field (new type\IsString ());
+		$this -> object -> setParent ($testField);
+		$this -> assertTrue ($this -> object -> getParent () === $testField);
+	}
+
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testGetParent().
+	 */
+	public function testGetParent ()
+	{
+		// Remove the following lines when you implement this test.
+		$this -> markTestIncomplete (
+			'This test has not been implemented yet.'
+		);
+	}
+
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testResetInvalids().
+	 */
+	public function testResetInvalids ()
+	{
+		// Remove the following lines when you implement this test.
+		$this -> markTestIncomplete (
+			'This test has not been implemented yet.'
+		);
+	}
+
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testGetInvalids().
+	 */
+	public function testGetInvalids ()
+	{
+		// Remove the following lines when you implement this test.
+		$this -> markTestIncomplete (
+			'This test has not been implemented yet.'
+		);
+	}
+
+	/**
+	 * @covers {className}::{origMethodName}
+	 * @todo Implement testHasInvalids().
+	 */
+	public function testHasInvalids ()
+	{
+		// Remove the following lines when you implement this test.
+		$this -> markTestIncomplete (
+			'This test has not been implemented yet.'
+		);
+	}
 }
 
 ?>
