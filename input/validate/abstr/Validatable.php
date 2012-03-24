@@ -18,13 +18,27 @@ use gordian\reefknot\input\validate\iface;
  *
  * @author gordonmcvey
  */
-abstract class Validatable extends BasicValidatable implements iface\Validatable
+abstract class Validatable implements iface\Validatable
 {
 	protected
 		/**
+		 * Reference back to this item's parent. Can be NULL for root items
+		 * 
+		 * @var iface\Field
+		 */
+		$parent		= NULL, 
+		
+		/**
 		 * @var mixed
 		 */
-		$data		= NULL; 
+		$data		= NULL, 
+		
+		/**
+		 * List of reasons why the item failed validation are stored here
+		 * 
+		 * @var array
+		 */
+		$invalids	= array (); 
 	
 	/**
 	 * Set the data to be validated
@@ -46,5 +60,40 @@ abstract class Validatable extends BasicValidatable implements iface\Validatable
 	public function getData ()
 	{
 		return ($this -> data);
+	}
+	
+	public function setParent (iface\Field $set)
+	{
+		if (($this -> parent === NULL)
+		|| ($this -> parent === $set))
+		{
+			$this -> parent	= $set;
+		}
+		else
+		{
+			throw new \InvalidArgumentException ('This field already has a parent');
+		}
+		return ($this);
+	}
+	
+	public function getParent ()
+	{
+		return ($this -> parent);
+	}
+	
+	public function resetInvalids ()
+	{
+		$this -> invalids	= array ();
+		return ($this);
+	}
+	
+	public function getInvalids ()
+	{
+		return ($this -> invalids);
+	}
+	
+	public function hasInvalids ()
+	{
+		return (!empty ($this -> invalids));
 	}
 }
