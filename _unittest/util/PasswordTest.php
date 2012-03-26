@@ -85,4 +85,10 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
 		}
 		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
 	}
+	
+	public function testToString ()
+	{
+		$pw	= new Password ();
+		$this -> assertEquals ((string) $pw, $pw -> getPassword ());
+	}
 }
