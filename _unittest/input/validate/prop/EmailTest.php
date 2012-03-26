@@ -35,7 +35,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testIsValid().
+	 * Test that the validation passes on NULL
 	 */
 	public function testIsValidNullPasses ()
 	{
@@ -43,59 +43,72 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test test@example.com 
+	 */
 	public function testIsValidGoodAddrPasses ()
 	{
 		$this -> object -> setData ('test@example.com');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
-	public function testIsValidGoodAddrPasses9 ()
-	{
-		/* 
-		 * According to Wikipedia this is a valid email address, but it fails.  
-		 * Either the address isn't valid or there's a bug in the email 
-		 * validator
-		 */
-		$this -> object -> setData ('Abc\@def@example.com');
-		$this -> assertTrue ($this -> object -> isValid ());
-	}
-	
+	/**
+	 * Test customer/department=shipping@example.com 
+	 */
 	public function testIsValidGoodAddrPasses2 ()
 	{
 		$this -> object -> setData ('customer/department=shipping@example.com');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test !def!xyz%abc@example.com 
+	 */
 	public function testIsValidGoodAddrPasses3 ()
 	{
 		$this -> object -> setData ('!def!xyz%abc@example.com');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test a.little.unusual@example.com 
+	 */
 	public function testIsValidGoodAddrPasses4 ()
 	{
 		$this -> object -> setData ('a.little.unusual@example.com');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test a.little.more.unusual@dept.example.com 
+	 */
 	public function testIsValidGoodAddrPasses5 ()
 	{
 		$this -> object -> setData ('a.little.more.unusual@dept.example.com');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test much."more\ unusual"@example.com 
+	 */
 	public function testIsValidGoodAddrPasses6 ()
 	{
 		$this -> object -> setData ('much."more\ unusual"@example.com');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test very.unusual."@".unusual.com@example.com 
+	 */
 	public function testIsValidGoodAddrPasses7 ()
 	{
 		$this -> object -> setData ('very.unusual."@".unusual.com@example.com');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test very."(),:;<>[]".VERY."very\\\ \@\"very".unusual@strange.example.com 
+	 */
 	public function testIsValidGoodAddrPasses8 ()
 	{
 		/* 
@@ -107,42 +120,108 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test Abc\@def@example.com 
+	 */
+	public function testIsValidGoodAddrPasses9 ()
+	{
+		/* 
+		 * According to Wikipedia this is a valid email address, but it fails.  
+		 * Either the address isn't valid or there's a bug in the email 
+		 * validator
+		 */
+		$this -> object -> setData ('Abc\@def@example.com');
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test test@example 
+	 */
+	public function testIsValidGoodAddrPasses10 ()
+	{
+		/**
+		 * This should freaking validate.  Haven't they heard of email on a LAN
+		 * before?   
+		 */
+		$this -> object -> setData ('test@example');
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test test@example.local 
+	 */
+	public function testIsValidGoodAddrPasses11 ()
+	{
+		$this -> object -> setData ('test@example.local');
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test test@example.museum 
+	 */
+	public function testIsValidGoodAddrPasses12 ()
+	{
+		$this -> object -> setData ('test@example.museum');
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test empty string 
+	 */
 	public function testIsValidBadAddrFails ()
 	{
 		$this -> object -> setData ('');
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test Abc.example.com 
+	 */
 	public function testIsValidBadAddrFails2 ()
 	{
 		$this -> object -> setData ('Abc.example.com');
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test "(),:;<>[\]@example.com 
+	 */
 	public function testIsValidBadAddrFails3 ()
 	{
 		$this -> object -> setData ('"(),:;<>[\]@example.com');
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test just"not"right@example.com
+	 */
 	public function testIsValidBadAddrFails4 ()
 	{
 		$this -> object -> setData ('just"not"right@example.com');
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test A@b@c@example.com 
+	 */
 	public function testIsValidBadAddrFails5 ()
 	{
 		$this -> object -> setData ('A@b@c@example.com');
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test this\ is\"really\"not\\allowed@example.com 
+	 */
 	public function testIsValidBadAddrFails6 ()
 	{
 		$this -> object -> setData ('this\ is\"really\"not\\allowed@example.com');
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that trying to validate a non-string throws an exception  
+	 */
 	public function testIsValidWrongTypeThrowsException ()
 	{
 		$exception	= NULL;
