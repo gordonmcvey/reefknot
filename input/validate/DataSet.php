@@ -125,16 +125,6 @@ class DataSet extends Field implements iface\DataSet
 	}
 	
 	/**
-	 * Reset the dataset validation state
-	 * 
-	 * @return DataSet 
-	 */
-	function resetInvalids ()
-	{
-		return (parent::resetInvalids ());
-	}
-	
-	/**
 	 * Validate the data set
 	 * 
 	 * This method iterates over all the fields that have been defined for this 
