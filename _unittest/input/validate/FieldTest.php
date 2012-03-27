@@ -10,17 +10,45 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 {
 
 	/**
-	 * @var Field
+	 * @var \gordian\reefknot\input\validate\Field
 	 */
 	protected $object;
 
+	/**
+	 * Helper for building mock props
+	 * 
+	 * @param mixed $value
+	 * @param bool $isValid
+	 * @return gordian\reefknot\input\validate\iface\Rule
+	 */
+	protected function makeStub ($type, $value = NULL, $isValid = true)
+	{
+		$stub	= $this -> getMockBuilder ('gordian\reefknot\input\validate\iface\\' . $type)
+				-> disableOriginalConstructor ()
+				-> getMock ();
+		
+		$stub	-> expects ($this -> any ())
+				-> method ('setData')
+				-> will ($this -> returnValue ($stub));
+		
+		$stub	-> expects ($this -> any ())
+				-> method ('getData')
+				-> will ($this -> returnValue ($value));
+		
+		$stub	-> expects ($this -> any ())
+				-> method ('isValid')
+				-> will ($this -> returnValue ($isValid));
+
+		return ($stub);
+	}
+	
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp ()
 	{
-		$this -> object = new Field (new type\IsMixed ());
+		$this -> object = new Field ($this -> makeStub ('Type'));
 	}
 
 	/**
@@ -33,29 +61,70 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testSetData().
 	 */
 	public function testSetData ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> object -> setData (NULL);
+		$this -> assertNull ($this -> object -> getData ());
+		$this -> object -> setData (123);
+		$this -> assertEquals ($this -> object -> getData (), 123);
+		$this -> object -> setData (pi ());
+		$this -> assertEquals ($this -> object -> getData (), pi ());
+		$this -> object -> setData (array ());
+		$this -> assertEquals ($this -> object -> getData (), array ());
+		$this -> object -> setData (array (1, 2, 3));
+		$this -> assertEquals ($this -> object -> getData (), array (1, 2, 3));
+		$this -> object -> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+		$this -> assertEquals ($this -> object -> getData (), array ('foo' => 1, 'bar' => 2, 'baz' => 3));
 	}
 
-	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testIsValid().
-	 */
-	public function testIsValid ()
+	public function testSetDataWithFields ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> object -> addProp ($this -> makeStub ('Prop'))
+						-> addProp ($this -> makeStub ('Prop'))
+						-> addProp ($this -> makeStub ('Prop'))
+			
+						-> setData (NULL);
+		$this -> assertNull ($this -> object -> getData ());
+		$this -> object -> setData (123);
+		$this -> assertEquals ($this -> object -> getData (), 123);
+		$this -> object -> setData (pi ());
+		$this -> assertEquals ($this -> object -> getData (), pi ());
+		$this -> object -> setData (array ());
+		$this -> assertEquals ($this -> object -> getData (), array ());
+		$this -> object -> setData (array (1, 2, 3));
+		$this -> assertEquals ($this -> object -> getData (), array (1, 2, 3));
+		$this -> object -> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+		$this -> assertEquals ($this -> object -> getData (), array ('foo' => 1, 'bar' => 2, 'baz' => 3));
 	}
-
+	
+	public function testIsValidPasses ()
+	{
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidWithPropsPasses ()
+	{
+		$this -> object -> addProp ($this -> makeStub ('Prop'))
+						-> addProp ($this -> makeStub ('Prop'))
+						-> addProp ($this -> makeStub ('Prop'));
+		
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails ()
+	{
+		$this -> object -> setType ($this -> makeStub ('Type', NULL, false));
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidWithPropsFails ()
+	{
+		$this -> object -> addProp ($this -> makeStub ('Prop', NULL, false))
+						-> addProp ($this -> makeStub ('Prop', NULL, false))
+						-> addProp ($this -> makeStub ('Prop', NULL, false));
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
 }
-
-?>

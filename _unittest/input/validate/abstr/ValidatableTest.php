@@ -36,86 +36,89 @@ class ValidatableTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testSetData().
 	 */
-	public function testSetData ()
+	public function testGetSetData ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> object -> setData (NULL);
+		$this -> assertNull ($this -> object -> getData ());
+		$this -> object -> setData (123);
+		$this -> assertEquals ($this -> object -> getData (), 123);
+		$this -> object -> setData (pi ());
+		$this -> assertEquals ($this -> object -> getData (), pi ());
+		$this -> object -> setData (array ());
+		$this -> assertEquals ($this -> object -> getData (), array ());
+		$this -> object -> setData (array (1, 2, 3));
+		$this -> assertEquals ($this -> object -> getData (), array (1, 2, 3));
+		$this -> object -> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+		$this -> assertEquals ($this -> object -> getData (), array ('foo' => 1, 'bar' => 2, 'baz' => 3));
 	}
 
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testGetData().
 	 */
-	public function testGetData ()
+	public function testSetParentPasses ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$parent = $this -> getMockBuilder ('gordian\reefknot\input\validate\Field') -> disableOriginalConstructor () -> getMock ();
+		$this -> object -> setParent ($parent);
+		$this -> assertEquals ($this -> object -> getParent (), $parent);
 	}
 
-	/**
-	 * @todo Implement testSetParent().
-	 */
-	public function testSetParent ()
+	public function testSetParentSameParentPasses ()
 	{
-		$testField	= new validate\Field (new type\IsString ());
-		$this -> object -> setParent ($testField);
-		$this -> assertTrue ($this -> object -> getParent () === $testField);
+		$parent = $this -> getMockBuilder ('gordian\reefknot\input\validate\Field') -> disableOriginalConstructor () -> getMock ();
+		$this -> object -> setParent ($parent);
+		$this -> assertEquals ($this -> object -> getParent (), $parent);
+		$this -> object -> setParent ($parent);
+		$this -> assertEquals ($this -> object -> getParent (), $parent);
 	}
-
+	
+	public function testSetParentDifferentParentThrowsException ()
+	{
+		$exception	= NULL;
+		$parent		= $this -> getMockBuilder ('gordian\reefknot\input\validate\Field') -> disableOriginalConstructor () -> getMock ();
+		$parent2	= $this -> getMockBuilder ('gordian\reefknot\input\validate\Field') -> disableOriginalConstructor () -> getMock ();
+		$this -> object -> setParent ($parent);
+		$this -> assertEquals ($this -> object -> getParent (), $parent);
+		try
+		{
+			$this -> object -> setParent ($parent2);
+		}
+		catch (\Exception $e)
+		{
+			$exception	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
+		$this -> assertEquals ($this -> object -> getParent (), $parent);
+	}
+	
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testGetParent().
 	 */
 	public function testGetParent ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertNull ($this -> object -> getParent ());
+		$parent = $this -> getMockBuilder ('gordian\reefknot\input\validate\Field') -> disableOriginalConstructor () -> getMock ();
+		$this -> object -> setParent ($parent);
+		$this -> assertEquals ($this -> object -> getParent (), $parent);
 	}
 
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testResetInvalids().
 	 */
 	public function testResetInvalids ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> object -> resetInvalids ();
+		$this -> assertEquals ($this -> object -> getInvalids (), array ());
 	}
 
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testGetInvalids().
 	 */
 	public function testGetInvalids ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ($this -> object -> getInvalids (), array ());
 	}
 
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testHasInvalids().
 	 */
 	public function testHasInvalids ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertFalse ($this -> object -> hasInvalids ());
 	}
 }
-
-?>
