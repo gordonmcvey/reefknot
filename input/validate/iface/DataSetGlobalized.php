@@ -57,4 +57,10 @@ interface DataSetGlobalized extends DataSet
 	 * @return array 
 	 */
 	public function getGlobalRules ();
+	
+	/**
+	 * @return array 
+	 */
+	public function getGlobalInvalids ();
+
 }
