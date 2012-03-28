@@ -46,7 +46,7 @@ class OneOf extends abstr\prop\Logic implements iface\prop\Logic
 		}
 		else
 		{
-			throw new \InvalidArgumentException ();
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
 		}
 	}
 	

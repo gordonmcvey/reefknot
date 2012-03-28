@@ -44,7 +44,7 @@ class Equals extends abstr\Prop implements iface\Prop
 		}
 		else
 		{
-			throw new \InvalidArgumentException ('A value must be specified');
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
 		}
 	}
 	

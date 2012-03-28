@@ -54,7 +54,7 @@ class Callback extends abstr\Prop implements iface\Prop
 		}
 		else
 		{
-			throw new \InvalidArgumentException ('You must provide a callback and valid arguments');
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
 		}
 	}
 	

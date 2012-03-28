@@ -29,7 +29,7 @@ class Subset extends abstr\Prop implements iface\Prop
 		}
 		else
 		{
-			throw new \InvalidArgumentException ('Set must be an array');
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
 		}
 	}
 	

@@ -47,7 +47,7 @@ class RequiredOnVal extends Required
 		}
 		else
 		{
-			throw new \InvalidArgumentException;
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
 		}
 	}
 	

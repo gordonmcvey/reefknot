@@ -43,7 +43,7 @@ class Negate extends abstr\prop\Logic implements iface\prop\Logic
 		}
 		else
 		{
-			throw new \InvalidArgumentException ('You must provide a property to negate');
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
 		}
 	}
 	
