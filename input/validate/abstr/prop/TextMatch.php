@@ -13,11 +13,28 @@ use
 	gordian\reefknot\input\validate\abstr\Prop;
 
 /**
- *
- * @author gordonmcvey
+ * Text matching prop
+ * 
+ * Test match properties implement the testing of text values in various ways, 
+ * ranging from simple equality checks to regular expression matching.  All
+ * text-matching properties implement the same format for their configuration,
+ * namely a needle field that the string will be tested against. 
+ * 
+ * @author Gordon McVey
  */
 abstract class TextMatch extends Prop implements iface\prop
 {
+	/**
+	 * Configure the property
+	 * 
+	 * Text match props all have a needle property that defines the string 
+	 * against which the value will be tested.  This method implements the 
+	 * needle setting
+	 * 
+	 * @param array $config
+	 * @return TextMatch
+	 * @throws \InvalidArgumentException 
+	 */
 	public function setConfig (array $config = array ())
 	{
 		if ((isset ($config ['needle']))
@@ -28,7 +45,7 @@ abstract class TextMatch extends Prop implements iface\prop
 		}
 		else
 		{
-			throw new \InvalidArgumentException ('Invalid needle');
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid ' . var_export ($config, true));
 		}
 	}
 }

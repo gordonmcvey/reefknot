@@ -13,11 +13,28 @@ use
 	gordian\reefknot\input\validate\abstr\Prop;
 
 /**
- *
- * @author gordonmcvey
+ * Ranged prop
+ * 
+ * A ranged prop is a prop that allows the testing of some aspect of the size of
+ * a value.  For example, a ranged prop can be used to test the number of 
+ * elements in an array, or the length of a string.  The config of a ranged 
+ * prop includes a limit attribute that defines the value that the range must 
+ * meet.  
+ * 
+ * @author Gordon McVey
  */
 abstract class Ranged extends Prop implements iface\prop\Ranged
 {
+	/**
+	 * Determine if the value specified for limit is valid.  
+	 * 
+	 * A limit value is valid if it is numeric, or if it is an instance of a 
+	 * field.  In the latter case the value stored in the field is used as the
+	 * limit.  
+	 * 
+	 * @param Field $limit
+	 * @return type 
+	 */
 	protected function validLimit ($limit)
 	{
 		return (($limit instanceof iface\Field)
@@ -39,7 +56,7 @@ abstract class Ranged extends Prop implements iface\prop\Ranged
 		{
 			if ($limit -> isValid ())
 			{
-				if (!is_numeric ($val = $limit -> getData ()))
+				if (!$this -> validLimit ($val = $limit -> getData ()))
 				{
 					$val	= NULL;
 				}
@@ -53,7 +70,11 @@ abstract class Ranged extends Prop implements iface\prop\Ranged
 	}
 	
 	/**
-	 *
+	 * Configure the rangeed limit
+	 * 
+	 * All ranged props have a limit configuration item that must be set.  This
+	 * method implements the configuration of the limit. 
+	 * 
 	 * @param array $config
 	 * @return Ranged
 	 * @throws \InvalidArgumentException 
@@ -67,7 +88,7 @@ abstract class Ranged extends Prop implements iface\prop\Ranged
 		}
 		else
 		{
-			throw new \InvalidArgumentException;
+			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
 		}
 	}
 }
