@@ -15,15 +15,16 @@ use gordian\reefknot\input\validate\iface;
  * 
  * Validation is implemented around the concept of nodes.  A node is a piece of 
  * data that is to be validated and the collection of rules that the data is
- * expected to respect.  The rules consist of a Type which determine the 
+ * expected to conform to.  The rules consist of a Type which determine the 
  * datatype that the data needs to be, and a collection of Properties that 
  * further constrain the values that can be considered valid.  
  *
- * @author gordonmcvey
+ * @author Gordon McVey
  */
 abstract class Node extends Validatable implements iface\Node
 {
 	protected
+		
 		/**
 		 * The Type object that defines what data type this node is expected to be
 		 * 
@@ -110,6 +111,16 @@ abstract class Node extends Validatable implements iface\Node
 		return ($this -> type);
 	}
 	
+	/**
+	 * Get the complete set of validation rules for this node
+	 * 
+	 * A full set of rules consists of an array, the first element of which is 
+	 * the Type that the value needs to conform to to be valid.  The subsequent
+	 * elements, if any, describe the Properties that constrain the valid values
+	 * of the data.  
+	 *  
+	 * @return array 
+	 */
 	public function getRules ()
 	{
 		$type	= $this -> getType ();
