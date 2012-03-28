@@ -45,7 +45,7 @@ interface Validatable
 	 * @return Validatable The item should return itself so chaining can occur
 	 * @throws \InvalidArgumentException
 	 */
-	public function setParent (Field $set);
+	public function setParent (Node $set);
 	
 	/**
 	 * Get the parent element of the validatable
