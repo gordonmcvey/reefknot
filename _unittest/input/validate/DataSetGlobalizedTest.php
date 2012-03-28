@@ -17,12 +17,40 @@ class DataSetGlobalizedTest extends \PHPUnit_Framework_TestCase
 	protected $object;
 
 	/**
+	 * Helper for building mock props
+	 * 
+	 * @param mixed $value
+	 * @param bool $isValid
+	 * @return gordian\reefknot\input\validate\iface\Rule
+	 */
+	protected function makeStub ($type, $value = NULL, $isValid = true)
+	{
+		$stub	= $this -> getMockBuilder ('gordian\reefknot\input\validate\iface\\' . $type)
+				-> disableOriginalConstructor ()
+				-> getMock ();
+		
+		$stub	-> expects ($this -> any ())
+				-> method ('setData')
+				-> will ($this -> returnValue ($stub));
+		
+		$stub	-> expects ($this -> any ())
+				-> method ('getData')
+				-> will ($this -> returnValue ($value));
+		
+		$stub	-> expects ($this -> any ())
+				-> method ('isValid')
+				-> will ($this -> returnValue ($isValid));
+
+		return ($stub);
+	}
+	
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp ()
 	{
-		$this -> object = new DataSetGlobalized ($this -> getMock ('gordian\reefknot\input\validate\type\IsArray'));
+		$this -> object = new DataSetGlobalized ($this -> makeStub ('Type'));
 	}
 
 	/**
@@ -159,15 +187,99 @@ class DataSetGlobalizedTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers {className}::{origMethodName}
-	 * @todo Implement testIsValid().
 	 */
-	public function testIsValid ()
+	public function testIsValidArrayPasses ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> object -> setType (new type\IsArray ()) -> setData (array (1, 2, 3));
+		$this -> assertTrue ($this -> object -> isValid ());
 	}
-
+	
+	public function testIsValidNotArrayFails ()
+	{
+		$this -> object -> setType (new type\IsArray ()) -> setData (123);
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidArrayPropsPasses ()
+	{
+		$this -> object -> addProp ($this -> makeStub ('Prop'))
+						-> setData (array (1, 2, 3));
+		
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidArrayPropsFails ()
+	{
+		$this -> object -> addProp ($this -> makeStub ('Prop', NULL, false))
+						-> setData (array (1, 2, 3));
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidGlobalRulesPasses ()
+	{
+		$this -> object -> setGlobalType ($this -> makeStub ('Type'))
+						-> addGlobalProp ($this -> makeStub ('Prop'))
+						-> setData (array (1, 2, 3));
+		
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidGlobalRulesFailsOnType ()
+	{
+		$this -> object -> setGlobalType ($this -> makeStub ('Type', NULL, false))
+						-> addGlobalProp ($this -> makeStub ('Prop'))
+						-> setData (array (1, 2, 3));
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidGlobalRulesFailsOnProp ()
+	{
+		$this -> object -> setGlobalType ($this -> makeStub ('Type'))
+						-> addGlobalProp ($this -> makeStub ('Prop', NULL, false))
+						-> setData (array (1, 2, 3));
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFieldRulesPasses ()
+	{
+		$field	= new Field ($this -> makeStub ('Type'));
+		$field -> addProp ($this -> makeStub ('Prop'));
+		
+		$this -> object -> setGlobalType ($this -> makeStub ('Type'))
+						-> addGlobalProp ($this -> makeStub ('Prop'))
+						-> addField ('namedField', $field)
+						-> setData (array (1, 2, 3, 'namedField' => 'abc'));
+		
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFieldRulesFailsOnType ()
+	{
+		$field	= new Field ($this -> makeStub ('Type', NULL, false));
+		$field -> addProp ($this -> makeStub ('Prop'));
+		
+		$this -> object -> setGlobalType ($this -> makeStub ('Type'))
+						-> addGlobalProp ($this -> makeStub ('Prop'))
+						-> addField ('namedField', $field)
+						-> setData (array (1, 2, 3, 'namedField' => 'abc'));
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFieldRulesFailsOnProp ()
+	{
+		$field	= new Field ($this -> makeStub ('Type'));
+		$field -> addProp ($this -> makeStub ('Prop', NULL, false));
+		
+		$this -> object -> setGlobalType ($this -> makeStub ('Type'))
+						-> addGlobalProp ($this -> makeStub ('Prop'))
+						-> addField ('namedField', $field)
+						-> setData (array (1, 2, 3, 'namedField' => 'abc'));
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+		
+	}
 }
