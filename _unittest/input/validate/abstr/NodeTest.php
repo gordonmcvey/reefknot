@@ -76,9 +76,9 @@ class NodeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetProps ()
 	{
-		$prop1	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'TestProp1');
-		$prop2	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'TestProp2');
-		$prop3	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'TestProp3');
+		$prop1	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'NodeTestProp1');
+		$prop2	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'NodeTestProp2');
+		$prop3	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'NodeTestProp3');
 		
 		$props	= array (
 			get_class ($prop1)	=> $prop1,
@@ -113,9 +113,9 @@ class NodeTest extends \PHPUnit_Framework_TestCase
 	public function testGetRules ()
 	{
 		$type	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Type');
-		$prop1	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'TestProp4');
-		$prop2	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'TestProp5');
-		$prop3	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'TestProp6');
+		$prop1	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'NodeTestProp4');
+		$prop2	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'NodeTestProp5');
+		$prop3	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop', array (), array (), 'NodeTestProp6');
 		
 		$rules	= array (
 			get_class ($type)	=> $type,
