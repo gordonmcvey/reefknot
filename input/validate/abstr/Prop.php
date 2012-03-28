@@ -16,10 +16,8 @@ use gordian\reefknot\input\validate\iface;
  * Properties are constraints that data has to meet in order to be considered
  * valid.  The details of these constraints can be configured, for example a 
  * value that a numeric datum has to be below in order to be considered valid. 
- * The functionaliry for managing the configuration of Properties is defined 
- * here
  *
- * @author gordonmcvey
+ * @author Gordon McVey
  */
 abstract class Prop extends Validatable implements iface\Prop
 {
@@ -51,6 +49,8 @@ abstract class Prop extends Validatable implements iface\Prop
 	/**
 	 * Constructor for Properties
 	 * 
+	 * Properties can have an optional configuration.  The constructor will
+	 * apply the configuration if one is given. 
 	 * 
 	 * @param array $config 
 	 */
