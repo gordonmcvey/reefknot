@@ -18,7 +18,7 @@ namespace gordian\reefknot\input\validate;
  * fairly regular content.  
  * 
  * Globalized datasets provide all the same functionality as the regular 
- * dataset does, so you can also apply specific rules to individual fields that
+ * dataset does, so you can also define specific rules to individual fields that
  * will be applied as well.  This means that the globalized dataset can also
  * be used in situations where most of the fields in a set are expected to 
  * have a uniform format, but one or two of them are expected to be 
@@ -59,7 +59,31 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		 * 
 		 * @var array
 		 */
-		$globalProps			= array ();
+		$globalProps			= array (),
+		
+		/**
+		 * List of fields that failed validation due to global invalids and why
+		 * 
+		 * @var array 
+		 */
+		$globalInvalids			= array ();
+	
+	public function getGlobalInvalids ()
+	{
+		return ($this -> globalInvalids);
+	}
+	
+	public function resetInvalids ()
+	{
+		$this -> globalInvalids	= array ();
+		return (parent::resetInvalids ());
+	}
+	
+	public function hasInvalids ()
+	{
+		return ((!empty ($this -> globalInvalids))
+			|| (parent::hasInvalids ()));
+	}
 	
 	/**
 	 * Add a global property
@@ -69,7 +93,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 * is expected to be quite uniform in nature.  
 	 * 
 	 * @param iface\Prop $newProp
-	 * @return type
+	 * @return DataSetGlobalized
 	 * @throws \InvalidArgumentException 
 	 */
 	public function addGlobalProp (iface\Prop $newProp)
@@ -89,8 +113,8 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	/**
 	 * Delete a global property
 	 * 
-	 * @param type $propName The class name of the property you want to remove
-	 * @return DataSet 
+	 * @param string $propName The class name of the property you want to remove
+	 * @return DataSetGlobalized
 	 */
 	public function deleteGlobalProp ($propName)
 	{
@@ -172,7 +196,8 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		foreach ($rules as $ruleKey => $rule)
 		{
 			// Check that the current field doesn't already have a rule of the same kind applied
-			if (!in_array ($rule, $fieldRules, true))
+			if ((($rule instanceof iface\Type) && (empty ($fieldRules)))
+			|| (($rule instanceof iface\Prop) && (!array_key_exists ($ruleKey, $fieldRules))))
 			{
 				$rule -> setData ($fieldData);
 				if (!$rule -> isValid ())
@@ -202,7 +227,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 			// Run the global validation
 			$rules	= $this -> getGlobalRules ();
 			$data	= $this -> getData ();
-
+			
 			/*
 			 * Unlike a standard dataset (shich is expected to only contain 
 			 * the defined fields), a globalized dataset can contain any number
@@ -216,9 +241,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 				{
 					if ($invalids = $this -> applyRules ($rules, $fieldName, $fieldData))
 					{
-						$this -> invalids [$fieldName]	= isset ($this -> invalids [$fieldName])? 
-							array_merge ($this -> data [$fieldData], $invalids):
-							$invalids;
+						$this -> globalInvalids [$fieldName]	= $invalids;
 					}
 				}
 			}
