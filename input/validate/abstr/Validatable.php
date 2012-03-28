@@ -13,22 +13,27 @@ use gordian\reefknot\input\validate\iface;
 /**
  * Validatable functionality
  * 
- * Most validatable items have data associated with them.  This class implements
- * the data management portion of validatable objects.  
+ * Validation in Reefknot is accomplished by collections of Validatable objects.
+ * A Validatable embodies a piece of data, and the rules necessary to test that
+ * the data is valid.  The rules that perform the validation are themselves 
+ * Validatables of various types.  
  *
  * @author gordonmcvey
  */
 abstract class Validatable implements iface\Validatable
 {
 	protected
+		
 		/**
 		 * Reference back to this item's parent. Can be NULL for root items
 		 * 
-		 * @var iface\Field
+		 * @var iface\Node
 		 */
 		$parent		= NULL, 
 		
 		/**
+		 * The data to be validated 
+		 * 
 		 * @var mixed
 		 */
 		$data		= NULL, 
@@ -62,7 +67,14 @@ abstract class Validatable implements iface\Validatable
 		return ($this -> data);
 	}
 	
-	public function setParent (iface\Field $set)
+	/**
+	 * Set the parent node of this validatable.  
+	 * 
+	 * @param iface\Node $set The node that is to become the validatable's parent
+	 * @return Validatable
+	 * @throws \InvalidArgumentException 
+	 */
+	public function setParent (iface\Node $set)
 	{
 		if (($this -> parent === NULL)
 		|| ($this -> parent === $set))
@@ -76,22 +88,42 @@ abstract class Validatable implements iface\Validatable
 		return ($this);
 	}
 	
+	/**
+	 * Get the parent node of this validatable
+	 * 
+	 * @return iface\Node 
+	 */
 	public function getParent ()
 	{
 		return ($this -> parent);
 	}
 	
+	/**
+	 * Clear the validation error list
+	 * 
+	 * @return Validatable 
+	 */
 	public function resetInvalids ()
 	{
 		$this -> invalids	= array ();
 		return ($this);
 	}
 	
+	/**
+	 * Get list of validation failures
+	 * 
+	 * @return array 
+	 */
 	public function getInvalids ()
 	{
 		return ($this -> invalids);
 	}
 	
+	/**
+	 * Return whether or not the validatable has invalid data
+	 * 
+	 * @return bool 
+	 */
 	public function hasInvalids ()
 	{
 		return (!empty ($this -> invalids));
