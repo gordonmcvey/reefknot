@@ -13,10 +13,14 @@ namespace gordian\reefknot\input\validate;
  * 
  * A dataset is a collection of one or more fields.  This collection can be used
  * to validate a set of data (an array) against the defined rules to see if it
- * is valid.  A dataset can also be a field, allowing for nested validation 
- * structures for testing nested arrays to be built.  
+ * is valid.  
+ * 
+ * A dataset can also be a field, allowing for nested validation structures for 
+ * validating nested arrays.
  *
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 class DataSet extends Field implements iface\DataSet
 {
@@ -30,9 +34,10 @@ class DataSet extends Field implements iface\DataSet
 		$fields				= array (), 
 		
 		/**
-		 * Flag that indicates whether the dataset meets the basic requirements
-		 * specified for the dataset props (The data must be an array or null, 
-		 * and it must meet any other props that have been applied) 
+		 * Flag that indicates whether the dataset meets the general 
+		 * requirements specified for the dataset props (The data must be an 
+		 * array or null, and it must meet any other props that have been 
+		 * applied).  
 		 * 
 		 * @var bool
 		 */
@@ -41,9 +46,15 @@ class DataSet extends Field implements iface\DataSet
 	/**
 	 * Register a field with the dataset
 	 * 
+	 * This method adds a new Field object to the collection that will be 
+	 * validated when isValid() is invoked.  
+	 * 
+	 * A field can only be added to a dataset once.  Attempts to add the same
+	 * field more than once will trigger an exception.  
+	 * 
 	 * @param string $name
 	 * @param iface\Node $field
-	 * @return Field
+	 * @return DataSet
 	 * @throws \InvalidArgumentException If the given field has already been registered with the dataset
 	 */
 	public function addField ($name, iface\Node $field)
@@ -64,7 +75,7 @@ class DataSet extends Field implements iface\DataSet
 	/**
 	 * Unregister the named field from the dataset
 	 * 
-	 * @param type $name
+	 * @param string $name
 	 * @return DataSet 
 	 */
 	public function deleteField ($name)
@@ -78,6 +89,9 @@ class DataSet extends Field implements iface\DataSet
 	
 	/**
 	 * Get the named field
+	 * 
+	 * This method returns the field registered for the given key, or NULL if 
+	 * it doesn't exist. 
 	 * 
 	 * @param string $name
 	 * @return iface\Field 
@@ -130,11 +144,10 @@ class DataSet extends Field implements iface\DataSet
 	 * This method iterates over all the fields that have been defined for this 
 	 * dataset and runs each one's validation rules in turn.  It will return a
 	 * boolean that indicates whether all the defined fields validate against 
-	 * their validation rules.  If the data set's fields are not valid, then 
-	 * more detailed information about why the dataset failed validation can be
-	 * obtained with the getInvalids () method.
+	 * their validation rules.  If any of the DataSet's fields are not valid, 
+	 * then more detailed information about why the dataset failed validation 
+	 * can be obtained with the getInvalids () method.
 	 * 
-	 * @param array $data
 	 * @return bool True if the data set is valid
 	 * @todo Cache result of last run until internal state changes
 	 */
