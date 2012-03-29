@@ -101,7 +101,6 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 		// Check that at least one of the flags is set to true, otherwise nothing would validate!
 		if (!in_array (true, $config, true))
 		{
-			var_dump ($config);
 			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid ' . var_export ($config, true));
 		}
 		
@@ -122,7 +121,6 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 	{
 		$valid	= false;
 		$cfg	= array_keys (array_filter ($this -> getConfig ()));
-		$cfg []	= 'fail';
 		
 		// Test number against the set flags
 		foreach ($cfg as $flag)
