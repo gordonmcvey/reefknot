@@ -30,55 +30,63 @@ namespace gordian\reefknot\input\validate;
  * least 12 characters and all array will be expected to have at least 12 
  * elements.  However, if one of the fields in the set has its own Min prop
  * set to 32, then that field will be expected to be at least 32 characters or
- *  elements long. 
+ * elements long. 
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 {
 	protected
-		
-		/**
-		 * Flag that indicates whether any fields in the given data should be 
-		 * stripped out. We want this to be false by default instead of true by
-		 * default in the superclass.
-		 * 
-		 * @var bool
-		 */
-		$stripUnspecifiedData	= false,
 
 		/**
 		 * Expected type for all fields
 		 * 
 		 * @var iface\Type 
 		 */
-		$globalType				= NULL,
+		$globalType		= NULL,
 		
 		/**
 		 * Props to apply to all fields
 		 * 
 		 * @var array
 		 */
-		$globalProps			= array (),
+		$globalProps	= array (),
 		
 		/**
 		 * List of fields that failed validation due to global invalids and why
 		 * 
 		 * @var array 
 		 */
-		$globalInvalids			= array ();
+		$globalInvalids	= array ();
 	
+	/**
+	 * Get the global invalid field list
+	 * 
+	 * @return array 
+	 */
 	public function getGlobalInvalids ()
 	{
 		return ($this -> globalInvalids);
 	}
 	
+	/**
+	 * Reset the invalid fields list in preparation for another run 
+	 * 
+	 * @return DataSetGlobalized 
+	 */
 	public function resetInvalids ()
 	{
 		$this -> globalInvalids	= array ();
 		return (parent::resetInvalids ());
 	}
 	
+	/**
+	 * Return whether or not the last run of the validation rules resulted in errors
+	 * 
+	 * @return bool 
+	 */
 	public function hasInvalids ()
 	{
 		return ((!empty ($this -> globalInvalids))
@@ -195,7 +203,14 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		// Apply the global rules to the field
 		foreach ($rules as $ruleKey => $rule)
 		{
-			// Check that the current field doesn't already have a rule of the same kind applied
+			/*
+			 * We only want to apply the global rules if the field doesn't have 
+			 * conflicting rules of its own.  If the field has any rules at all
+			 * then it must have a type, so we'll use the field's type to 
+			 * determine type validity.  If the field has a property of the 
+			 * same kind as a global property, then we'll use the field's prop.
+			 * Otherwise the global prop will be applied.  
+			 */
 			if ((($rule instanceof iface\Type) && (empty ($fieldRules)))
 			|| (($rule instanceof iface\Prop) && (!array_key_exists ($ruleKey, $fieldRules))))
 			{
@@ -215,7 +230,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 * 
 	 * This method runs the field rules, then applies the globalized rules. 
 	 * 
-	 * @return bool 
+	 * @return bool True if the given data is valid
 	 */
 	public function isValid ()
 	{
@@ -229,7 +244,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 			$data	= $this -> getData ();
 			
 			/*
-			 * Unlike a standard dataset (shich is expected to only contain 
+			 * Unlike a standard dataset (which is expected to only contain 
 			 * the defined fields), a globalized dataset can contain any number
 			 * of fields.  They all get the same rules applied to them.  
 			 * Therefore we want to iterate over the data instead of the field
