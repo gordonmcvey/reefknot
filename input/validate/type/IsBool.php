@@ -13,12 +13,20 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of IsArray
+ * Type for validating Boolean data
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsBool extends IsScalar implements iface\Type
 {
+	/**
+	 * Check that the provided data is a Boolean
+	 * 
+	 * @return bool True if data is Boolean 
+	 */
 	public function isValid ()
 	{
 		$data	= $this -> getData ();

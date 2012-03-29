@@ -18,7 +18,10 @@ use
  * This datatype validates that its input data is a valid string.  As strings 
  * are also implicitly scalars, this class is a subclass of the IsScalar class.
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsString extends IsScalar implements iface\Type
 {

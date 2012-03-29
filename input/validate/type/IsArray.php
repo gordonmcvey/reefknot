@@ -13,11 +13,14 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of IsArray
+ * Check the given data is an array
  * 
  * The IsArray type checks that the provided data is valid as an array
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsArray extends abstr\Validatable implements iface\Type
 {

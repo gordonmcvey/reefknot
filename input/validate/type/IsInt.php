@@ -13,12 +13,20 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of IsArray
+ * Type for validating integers
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsInt extends IsNumber implements iface\Type
 {
+	/**
+	 * Check that the provided data is an integer
+	 * 
+	 * @return bool True if the provided data is an integer 
+	 */
 	public function isValid ()
 	{
 		$data	= $this -> getData ();

@@ -13,12 +13,21 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of IsFloat
+ * Type for validating floating point data
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsFloat extends IsNumber implements iface\Type
 {
+	
+	/**
+	 * Validate that the given data is a floating point number
+	 * 
+	 * @return bool True of the data is floating point 
+	 */
 	public function isValid ()
 	{
 		$data	= $this -> getData ();

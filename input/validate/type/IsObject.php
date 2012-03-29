@@ -13,12 +13,20 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of IsArray
+ * Type for validating objects
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsObject extends abstr\Validatable implements iface\Type
 {
+	/**
+	 * Check that the given data is an object
+	 * 
+	 * @return bool True if the given data is an object 
+	 */
 	public function isValid ()
 	{
 		$data	= $this -> getData ();

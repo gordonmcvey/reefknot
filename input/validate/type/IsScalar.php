@@ -13,12 +13,24 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of IsScalar
+ * Type for validating scalar data
+ * 
+ * In PHP a scalar is any non-composite datatype.  This means that ints, floats,
+ * strings and booleans are scalar.  Arrays, objects and resources are not 
+ * scalar types. 
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsScalar extends abstr\Validatable implements iface\Type
 {
+	/**
+	 * Test that the given data is a scalar
+	 * 
+	 * @return bool True if the given data is a scalar 
+	 */
 	public function isValid ()
 	{
 		$data	= $this -> getData ();

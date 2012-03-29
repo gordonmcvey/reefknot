@@ -15,22 +15,30 @@ use
 /**
  * Number data type validation
  * 
- * This class tests if the provided data is of a scalar type.  Any non-composite
- * datatypes (anything that isn't an object, a resource or an array) is a valid
- * scalar
+ * This class tests if the provided data is of a numeric type, in other words 
+ * an integer or a float. Generally you'll want to be more exact regarding the
+ * type you want (integer or float), but there are cases where a programmer
+ * will want a number but won't be too concerned whether the number is an 
+ * integer or a float. 
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Type
  */
 class IsNumber extends IsScalar implements iface\Type
 {
 	/**
-	 * Determine if the provided value is a scalar
+	 * Determine if the provided value is a number
 	 * 
-	 * Whilst the IsNumber class descends from the IsScalar class (because a 
-	 * valid number is also implicitly a valid scalar), the parent method is 
-	 * not invoked simply for performance reasons.  
+	 * Implementation note: Whilst the IsNumber class descends from the IsScalar 
+	 * class (because a valid number is also implicitly a valid scalar), the 
+	 * parent method is not invoked simply for performance reasons.  If the
+	 * data passes this check then it would, by definition, have passed the 
+	 * superclass check.  The opposite is also true.  All ints and floats are 
+	 * scalars, and anything that isn't a scalar can't be an int or a float. 
 	 * 
-	 * @return bool True if valid 
+	 * @return bool True if the given data is numeric 
 	 */
 	public function isValid ()
 	{
