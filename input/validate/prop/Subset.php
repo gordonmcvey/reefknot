@@ -13,26 +13,18 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of Subset
+ * Prop for validating that one array is a subset of the other
+ * 
+ * This prop is intended for comparing arrays.  For checking that a scalar type
+ * is in an array, use SetMember instead. 
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
-class Subset extends abstr\Prop implements iface\Prop
+class Subset extends abstr\Prop\Set implements iface\Prop
 {
-	public function setConfig (array $config = array ())
-	{
-		if ((isset ($config ['set']))
-		&& (is_array ($config ['set']))
-		&& (!empty ($config ['set'])))
-		{
-			return (parent::setConfig ($config));
-		}
-		else
-		{
-			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
-		}
-	}
-	
 	/**
 	 * Test that the given data array is a subset of the Property's set
 	 * 

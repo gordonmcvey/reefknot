@@ -13,26 +13,15 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of SetMember
+ * Prop for testing if the given data is in a set
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
-class SetMember extends abstr\Prop implements iface\Prop
+class SetMember extends abstr\Prop\Set implements iface\Prop
 {
-	public function setConfig (array $config = array ())
-	{
-		if ((isset ($config ['set']))
-		&& (is_array ($config ['set']))
-		&& (!empty ($config ['set'])))
-		{
-			return (parent::setConfig ($config));
-		}
-		else
-		{
-			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid  -- [ ' . var_export ($config, true) . ' ]');
-		}
-	}
-	
 	public function isValid ()
 	{
 		$cfg	= $this -> getConfig ();
