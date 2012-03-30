@@ -4,7 +4,6 @@
  * 
  * @copyright Gordian Solutions and Gordon McVey
  * @license http://www.apache.org/licenses/LICENSE-2.0.txt Apache license V2.0
- * @author Gordon McVey
  */
 
 namespace gordian\reefknot\autoload;
@@ -25,6 +24,8 @@ namespace gordian\reefknot\autoload;
  * scheme used in PEAR and Zend Framework 1.x by specifying a different
  * namespace character.  Finally, you can subclass the autoloader for complete
  * control over its operation
+ * 
+ * @author Gordon McVey
  */
 class Autoload implements iface\Autoload
 {
@@ -120,20 +121,20 @@ class Autoload implements iface\Autoload
 	}
 	
 	/**
-	 * Determine if a class/interface was loaded successfully
+	 * Determine if a class/interface/trait was loaded successfully
 	 * 
 	 * Once the autoloader has included the file that is expected to contain 
-	 * the class/method that's being requested, this method will check that the 
-	 * requested resource is now actually available to PHP.  
+	 * the class/interface/trait that's being requested, this method will check 
+	 * that the requested resource is now actually available to PHP.  
 	 * 
-	 * @param string $name
-	 * @return bool 
+	 * @param string $name Name of the resource to check
+	 * @return bool True if the resource is available
 	 */
 	protected function resourceLoaded ($name)
 	{
-		return (class_exists ($name, false) 
-			|| interface_exists ($name, false));
-		
+		return ((class_exists ($name, false)) 
+			|| (interface_exists ($name, false))
+			|| ((function_exists ('trait_exists')) && (trait_exists ($name, false))));
 	}
 	
 	/**
