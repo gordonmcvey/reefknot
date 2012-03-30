@@ -19,7 +19,10 @@ use
  * to validate that the prop's value DOESN'T validate against the configured
  * property.  
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class Negate extends abstr\prop\Logic implements iface\prop\Logic
 {

@@ -12,6 +12,8 @@ use gordian\reefknot\input\validate\iface;
 
 /**
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 interface Logic extends iface\Prop
 {

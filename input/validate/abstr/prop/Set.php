@@ -22,6 +22,13 @@ use
  */
 abstract class Set extends Prop implements iface\Prop
 {
+	/**
+	 * Configure the Set
+	 * 
+	 * @param array $config
+	 * @return Set
+	 * @throws \InvalidArgumentException 
+	 */
 	public function setConfig (array $config = array ())
 	{
 		if ((isset ($config ['set']))

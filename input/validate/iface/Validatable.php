@@ -16,7 +16,9 @@ namespace gordian\reefknot\input\validate\iface;
  * BasicValidatable interface.  Most kinds of validation units in the validate
  * package implement this interface, the notable exception being groups.
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 interface Validatable
 {

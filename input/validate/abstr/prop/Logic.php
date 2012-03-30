@@ -20,6 +20,9 @@ use
  * make up the collection.  
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 abstract class Logic extends Prop implements iface\prop\Logic
 {

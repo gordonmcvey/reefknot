@@ -21,6 +21,9 @@ use
  * namely a needle field that the string will be tested against. 
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 abstract class TextMatch extends Prop implements iface\prop
 {

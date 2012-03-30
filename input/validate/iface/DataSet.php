@@ -10,7 +10,9 @@ namespace gordian\reefknot\input\validate\iface;
 
 /**
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 interface DataSet extends Node
 {

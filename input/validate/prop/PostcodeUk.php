@@ -15,7 +15,10 @@ use
 /**
  * Test whether the data is in a format compatible with UK postal code format
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class PostcodeUk extends abstr\Prop implements iface\Prop
 {
@@ -31,7 +34,8 @@ class PostcodeUk extends abstr\Prop implements iface\Prop
 		PATTERN	= '/^(?:(GIR 0AA)|(((A[BL]|B[ABDHLNRSTX]?|C[ABFHMORTVW]|D[ADEGHLNTY]|E[HNX]?|F[KY]|G[LUY]?|H[ADGPRSUX]|I[GMPV]|JE|K[ATWY]|L[ADELNSU]?|M[EKL]?|N[EGNPRW]?|O[LX]|P[AEHLOR]|R[GHM]|S[AEGKLMNOPRSTY]?|T[ADFNQRSW]|UB|W[ADFNRSV]|YO|ZE)[1-9]?[0-9]|((E|N|NW|SE|SW|W)1|EC[1-4]|WC[12])[A-HJKMNPR-Y]|(SW|W)([2-9]|[1-9][0-9])|EC[1-9][0-9]) [0-9][ABD-HJLNP-UW-Z]{2}))\z/';
 	
 	/**
-	 *
+	 * Test that the given data is conformant to the format of a UK post code
+	 * 
 	 * @return bool True if valid
 	 * @throws \InvalidArgumentException 
 	 */

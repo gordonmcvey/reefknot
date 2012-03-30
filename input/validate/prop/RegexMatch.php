@@ -18,10 +18,19 @@ use
  * This property can be used to test that a string matches a provided regular
  * expression.  It can only be used with strings. 
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class RegexMatch extends abstr\prop\TextMatch implements iface\Prop
 {
+	/**
+	 * Test that the given data matches the specified regular expression. 
+	 * 
+	 * @return bool True if the data matches
+	 * @throws \InvalidArgumentException Triggered on an attempt to use this validator on non-string data
+	 */
 	public function isValid ()
 	{
 		$valid	= false;

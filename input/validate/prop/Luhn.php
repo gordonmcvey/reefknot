@@ -13,12 +13,25 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Description of Luhn
+ * Prop for testing that a string validates against the Luhn algorithm
+ * 
+ * The Luhn algorithm is a simple checksum, commonly used to verify that 
+ * credit-card numbers have been entered correctly.  
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class Luhn extends abstr\Prop implements iface\Prop
 {
+	/**
+	 * Test that the given data passes a Luhn check. 
+	 * 
+	 * @return bool True if the data passes the Luhn check
+	 * @throws \InvalidArgumentException 
+	 * @see http://en.wikipedia.org/wiki/Luhn_algorithm
+	 */
 	public function isValid ()
 	{
 		$data	= $this -> getData ();

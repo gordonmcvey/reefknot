@@ -20,6 +20,8 @@ use gordian\reefknot\input\validate\iface;
  * further constrain the values that can be considered valid.  
  *
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 abstract class Node extends Validatable implements iface\Node
 {

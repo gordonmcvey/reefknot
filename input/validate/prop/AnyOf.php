@@ -19,7 +19,10 @@ use
  * and test that the provided data matches any one of the properties in the 
  * collection.  In other words, this property serves as an Or operation
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class AnyOf extends abstr\prop\Logic implements iface\prop\Logic
 {

@@ -18,10 +18,20 @@ use
  * This property tests that a given string contains the configured needle string
  * within it, regardless of character case. 
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class IMatch extends abstr\prop\TextMatch implements iface\Prop
 {
+	/**
+	 * Check that the given data contains the specified string within it in a 
+	 * case-insensitive manner
+	 * 
+	 * @return bool True if the given data contains the specified string
+	 * @throws \InvalidArgumentException 
+	 */
 	public function isValid ()
 	{
 		$valid	= false;

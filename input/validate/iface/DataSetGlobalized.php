@@ -11,7 +11,9 @@ namespace gordian\reefknot\input\validate\iface;
 /**
  * Globalized Data Set interface
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 interface DataSetGlobalized extends DataSet
 {

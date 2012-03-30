@@ -22,6 +22,9 @@ use
  * meet.  
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 abstract class Ranged extends Prop implements iface\prop\Ranged
 {

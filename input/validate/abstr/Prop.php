@@ -18,6 +18,9 @@ use gordian\reefknot\input\validate\iface;
  * value that a numeric datum has to be below in order to be considered valid. 
  *
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 abstract class Prop extends Validatable implements iface\Prop
 {

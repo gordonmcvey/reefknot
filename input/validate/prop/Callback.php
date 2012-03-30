@@ -20,7 +20,10 @@ use
  * Validate package, the other two being subclassing a component in the package
  * or building classes that implement the package interfaces
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class Callback extends abstr\Prop implements iface\Prop
 {

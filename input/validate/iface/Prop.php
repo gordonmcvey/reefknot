@@ -15,6 +15,8 @@ namespace gordian\reefknot\input\validate\iface;
  * implement
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 interface Prop extends Rule
 {
@@ -31,6 +33,11 @@ interface Prop extends Rule
 	 */
 	public function setConfig (array $config = array ());
 	
+	/**
+	 * Get the property configuration
+	 * 
+	 * @return array 
+	 */
 	public function getConfig ();
 	
 	/**

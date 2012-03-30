@@ -18,7 +18,10 @@ use
  * This class tests whether its value is equal to the value supplied to it in
  * the configuration provided.  
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class Equals extends abstr\Prop implements iface\Prop
 {

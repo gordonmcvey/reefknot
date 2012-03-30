@@ -10,7 +10,9 @@ namespace gordian\reefknot\input\validate\iface;
 
 /**
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 interface Node extends Validatable
 {
@@ -53,7 +55,15 @@ interface Node extends Validatable
 	 */
 	public function getType ();
 	
+	/**
+	 * Get the node's current rules
+	 * 
+	 * @return array 
+	 */
 	public function getRules ();
 	
+	/**
+	 * Node constructor 
+	 */
 	public function __construct (Type $type);
 }

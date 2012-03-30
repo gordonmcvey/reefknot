@@ -11,7 +11,9 @@ namespace gordian\reefknot\input\validate\iface;
 /**
  * Description of Rule
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 interface Rule extends Validatable
 {

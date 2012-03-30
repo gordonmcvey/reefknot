@@ -20,7 +20,10 @@ use
  * in the collection.  In other words, this property serves as an Exclosive Or
  * operation (xor)
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class OneOf extends abstr\prop\Logic implements iface\prop\Logic
 {

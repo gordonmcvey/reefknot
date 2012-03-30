@@ -25,6 +25,9 @@ use
  * the list.  
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class PhoneUk extends abstr\Prop implements iface\Prop
 {
@@ -48,6 +51,12 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 		PATTERN			= '[1235789]\d{8,9}';
 	
 	protected 
+		
+		/**
+		 * List of regular expression patterns for the various classes of phone number
+		 * 
+		 * @var array 
+		 */
 		$numberTypes	= array (
 			'landline'	=> '[12]',
 			'national'	=> '3',

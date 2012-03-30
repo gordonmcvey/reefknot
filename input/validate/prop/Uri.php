@@ -17,7 +17,10 @@ use
  * 
  * Validate that a valid URI/URL has been provided
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class Uri extends abstr\Prop implements iface\Prop
 {

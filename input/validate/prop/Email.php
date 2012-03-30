@@ -18,7 +18,10 @@ use
  * This property can be applied to strings to see if the string appears to 
  * encode a valid email address.  
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class Email extends abstr\Prop implements iface\Prop
 {

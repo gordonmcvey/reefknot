@@ -15,7 +15,10 @@ use
 /**
  * Required conditional of other field property
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class RequiredOnVal extends Required
 {
@@ -37,6 +40,7 @@ class RequiredOnVal extends Required
 	 * @param array $config
 	 * @return RequiredOnVal 
 	 * @throws \InvalidArgumentException Thrown if the required keys don't exist
+	 * @todo Configuration of how to handle the given value is very limited.  Replace the requireWhenEmpty flag with a callback for making the decision on whether or not the dependant field is required 
 	 */
 	public function setConfig (array $config = array ())
 	{

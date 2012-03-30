@@ -21,10 +21,18 @@ use
  * considered to be invalid against this rule.  The Required property is the 
  * exception to the rule that validation rules will pass NULL values as valid.
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
+ * @subpackage Prop
  */
 class Required extends abstr\Prop implements iface\Prop
 {
+	/**
+	 * Test that the required data has a value
+	 * 
+	 * @return bool True if the data has a value
+	 */
 	public function isValid ()
 	{
 		$data	= $this -> getData ();

@@ -18,7 +18,9 @@ use gordian\reefknot\input\validate\iface;
  * the data is valid.  The rules that perform the validation are themselves 
  * Validatables of various types.  
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Validate
  */
 abstract class Validatable implements iface\Validatable
 {
