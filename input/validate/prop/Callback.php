@@ -87,6 +87,7 @@ class Callback extends abstr\Prop implements iface\Prop
 	{
 		$data	= $this -> getData ();
 		$valid	= false;
+		$args	= array ();
 		
 		if (!is_null ($data))
 		{
@@ -99,7 +100,7 @@ class Callback extends abstr\Prop implements iface\Prop
 			}
 			else
 			{
-				$args	= array ($data);
+				$args []	= $data;
 			}
 			// Execute the callback
 			$valid	= (bool) call_user_func_array ($cfg ['callback'], $args);
