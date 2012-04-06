@@ -13,7 +13,10 @@ use
 	gordian\reefknot\input\validate\iface;
 
 /**
- * Required conditional of other field property
+ * Required conditional on other field property
+ * 
+ * This property allows for you to make a field in your dataset required on 
+ * condition that another field is valid and either is or is not empty.  
  * 
  * @author Gordon McVey
  * @category Reefknot
@@ -40,7 +43,6 @@ class RequiredOnVal extends Required
 	 * @param array $config
 	 * @return RequiredOnVal 
 	 * @throws \InvalidArgumentException Thrown if the required keys don't exist
-	 * @todo Configuration of how to handle the given value is very limited.  Replace the requireWhenEmpty flag with a callback for making the decision on whether or not the dependant field is required 
 	 */
 	public function setConfig (array $config = array ())
 	{
@@ -102,8 +104,6 @@ class RequiredOnVal extends Required
 		
 		if ($canValidate)
 		{
-			$data	= $this -> getData ();
-			
 			if (empty ($cfg ['requireWhenEmpty']))
 			{
 				/*
@@ -114,7 +114,7 @@ class RequiredOnVal extends Required
 				 */
 				$valid	= empty ($dependantData)?
 					true:
-					!empty ($data);
+					parent::isValid ();
 			}
 			else
 			{
@@ -125,7 +125,7 @@ class RequiredOnVal extends Required
 				 * data is considered valid regardless of its value.  
 				 */
 				$valid	= empty ($dependantData)?
-					!empty ($data):
+					parent::isValid ():
 					true;
 			}
 		}
