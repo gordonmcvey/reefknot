@@ -3,9 +3,9 @@
 namespace gordian\reefknot\input\validate\prop;
 
 /* Simple callbacks for testing */
-function alwaysTrue () {return true;}
-function alwaysFalse () {return false;}
-function argSet ($arg = NULL) {var_dump ($arg); return (isset ($arg));}
+function roc_alwaysTrue( ) {return true;}
+function roc_alwaysFalse () {return false;}
+function roc_argSet ($arg = NULL) {var_dump ($arg); return (isset ($arg));}
 
 class CallbackSuite
 {
@@ -38,7 +38,7 @@ class RequiredOnCallbackTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp ()
 	{
-		$this -> object = new RequiredOnCallback (array ('callback' => '\gordian\reefknot\input\validate\prop\alwaysTrue'));
+		$this -> object = new RequiredOnCallback (array ('callback' => '\gordian\reefknot\input\validate\prop\roc_alwaysTrue'));
 	}
 
 	/**
@@ -94,7 +94,7 @@ class RequiredOnCallbackTest extends \PHPUnit_Framework_TestCase
 	{
 		$exception	= NULL;
 		$cfg		= array (
-			'callback'	=> '\gordian\reefknot\input\validate\prop\argSet',
+			'callback'	=> '\gordian\reefknot\input\validate\prop\roc_argSet',
 			'args'		=> NULL
 		);
 		
@@ -115,7 +115,7 @@ class RequiredOnCallbackTest extends \PHPUnit_Framework_TestCase
 	{
 		$exception	= NULL;
 		$cfg		= array (
-			'callback'	=> '\gordian\reefknot\input\validate\prop\argSet',
+			'callback'	=> '\gordian\reefknot\input\validate\prop\roc_argSet',
 			'args'		=> 12345
 		);
 		
@@ -136,7 +136,7 @@ class RequiredOnCallbackTest extends \PHPUnit_Framework_TestCase
 	{
 		$exception	= NULL;
 		$cfg		= array (
-			'callback'	=> '\gordian\reefknot\input\validate\prop\argSet',
+			'callback'	=> '\gordian\reefknot\input\validate\prop\roc_argSet',
 			'args'		=> array (1)
 		);
 		
@@ -257,7 +257,7 @@ class RequiredOnCallbackTest extends \PHPUnit_Framework_TestCase
 	
 	public function testIsValidAlwaysFalsePass ()
 	{
-		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\alwaysFalse'));
+		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\roc_alwaysFalse'));
 		$this -> object -> setData ('123');
 		$this -> assertTrue ($this -> object -> isValid ());
 		$this -> object -> setData (0);
@@ -274,14 +274,14 @@ class RequiredOnCallbackTest extends \PHPUnit_Framework_TestCase
 	
 	public function testIsValidArgSetPass ()
 	{
-		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\argSet', 'args' => array (true)));
+		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\roc_argSet', 'args' => array (true)));
 		$this -> object -> setData ('123');
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
 	public function testIsValidArgSetFail ()
 	{
-		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\argSet', 'args' => array (true)));
+		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\roc_argSet', 'args' => array (true)));
 		$this -> object -> setData (0);
 		$this -> assertFalse ($this -> object -> isValid ());
 		$this -> object -> setData ('');
@@ -296,7 +296,7 @@ class RequiredOnCallbackTest extends \PHPUnit_Framework_TestCase
 	
 	public function testIsValidArgSetPass2 ()
 	{
-		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\argSet', 'args' => array (NULL)));
+		$this -> object -> setConfig (array ('callback' => '\gordian\reefknot\input\validate\prop\roc_argSet', 'args' => array (NULL)));
 		$this -> object -> setData ('123');
 		$this -> assertTrue ($this -> object -> isValid ());
 		$this -> object -> setData (0);
