@@ -90,7 +90,47 @@ class Request implements iface\Request
 	{
 		return (in_array ($method, $this -> validMethods));
 	}
-
+	
+	public function isConnect ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_CONNECT);
+	}
+	
+	public function isDelete ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_DELETE);
+	}
+	
+	public function isGet ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_GET);
+	}
+	
+	public function isHead ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_HEAD);
+	}
+	
+	public function isOptions ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_HEAD);
+	}
+	
+	public function isPost ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_POST);
+	}
+	
+	public function isPut ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_POT);
+	}
+	
+	public function isTrace ()
+	{
+		return ($this -> server ['REQUEST_METHOD'] === self::M_TRACE);
+	}
+	
 	public function __construct (	iface\util\RequestBody $reqBody,
 									array $get		= NULL,
 									array $post		= NULL,

@@ -25,12 +25,12 @@ interface Request
 		M_POT		= 'PUT',
 		M_TRACE		= 'TRACE';
 	
-	public function getMethod ();
-	public function getVersion ();
-	public function getQuery ();
-	public function getPost ();
-	public function getCookie ();
-	public function getHeader ($headerKey);
-	public function getHeaders ();
-	public function getBody ();
+	public function isConnect ();
+	public function isDelete ();
+	public function isGet ();
+	public function isHead ();
+	public function isOptions ();
+	public function isPost ();
+	public function isPut ();
+	public function isTrace ();
 }
