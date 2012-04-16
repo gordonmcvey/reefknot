@@ -8,7 +8,7 @@
 
 namespace gordian\reefknot\storage\session;
 
-use gordian\reefknot\storage;
+use gordian\reefknot\iface;
 
 /**
  * Session management
@@ -36,7 +36,7 @@ use gordian\reefknot\storage;
  * @author gordonmcvey
  * @todo implement Iterator interface
  */
-class Session implements storage\iface\Crud, iface\Session, \Countable, \Iterator
+class Session implements iface\Crud, iface\Session, \Countable, \Iterator
 {
 	
 	protected
