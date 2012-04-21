@@ -8,12 +8,15 @@
 
 namespace gordian\reefknot\storage\session\iface;
 
+use
+	gordian\reefknot\iface;
+
 /**
  * Interface for ReefKnot session manager
  *
  * @author gordonmcvey
  */
-interface Session
+interface Session extends iface\Crud, \ArrayAccess, \Countable, \Iterator
 {
 	/**
 	 * Instantise a session
