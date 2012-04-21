@@ -16,7 +16,7 @@ use
  *
  * @author gordonmcvey
  */
-interface Session extends iface\Crud, \ArrayAccess, \Countable, \Iterator
+interface Session extends iface\Crud, \Countable, \Iterator
 {
 	/**
 	 * Instantise a session

@@ -8,8 +8,6 @@
 
 namespace gordian\reefknot\storage\session;
 
-use gordian\reefknot\iface;
-
 /**
  * Session management
  * 
@@ -55,56 +53,6 @@ class Session implements iface\Session
 		 * @var &array 
 		 */
 		$storage	= NULL;
-	
-	// -[ ArrayAccess implementation starts here ]------------------------------
-	
-	/**
-	 *
-	 * @param scalar $offset
-	 * @param mixed $value 
-	 */
-    public function offsetSet ($offset, $value)
-	{
-		if (is_null ($offset))
-		{
-			$this -> storage []	= $value;
-		}
-		else
-		{
-			$this -> storage [$offset]	= $value;
-		}
-	}
-	
-	/**
-	 *
-	 * @param scalar $offset
-	 * @return bool 
-	 */
-	public function offsetExists ($offset)
-	{
-		return (isset ($this -> storage [$offset]));
-	}
-	
-	/**
-	 *
-	 * @param scalar $offset 
-	 */
-	public function offsetUnset ($offset)
-	{
-		unset ($this -> storage [$offset]);
-	}
-
-	/**
-	 *
-	 * @param scalar $offset
-	 * @return mixed 
-	 */
-	public function offsetGet ($offset)
-	{
-		return (isset ($this -> storage [$offset])? 
-			$this -> container [$offset]: 
-			NULL);
-	}	
 	
 	// -[ Countable implementation starts here ]--------------------------------
 	
