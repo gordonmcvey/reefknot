@@ -36,7 +36,7 @@ use gordian\reefknot\iface;
  * @author gordonmcvey
  * @todo implement Iterator interface
  */
-class Session implements iface\Crud, iface\Session, \Countable, \Iterator
+class Session implements iface\Session
 {
 	
 	protected
@@ -55,6 +55,70 @@ class Session implements iface\Crud, iface\Session, \Countable, \Iterator
 		 * @var &array 
 		 */
 		$storage	= NULL;
+	
+	// -[ ArrayAccess implementation starts here ]------------------------------
+	
+	/**
+	 *
+	 * @param scalar $offset
+	 * @param mixed $value 
+	 */
+    public function offsetSet ($offset, $value)
+	{
+		if (is_null ($offset))
+		{
+			$this -> storage []	= $value;
+		}
+		else
+		{
+			$this -> storage [$offset]	= $value;
+		}
+	}
+	
+	/**
+	 *
+	 * @param scalar $offset
+	 * @return bool 
+	 */
+	public function offsetExists ($offset)
+	{
+		return (isset ($this -> storage [$offset]));
+	}
+	
+	/**
+	 *
+	 * @param scalar $offset 
+	 */
+	public function offsetUnset ($offset)
+	{
+		unset ($this -> storage [$offset]);
+	}
+
+	/**
+	 *
+	 * @param scalar $offset
+	 * @return mixed 
+	 */
+	public function offsetGet ($offset)
+	{
+		return (isset ($this -> storage [$offset])? 
+			$this -> container [$offset]: 
+			NULL);
+	}	
+	
+	// -[ Countable implementation starts here ]--------------------------------
+	
+	/**
+	 * Implementation of countable count
+	 * 
+	 * @return type 
+	 */
+	public function count ()
+	{
+		return (count ($this -> storage));
+	}
+	
+	// -[ Iterator implementation starts here ]---------------------------------
 	
 	/**
 	 * Implementation of iterator rewind 
@@ -105,18 +169,6 @@ class Session implements iface\Crud, iface\Session, \Countable, \Iterator
 	{
 		$key	= \key ($this -> storage);
 		return (($key !== NULL) && ($key !== false));
-	}
-	
-	// -[ Countable implementation starts here ]--------------------------------
-	
-	/**
-	 * Implementation of countable count
-	 * 
-	 * @return type 
-	 */
-	public function count ()
-	{
-		return (count ($this -> storage));
 	}
 	
 	// -[ Session implementation starts here ]----------------------------------
@@ -269,3 +321,4 @@ class Session implements iface\Crud, iface\Session, \Countable, \Iterator
 		}
 	}
 }
+
