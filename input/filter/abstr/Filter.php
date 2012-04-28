@@ -7,7 +7,10 @@ use gordian\reefknot\input\filter\iface;
 /**
  * Description of Filter
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Input
+ * @subpackage Filtering
  */
 abstract class Filter implements iface\Filter
 {

@@ -9,11 +9,14 @@
 namespace gordian\reefknot\app\rmr;
 
 /**
- * Description of Resolver
+ * Resolver reference implementation
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Application
+ * @subpackage RMR
  */
-class Resolver
+class Resolver implements iface\Resolver
 {
 	//put your code here
 }

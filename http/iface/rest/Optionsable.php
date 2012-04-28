@@ -19,8 +19,17 @@ use
  * a HTTP OPTIONS request. 
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
+ * @subpackage REST
+ * @subpackage Interfaces
  */
-interface Optionsable extends Restable
+interface Optionsable extends Restful
 {
+	/**
+	 * 
+	 * @param Request $request Request object that triggered the action
+	 * @return mixed Result of the operation to be formatted by a Representation
+	 */
 	public function httpOptions (Request $request);
 }

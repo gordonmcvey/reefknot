@@ -13,6 +13,11 @@ namespace gordian\reefknot\autoload\iface;
  * 
  * The Reefknot autoloader is quite simple.  Nonetheless, it was decided to 
  * include an interface anyway so that it can be easily replaced if necessary.
+ * 
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Autoload
+ * @subpackage Interfaces
  */
 interface Autoload
 {

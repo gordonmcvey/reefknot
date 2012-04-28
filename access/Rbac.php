@@ -11,7 +11,9 @@ namespace gordian\reefknot\access;
 /**
  * Role-based Access Control model
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Access
  */
 class Rbac extends abstr\Access
 {

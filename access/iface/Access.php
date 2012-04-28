@@ -9,8 +9,12 @@
 namespace gordian\reefknot\access\iface;
 
 /**
- *
- * @author gordonmcvey
+ * Access control class interface
+ * 
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Access
+ * @subpackage Interfaces
  */
 interface Access
 {

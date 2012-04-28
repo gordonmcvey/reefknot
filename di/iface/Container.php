@@ -19,7 +19,10 @@ namespace gordian\reefknot\di\iface;
  * subclass the framework's implementation if you need something basically
  * similar, but with additional behaviour. 
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package DependencyInjection
+ * @subpackage Interfaces
  */
 interface Container
 {

@@ -19,8 +19,17 @@ use
  * HTTP PUT request. 
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
+ * @subpackage REST
+ * @subpackage Interfaces
  */
-interface Puttable extends Restable
+interface Puttable extends Restful
 {
+	/**
+	 * 
+	 * @param Request $request Request object that triggered the action
+	 * @return mixed Result of the operation to be formatted by a Representation
+	 */
 	public function httpPut (Request $request);
 }

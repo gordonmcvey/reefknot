@@ -17,6 +17,10 @@ namespace gordian\reefknot;
  * interface available for use.  It does not activate the autoloader, you need
  * to do that yourself by creating an instance of the autoloader class. This 
  * will put the autoloader into the SPL autoload stack. 
+ * 
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Bootstrap
  */
 
 const

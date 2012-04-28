@@ -20,8 +20,10 @@ namespace gordian\reefknot\di;
  * your object graph (so you don't have to keep passing the same closure around
  * all over the place).  
  * 
- * @author gordonmcvey
  * @link http://www.slideshare.net/fabpot/dependency-injection-with-php-53 Dependency Injection with PHP 5.3
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package DependencyInjection
  */
 class Container implements iface\Container
 {

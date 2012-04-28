@@ -11,7 +11,10 @@ namespace gordian\reefknot\access\iface;
 /**
  * Access Control Resource interface
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Access
+ * @subpackage Interfaces
  */
 interface Resource
 {

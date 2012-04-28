@@ -15,8 +15,10 @@ namespace gordian\reefknot\access;
  * resource has a list of consumers that can access it.  The assigned consumer
  * must be on the access control list in order to access the resource
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Access
  */
-class Acl
+class Acl extends abstr\Access
 {
 }

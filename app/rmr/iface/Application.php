@@ -6,14 +6,17 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0.txt Apache license V2.0
  */
 
-namespace gordian\reefknot\app\rmr;
+namespace gordian\reefknot\app\rmr\iface;
 
 /**
- * Description of Responder
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Application
+ * @subpackage RMR
+ * @subpackage Interfaces
  */
-class Responder
+interface Application
 {
 	//put your code here
 }

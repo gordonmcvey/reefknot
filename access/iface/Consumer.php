@@ -11,7 +11,10 @@ namespace gordian\reefknot\access\iface;
 /**
  * Access Control Consumer interface
  * 
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Access
+ * @subpackage Interfaces
  */
 interface Consumer
 {

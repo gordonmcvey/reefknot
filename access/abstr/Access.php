@@ -8,12 +8,15 @@
 
 namespace gordian\reefknot\access\abstr;
 
-use gordian\reefknot\access\iface;
+use
+	gordian\reefknot\access\iface;
 
 /**
- * Description of Access
+ * Base implementation of access control classes
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Access
  */
 abstract class Access implements iface\Access
 {

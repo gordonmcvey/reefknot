@@ -26,6 +26,8 @@ namespace gordian\reefknot\autoload;
  * control over its operation
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Autoload
  */
 class Autoload implements iface\Autoload
 {

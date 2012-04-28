@@ -23,7 +23,9 @@ namespace gordian\reefknot\access;
  * access control model only when porting legacy applications that use the same
  * model to the framework.  
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Access
  */
 class Level extends abstr\Access
 {

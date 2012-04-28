@@ -31,8 +31,11 @@ namespace gordian\reefknot\storage\session;
  * the same session state in more than one place, then you are advised to pass
  * the same instance of the class to the objects that need it instead.  
  *
- * @author gordonmcvey
  * @todo implement Iterator interface
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Storage
+ * @subpackage Session
  */
 class Session implements iface\Session
 {

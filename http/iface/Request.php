@@ -12,6 +12,9 @@ namespace gordian\reefknot\http\iface;
  * HTTP Request object interface
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
+ * @subpackage Interfaces
  */
 interface Request
 {
@@ -25,6 +28,7 @@ interface Request
 		M_POT		= 'PUT',
 		M_TRACE		= 'TRACE';
 	
+	public function getMethod ();
 	public function isConnect ();
 	public function isDelete ();
 	public function isGet ();

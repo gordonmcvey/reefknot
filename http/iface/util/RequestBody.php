@@ -10,6 +10,10 @@ namespace gordian\reefknot\http\iface\util;
 
 /**
  * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
+ * @subpackage Util
+ * @subpackage Interfaces
  */
 interface RequestBody
 {

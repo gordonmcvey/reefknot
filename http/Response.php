@@ -11,7 +11,9 @@ namespace gordian\reefknot\http;
 /**
  * Description of Response
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
  */
 class Response implements iface\Response
 {
@@ -63,18 +65,32 @@ class Response implements iface\Response
 	protected
 		
 		/**
+		 * HTTP response status
+		 * 
+		 * The HTTP response status code (200 for OK, 404 for not found, etc)
+		 * 
+		 * @var int
+		 */
+		$status		= self::ERR_S_INTERNAL,
+	
+		/**
 		 * HTTP headers to be sent with this response
+		 * 
+		 * The headers are encoded as an associative array, with the key 
+		 * defining the header key (the text to the left of the : character) and 
+		 * the value defining the header value (the text to the right of the 
+		 * : character)
 		 * 
 		 * @var array 
 		 */
-		$head	= array (),
+		$headers	= array (),
 		
 		/**
 		 * Body of the response to be sent
 		 * 
 		 * @var mixed 
 		 */
-		$body	= NULL;
+		$body		= NULL;
 	
 	/**
 	 * Determine if the given code is a valid HTTP status code
@@ -88,28 +104,148 @@ class Response implements iface\Response
 	}
 	
 	/**
-	 * Get the textual message for the given HTTP status code
+	 * Set the response status code
 	 * 
-	 * @param int $code 
-	 * @return string
+	 * @param int $status
+	 * @return Response
 	 * @throws \InvalidArgumentException
 	 */
-	public function getStatusMessage ($code)
+	public function setStatus ($status)
 	{
-		$code	= intval ($code);
-		if (!$this -> validCode ($code))
+		$status	= intval ($status);
+		
+		if ($this -> validCode ($status))
 		{
-			throw new \InvalidArgumentException;
+			$this -> status	= $status;
 		}
-		return ($this -> statusMessages [$code]);
+		else
+		{
+			// Status code not recognised
+			throw new \InvalidArgumentException (__METHOD__ . ': Invalid HTTP response code - ' . $status);
+		}
+		
+		return ($this);
 	}
 	
-	public function getResponseString ($code)
+	/**
+	 * Get the current HTTP response code
+	 * 
+	 * @return int 
+	 */
+	public function getStatus ()
 	{
-		return (	self::HTTP_VER_11 
-					. ' ' 
-					. $code 
-					. ' ' 
-					. $this -> getStatusMessage ($code));
+		return ($this -> status);
+	}
+	
+	/**
+	 * Get the textual message for the current HTTP status code
+	 * 
+	 * @return string
+	 */
+	public function getStatusMessage ()
+	{
+		return ($this -> statusMessages [$this -> getStatus ()]);
+	}
+	
+	/**
+	 * Get the full HTTP status header
+	 * 
+	 * @return string 
+	 */
+	public function getStatusHeader ()
+	{
+		return (	self::HTTP_VER_11 . ' ' 
+					. $this -> getStatus () . ' ' 
+					. $this -> getStatusMessage());
+	}
+	
+	/**
+	 * Set a HTTP header to send with this response
+	 * 
+	 * @param string $key
+	 * @param string $value
+	 * @return Response 
+	 */
+	public function setHeader ($key, $value)
+	{
+		$this -> headers [$key]	= $value;
+		return ($this);
+	}
+	
+	/**
+	 *
+	 * @param string $body
+	 * @return Response
+	 * @throws \InvalidArgumentException 
+	 */
+	public function setBody ($body)
+	{
+		if (is_string ($body))
+		{
+			$this -> setHeader ('Content-Length', strlen ($body));
+			$this -> body	= $body;
+		}
+		else
+		{
+			throw new \InvalidArgumentException ();
+		}
+		
+		return ($this);
+	}
+	
+	/**
+	 *
+	 * @return string 
+	 */
+	public function getBody ()
+	{
+		return ($this -> body);
+	}
+	
+	/**
+	 * Send the HTTP headers to the client
+	 * 
+	 * @return Response 
+	 */
+	protected function sendHeaders ()
+	{
+		header ($this -> getStatusHeader ());
+		
+		foreach ($this -> headers as $key -> $val)
+		{
+			header ($key . ': ' . $val, true);
+		}
+		
+		return ($this);
+	}
+	
+	/**
+	 *
+	 * @return Response 
+	 */
+	protected function sendBody ()
+	{
+		echo ($this -> body);
+		return ($this);
+	}
+	
+	/**
+	 *
+	 * @return Response
+	 * @throws \Exception 
+	 */
+	public function send ()
+	{
+		if (!\headers_sent ())
+		{
+			$this -> sendHeaders ();
+			$this -> sendBody ();
+		}
+		else
+		{
+			// Headers already sent
+			throw new \Exception ();
+		}
+		return ($this);
 	}
 }

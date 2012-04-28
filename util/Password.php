@@ -11,7 +11,9 @@ namespace gordian\reefknot\util;
 /**
  * Class for generating a random password
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Util
  */
 class Password
 {

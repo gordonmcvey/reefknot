@@ -19,8 +19,17 @@ use
  * requests.  
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
+ * @subpackage REST
+ * @subpackage Interfaces
  */
-interface Connectable extends Restable
+interface Connectable extends Restful
 {
+	/**
+	 * 
+	 * @param Request $request Request object that triggered the action
+	 * @return mixed Result of the operation to be formatted by a Representation
+	 */
 	public function httpConnect (Request $request);
 }

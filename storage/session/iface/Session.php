@@ -14,7 +14,11 @@ use
 /**
  * Interface for ReefKnot session manager
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Storage
+ * @subpackage Session
+ * @subpackage Interfaces
  */
 interface Session extends iface\Crud, \Countable, \Iterator
 {

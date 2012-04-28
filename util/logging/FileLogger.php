@@ -11,7 +11,10 @@ namespace gordian\reefknot\util\logging;
 /**
  * Description of FileLogger
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Util
+ * @subpackage Logging
  */
 class FileLogger implements \SplObserver
 {

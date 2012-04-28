@@ -10,15 +10,19 @@ namespace gordian\reefknot\http\iface;
 
 /**
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
+ * @subpackage Interfaces
  */
 interface Response
 {
 	const
 		
 		/**
-		 * HTTP 1.1 version string 
+		 * HTTP version strings
 		 */
+		HTTP_VER_10			= 'HTTP/1.0',
 		HTTP_VER_11			= 'HTTP/1.1',
 		
 		/**
@@ -81,4 +85,12 @@ interface Response
 		ERR_S_UNAVAILABLE	= 503, // Service unavailable
 		ERR_S_TIMEOUT		= 504, // Server timeout
 		ERR_S_VERSION		= 505; // HTTP version not supported
+	
+	public function setStatus ();
+	public function getStatus ();
+	public function getStatusMessage ();
+	public function getStatusHeader ();
+	public function setHeader ($key, $value);
+	public function setBody ($body);
+	public function send ();
 }

@@ -15,6 +15,9 @@ use
  * Object for accessing the request body
  *
  * @author Gordon McVey
+ * @category Reefknot
+ * @package HTTP
+ * @subpackage Util
  */
 class RequestBody implements iface\util\RequestBody
 {

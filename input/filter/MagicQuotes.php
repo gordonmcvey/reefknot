@@ -18,7 +18,10 @@ namespace gordian\reefknot\input\filter;
  * This filter has no effect on PHP 5.4 (which no longer supports magic quotes)
  * or on intallations where magic_quotes_gpc has been disabled.  
  *
- * @author gordonmcvey
+ * @author Gordon McVey
+ * @category Reefknot
+ * @package Input
+ * @subpackage Filtering
  */
 class MagicQuotes extends abstr\Filter
 {
