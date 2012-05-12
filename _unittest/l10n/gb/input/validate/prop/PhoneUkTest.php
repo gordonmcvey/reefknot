@@ -1,6 +1,6 @@
 <?php
 
-namespace gordian\reefknot\input\validate\prop;
+namespace gordian\reefknot\l10n\gb\input\validate\prop;
 
 /**
  * Test class for PhoneUk.

@@ -6,7 +6,7 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0.txt Apache license V2.0
  */
 
-namespace gordian\reefknot\input\validate\prop;
+namespace gordian\reefknot\l10n\gb\input\validate\prop;
 
 use
 	gordian\reefknot\input\validate\abstr, 
@@ -83,6 +83,7 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 	 * 
 	 * @param array $config
 	 * @return PhoneUk 
+	 * @throws \InvalidArgumentException 
 	 * @link http://en.wikipedia.org/wiki/Telephone_numbers_in_the_United_Kingdom
 	 */
 	public function setConfig (array $config = array ())
@@ -113,7 +114,7 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 			throw new \InvalidArgumentException (__CLASS__ . ': The given configuration is not valid ' . var_export ($config, true));
 		}
 		
-		return (parent::setConfig ($config));
+		return parent::setConfig ($config);
 	}
 	
 	/**
@@ -143,7 +144,7 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 			}
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 	
 	/**
@@ -171,6 +172,6 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 			break;
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 }

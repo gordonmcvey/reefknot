@@ -1,8 +1,6 @@
 <?php
 
-namespace gordian\reefknot\input\validate\prop;
-
-require_once dirname (__FILE__) . '/../../../../input/validate/prop/PostcodeUk.php';
+namespace gordian\reefknot\l10n\gb\input\validate\prop;
 
 /**
  * Test class for PostcodeUk.

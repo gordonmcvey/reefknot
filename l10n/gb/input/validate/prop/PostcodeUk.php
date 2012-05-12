@@ -6,7 +6,7 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0.txt Apache license V2.0
  */
 
-namespace gordian\reefknot\input\validate\prop;
+namespace gordian\reefknot\l10n\gb\input\validate\prop;
 
 use
 	gordian\reefknot\input\validate\abstr, 
@@ -57,6 +57,6 @@ class PostcodeUk extends abstr\Prop implements iface\Prop
 			break;
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 }
