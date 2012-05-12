@@ -62,11 +62,11 @@ class Session implements iface\Session
 	/**
 	 * Implementation of countable count
 	 * 
-	 * @return type 
+	 * @return int 
 	 */
 	public function count ()
 	{
-		return (count ($this -> storage));
+		return count ($this -> storage);
 	}
 	
 	// -[ Iterator implementation starts here ]---------------------------------
@@ -78,7 +78,7 @@ class Session implements iface\Session
 	 */
 	public function rewind ()
 	{
-		return (\reset ($this -> storage));
+		return \reset ($this -> storage);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ class Session implements iface\Session
 	 */
 	public function current ()
 	{
-		return (\current ($this -> storage));
+		return \current ($this -> storage);
 	}
 	
 	/**
@@ -98,7 +98,7 @@ class Session implements iface\Session
 	 */
 	public function key ()
 	{
-		return (\key ($this -> storage));
+		return \key ($this -> storage);
 	}
 	
 	/**
@@ -108,7 +108,7 @@ class Session implements iface\Session
 	 */
 	public function next ()
 	{
-		return (\next ($this -> storage));
+		return \next ($this -> storage);
 	}
 	
 	/**
@@ -119,7 +119,7 @@ class Session implements iface\Session
 	public function valid ()
 	{
 		$key	= \key ($this -> storage);
-		return (($key !== NULL) && ($key !== false));
+		return ($key !== NULL) && ($key !== false);
 	}
 	
 	// -[ Session implementation starts here ]----------------------------------
@@ -127,10 +127,10 @@ class Session implements iface\Session
 	/**
 	 * Add a new item to the session
 	 * 
-	 * @param mixed $data 
-	 * @param string $key
-	 * @return Session
-	 * @throws \InvalidArgumentException Thrown if no name is provided
+	 * @param scalar $data
+	 * @param mixed $key
+	 * @return \gordian\reefknot\storage\session\Session
+	 * @throws \InvalidArgumentException 
 	 */
 	public function createItem ($data, $key)
 	{
@@ -143,27 +143,27 @@ class Session implements iface\Session
 		}
 		else
 		{
-			throw new \InvalidArgumentException ('No valid key given');
+			throw new \InvalidArgumentException (__METHOD__ . ': Key is not valid');
 		}
-		return ($this);
+		return $this;
 	}
 	
 	/**
 	 * Delete the specified key
 	 * 
-	 * @param string $key 
-	 * @return Session
+	 * @param scalar $key 
+	 * @return \gordian\reefknot\storage\session\Session 
 	 */
 	public function deleteItem ($key)
 	{
 		unset ($this -> storage [$key]);
-		return ($this);
+		return $this;
 	}
 	
 	/**
 	 * Retrieve the data stored in the specified key
 	 * 
-	 * @param type $key 
+	 * @param scalar $key 
 	 * @return mixed
 	 */
 	public function readItem ($key)
@@ -177,26 +177,35 @@ class Session implements iface\Session
 	 * Update a previously stored data item to a new value
 	 * 
 	 * @param mixed $data 
-	 * @param string $key
+	 * @param scalar $key
+	 * @return \gordian\reefknot\storage\session\Session
+	 * @throws \InvalidArgumentException 
 	 */
 	public function updateItem ($data, $key)
 	{
-		if (array_key_exists ($key, $this -> storage))
+		if (is_scalar ($key))
 		{
-			$this -> storage [$key]	= $data;
+			if (array_key_exists ($key, $this -> storage))
+			{
+				$this -> storage [$key]	= $data;
+			}
 		}
-		return ($this);
+		else
+		{
+			throw new \InvalidArgumentException (__METHOD__ . ': Key is not valid');
+		}
+		return $this;
 	}
 	
 	/**
 	 * Clear the session of all stored data
 	 * 
-	 * @return Session 
+	 * @return \gordian\reefknot\storage\session\Session 
 	 */
 	public function reset ()
 	{
 		$this -> storage = array ();
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -239,7 +248,7 @@ class Session implements iface\Session
 			&& ((headers_sent ()) 
 			|| ((!session_start ()))))
 			{
-				throw new \RuntimeException ('Unable to start session at this time');
+				throw new \RuntimeException (__METHOD__ . ': Unable to initiate session storage at this time');
 			}
 			// Alias our instance storage to the named $_SESSION variable
 			$this -> storage	=& $_SESSION [$this -> namespace];
@@ -249,13 +258,13 @@ class Session implements iface\Session
 				$this -> reset ();
 			}
 		}
-		return ($this -> hasData ());
+		return $this -> hasData ();
 	}
 	
 	/**
 	 * Class constructor
 	 * 
-	 * @param string $namespace
+	 * @param scalar $namespace
 	 * @throws \InvalidArgumentException Thrown if no session name is provided
 	 */
 	public function __construct ($namespace)
@@ -268,7 +277,7 @@ class Session implements iface\Session
 		}
 		else
 		{
-			throw new \InvalidArgumentException ('Session must have a name');
+			throw new \InvalidArgumentException (__METHOD__ . ': Session must have a valid name');
 		}
 	}
 }
