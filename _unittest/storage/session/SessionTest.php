@@ -60,9 +60,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
 	}
 	
-	/**
-	 * @todo Implement testCreateItem().
-	 */
 	public function testCreateItem ()
 	{
 		$this -> assertTrue (isset ($_SESSION));
@@ -124,19 +121,31 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue (empty ($_SESSION ['unittest']));
 	}
 
-	/**
-	 * @todo Implement testUpdateItem().
-	 */
 	public function testUpdateItem ()
 	{
 		$this -> assertTrue (empty ($_SESSION ['unittest']));
 		$this -> assertTrue (empty ($_SESSION ['unittest']['test']));
 		$this -> object ->  createItem ('This is a test', 'test');
+		$this -> assertEquals ($this -> object -> readItem ('test'), 'This is a test');
 		$this -> object ->  updateItem ('foofoofoo', 'test');
 		$this -> assertFalse (empty ($_SESSION ['unittest']['test']));
 		$this -> assertEquals ($this -> object ->  readItem ('test'), 'foofoofoo');
 	}
-
+	
+	public function testUpdateItemInvalidKeyThrowsException ()
+	{
+		$ex	= NULL;
+		try
+		{
+			$this -> object -> updateItem ('asdfdsa', array (1, 2, 3));
+		}
+		catch (\Exception $e)
+		{
+			$ex	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+	}
+	
 	/**
 	 * @todo Implement testReset().
 	 */
