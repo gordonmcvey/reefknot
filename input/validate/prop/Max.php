@@ -84,6 +84,6 @@ class Max extends abstr\prop\Ranged implements iface\prop\Ranged
 			break;
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 }

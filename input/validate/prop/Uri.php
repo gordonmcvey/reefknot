@@ -38,6 +38,29 @@ class Uri extends abstr\Prop implements iface\Prop
 		);
 	
 	/**
+	 * Test the URI for validity
+	 * 
+	 * @param string $data
+	 * @return bool True if valid 
+	 */
+	protected function uriValid ($data)
+	{
+		$valid	= false;
+		
+		if ((filter_var ($data, FILTER_VALIDATE_URL, array (
+			FILTER_FLAG_SCHEME_REQUIRED, 
+			FILTER_FLAG_HOST_REQUIRED
+		))) !== false)
+		{
+			$parts	= parse_url ($data);
+			$valid	= ((!empty ($parts ['scheme'])) 
+					&& (in_array ($parts ['scheme'], $this -> schemaList)));
+		}
+		
+		return $valid;
+	}
+	
+	/**
 	 * Validate that this object's data is a valid URL/URI
 	 * 
 	 * This method depends on the underlying PHP filter_var function with the
@@ -59,15 +82,7 @@ class Uri extends abstr\Prop implements iface\Prop
 				$valid	= true;
 			break;
 			case 'string'	:
-				if ((filter_var ($data, FILTER_VALIDATE_URL, array (
-					FILTER_FLAG_SCHEME_REQUIRED, 
-					FILTER_FLAG_HOST_REQUIRED
-				))) !== false)
-				{
-					$parts	= parse_url ($data);
-					$valid	= ((!empty ($parts ['scheme'])) 
-							&& (in_array ($parts ['scheme'], $this -> schemaList)));
-				}
+				$valid	= $this -> uriValid ($data);
 			break;
 			default			:
 				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));

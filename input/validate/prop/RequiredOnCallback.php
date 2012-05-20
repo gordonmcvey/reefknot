@@ -75,6 +75,6 @@ class RequiredOnCallback extends Required
 			parent::isValid ():
 			true;
 		
-		return ($valid);
+		return $valid;
 	}
 }

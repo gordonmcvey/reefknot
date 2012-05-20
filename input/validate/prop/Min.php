@@ -81,6 +81,6 @@ class Min extends abstr\prop\Ranged implements iface\prop\Ranged
 				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
-		return ($valid);
+		return $valid;
 	}
 }

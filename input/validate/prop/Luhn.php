@@ -25,6 +25,36 @@ use
  */
 class Luhn extends abstr\Prop implements iface\Prop
 {
+	
+	/**
+	 * Apply the Luhn algorithim to the provided data
+	 * 
+	 * @param number $data
+	 * @return bool True if the data passes the Luhn check
+	 */
+	protected function luhnValid ($data)
+	{
+		// Get the sequence of digits that make up the number under test
+		$digits	= array_reverse (array_map ('intval', str_split ((string) $data)));
+		
+		// Walk the array, doubling the value of every second digit
+		for ($i = 0, $count	= count ($digits); $i < $count; $i++)
+		{
+			if ($i % 2)
+			{
+				if (($digits [$i] *= 2) > 9)
+				{
+					// If doubling the digit resulted in a value > 9 then subtract 10 and add an extra 1 onto the array
+					$digits [$i]	-= 10;
+					$digits []		= 1;
+				}
+			}
+		}
+		
+		// The Luhn is valid if the sum of the digits ends in a 0
+		return (array_sum ($digits) % 10) === 0;
+	}
+	
 	/**
 	 * Test that the given data passes a Luhn check. 
 	 * 
@@ -34,8 +64,8 @@ class Luhn extends abstr\Prop implements iface\Prop
 	 */
 	public function isValid ()
 	{
-		$data	= $this -> getData ();
 		$valid	= false;
+		$data	= $this -> getData ();
 		
 		switch (gettype ($data))
 		{
@@ -43,24 +73,7 @@ class Luhn extends abstr\Prop implements iface\Prop
 				$valid	= true;
 			break;
 			case 'integer'	:
-				// Get the sequence of digits that make up the number under test
-				$digits	= array_reverse (array_map ('intval', str_split ((string) $data)));
-				// Walk the array, doubling the value of every second digit
-				for ($i = 0, $count	= count ($digits); $i < $count; $i++)
-				{
-					if ($i % 2)
-					{
-						// Double the digit
-						if (($digits [$i] *= 2) > 9)
-						{
-							// Handle the case where the doubled digit is over 9
-							$digits	[$i]	-= 10;
-							$digits []		= 1;
-						}
-					}
-				}
-				// The Luhn is valid if the sum of the digits ends in a 0
-				$valid	= ((array_sum ($digits) % 10) === 0);
+				$valid	= $this -> luhnValid ($data);
 			break;
 			default			:
 				// An attempt was made to apply the check to an invalid data type
@@ -68,6 +81,6 @@ class Luhn extends abstr\Prop implements iface\Prop
 			break;
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 }

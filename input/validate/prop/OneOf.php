@@ -54,6 +54,32 @@ class OneOf extends abstr\prop\Logic implements iface\prop\Logic
 	}
 	
 	/**
+	 * Do the OneOf validation test
+	 * 
+	 * @param mixed $data
+	 * @return int 
+	 */
+	protected function oneOfValid ($data)
+	{
+		$validCount	= 0;
+		$cfg		= $this -> getConfig ();
+		
+		foreach ($cfg ['props'] as $prop)
+		{
+			if ($prop -> setData ($data) -> isValid ())
+			{
+				$validCount ++;
+				if ($validCount > 1)
+				{
+					break;
+				}
+			}
+		}
+			
+		return $validCount;
+	}
+	
+	/**
 	 * Test that the property's data is valid
 	 * 
 	 * For the data to be valid, it must validate against one, and only one, of 
@@ -67,26 +93,10 @@ class OneOf extends abstr\prop\Logic implements iface\prop\Logic
 		$validCount	= 0;
 		$data		= $this -> getData ();
 		
-		if (is_null ($data))
-		{
-			$validCount	= 1;
-		}
-		else
-		{
-			$cfg	= $this -> getConfig ();
-			foreach ($cfg ['props'] as $prop)
-			{
-				if ($prop -> setData ($data) -> isValid ())
-				{
-					$validCount ++;
-					if ($validCount > 1)
-					{
-						break;
-					}
-				}
-			}
-		}
-		
-		return ($validCount === 1);
+		$validCount	= !is_null ($data)?
+			$this -> oneOfValid ($data):
+			1;
+
+		return $validCount === 1;
 	}
 }

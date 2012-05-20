@@ -62,6 +62,32 @@ class Callback extends abstr\Prop implements iface\Prop
 	}
 	
 	/**
+	 * Apply the callback to the data to test
+	 * 
+	 * @param mixed $data
+	 * @return bool True if valid
+	 */
+	protected function callbackValid ($data)
+	{
+		$cfg	= $this -> getConfig ();
+		$args	= array ();
+		
+		// Generate arguments for the callback
+		if (isset ($cfg ['args']))
+		{
+			$args	= $cfg ['args'];
+			array_unshift ($args, $data);
+		}
+		else
+		{
+			$args []	= $data;
+		}
+		
+		// Execute the callback
+		return (bool) call_user_func_array ($cfg ['callback'], $args);
+	}
+	
+	/**
 	 * Test the validity of the item's data
 	 * 
 	 * The item's data is considered valid if the callback it is passed to 
@@ -85,31 +111,13 @@ class Callback extends abstr\Prop implements iface\Prop
 	 */
 	public function isValid ()
 	{
-		$data	= $this -> getData ();
 		$valid	= false;
-		$args	= array ();
+		$data	= $this -> getData ();
 		
-		if (!is_null ($data))
-		{
-			$cfg	= $this -> getConfig ();
-			// Generate arguments for the callback
-			if (isset ($cfg ['args']))
-			{
-				$args	= $cfg ['args'];
-				array_unshift ($args, $data);
-			}
-			else
-			{
-				$args []	= $data;
-			}
-			// Execute the callback
-			$valid	= (bool) call_user_func_array ($cfg ['callback'], $args);
-		}
-		else
-		{
-			$valid	= true;
-		}
+		$valid	= !is_null ($data)?
+			$this -> callbackValid ($data):
+			true;
 		
-		return ($valid);
+		return $valid;
 	}
 }

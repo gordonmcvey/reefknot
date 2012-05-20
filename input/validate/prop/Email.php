@@ -55,6 +55,6 @@ class Email extends abstr\Prop implements iface\Prop
 			break;
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 }

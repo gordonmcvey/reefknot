@@ -25,6 +25,19 @@ use
  */
 class Subset extends abstr\Prop\Set implements iface\Prop
 {
+	
+	/**
+	 * Perform the subset test
+	 * @param array $data 
+	 * @return bool True if valid
+	 */
+	protected function subsetValid (array $data)
+	{
+		$cfg	= $this -> getConfig ();
+		$diffs	= array_diff ($data, $cfg ['set']);
+		return empty ($diffs);
+	}
+	
 	/**
 	 * Test that the given data array is a subset of the Property's set
 	 * 
@@ -50,9 +63,7 @@ class Subset extends abstr\Prop\Set implements iface\Prop
 				$valid	= true;
 			break;
 			case 'array'	:
-				$cfg	= $this -> getConfig ();
-				$diffs	= array_diff ($data, $cfg ['set']);
-				$valid	= empty ($diffs);
+				$valid	= $this -> subsetValid ($data);
 			break;
 			default			: 
 				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));

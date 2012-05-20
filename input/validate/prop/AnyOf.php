@@ -53,6 +53,28 @@ class AnyOf extends abstr\prop\Logic implements iface\prop\Logic
 	}
 	
 	/**
+	 * Perform the AnyOf validation check
+	 *
+	 * @param mixed $data
+	 * @return bool True if valid 
+	 */
+	protected function anyOfValid ($data)
+	{
+		$valid	= false;
+		
+		$cfg	= $this -> getConfig ();
+		foreach ($cfg ['props'] as $prop)
+		{
+			if (($valid = $prop -> setData ($data) -> isValid ()) == true)
+			{
+				break;
+			}
+		}
+		
+		return $valid;
+	}
+	
+	/**
 	 * Test that the property's data is valid
 	 * 
 	 * For the data to be valid, it must validate against at least one of the 
@@ -66,22 +88,10 @@ class AnyOf extends abstr\prop\Logic implements iface\prop\Logic
 		$valid	= false;
 		$data	= $this -> getData ();
 		
-		if (is_null ($data))
-		{
-			$valid	= true;
-		}
-		else
-		{
-			$cfg	= $this -> getConfig ();
-			foreach ($cfg ['props'] as $prop)
-			{
-				if (($valid = $prop -> setData ($data) -> isValid ()) == true)
-				{
-					break;
-				}
-			}
-		}
-		
-		return ($valid);
+		$valid	= !is_null ($data)?
+			$this -> anyOfValid ($data):
+			true;
+	
+		return $valid;
 	}
 }

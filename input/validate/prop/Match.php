@@ -50,6 +50,6 @@ class Match extends abstr\prop\TextMatch implements iface\Prop
 			break;
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 }
