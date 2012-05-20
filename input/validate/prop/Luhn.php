@@ -79,6 +79,7 @@ class Luhn extends abstr\Prop implements iface\Prop
 				$valid	= $this -> luhnValid (number_format (round ($data), 0, '', ''));
 			break;
 			case 'string'	:
+				// We only want to attempt Luhn validation if the string consists only of digits with no leading 0s
 				if (preg_match ('/^[1-9][0-9]*$/', $data))
 				{
 					$valid	= $this -> luhnValid (number_format (round ($data), 0, '', ''));
