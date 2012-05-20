@@ -44,16 +44,34 @@ class LuhnTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
-	public function testIsValidFails ()
-	{
-		$this -> object -> setData (4111111111111119);
-		$this -> assertFalse ($this -> object -> isValid ());
-	}
-	
 	public function testIsValidPasses2 ()
 	{
 		$this -> object -> setData (79927398713);
 		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidPasses3 ()
+	{
+		$this -> object -> setData (109);
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidPasses4 ()
+	{
+		$this -> object -> setData (109.0);
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidPasses5 ()
+	{
+		$this -> object -> setData ('4111111111111111');
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails ()
+	{
+		$this -> object -> setData (4111111111111119);
+		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
 	public function testIsValidFails2 ()
@@ -62,10 +80,43 @@ class LuhnTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	public function testIsValidFails3 ()
+	{
+		$this -> object -> setData (108);
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails4 ()
+	{
+		$this -> object -> setData (108.0);
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidFails5 ()
+	{
+		$this -> object -> setData ('4111111111111119');
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
 	public function testIsValidWrongTypeThrowsException ()
 	{
 		$exception	= NULL;
-		$this -> object -> setData ('4111111111111111');
+		$this -> object -> setData ('123 The quick brown fox jumps over the lazy dog 321');
+		try 
+		{
+			$this -> object -> isValid ();
+		}
+		catch (\Exception $e)
+		{
+			$exception	= $e;
+		}
+		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
+	}
+	
+	public function testIsValidWrongTypeThrowsException2 ()
+	{
+		$exception	= NULL;
+		$this -> object -> setData (array (4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
 		try 
 		{
 			$this -> object -> isValid ();

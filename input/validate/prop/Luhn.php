@@ -75,6 +75,19 @@ class Luhn extends abstr\Prop implements iface\Prop
 			case 'integer'	:
 				$valid	= $this -> luhnValid ($data);
 			break;
+			case 'double'	:
+				$valid	= $this -> luhnValid (number_format (round ($data), 0, '', ''));
+			break;
+			case 'string'	:
+				if (preg_match ('/^[1-9][0-9]*$/', $data))
+				{
+					$valid	= $this -> luhnValid (number_format (round ($data), 0, '', ''));
+				}
+				else
+				{
+					throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
+				}
+			break;
 			default			:
 				// An attempt was made to apply the check to an invalid data type
 				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
