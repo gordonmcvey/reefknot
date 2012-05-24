@@ -46,6 +46,18 @@ class IsIntTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	public function testIsValidIntMaxPass ()
+	{
+		$this -> object -> setData (PHP_INT_MAX);
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidIntMinPass ()
+	{
+		$this -> object -> setData ((PHP_INT_MAX * -1) - 1);
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
 	public function testIsValidIntNegativePass ()
 	{
 		$this -> object -> setData (-42);
@@ -93,6 +105,18 @@ class IsIntTest extends \PHPUnit_Framework_TestCase
 	public function testIsValidStringFail ()
 	{
 		$this -> object -> setData ('The quick brown fox jumps over the lazy dog.');
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidIntAboveMaxFail ()
+	{
+		$this -> object -> setData (PHP_INT_MAX + 1);
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidIntBelowMinFail ()
+	{
+		$this -> object -> setData ((PHP_INT_MAX * -1) - 2);
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 }
