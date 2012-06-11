@@ -23,6 +23,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp ()
 	{
+		if (version_compare (PHP_VERSION, '5.3.6') < 0)
+		{
+			$this -> markTestSkipped ('The Widget class requires PHP >= 5.3.6');
+		}
 		$this -> object = new WidgetMock (new \DOMDocument ());
 	}
 
