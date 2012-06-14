@@ -16,6 +16,7 @@ use
  *
  * @author Gordon McVey
  * @link https://developer.mozilla.org/en/HTML/Global_attributes
+ * @todo Implement HTML5 data-* attribute management
  */
 abstract class Widget implements iface\Widget
 {
@@ -162,13 +163,68 @@ abstract class Widget implements iface\Widget
 	 * The access key of a widget is a space-separated list of keys to bind to 
 	 * an element.  The first key in the that exists on the user's keyboard will 
 	 * activate the element. 
+	 * 
 	 * @return string 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#the-accesskey-attribute
 	 */
 	public function getAccessKeys ()
 	{
 		return $this -> getAttr ('accesskey');
 	}
 	
+	/**
+	 * Set the elements accesskey list
+	 * 
+	 * @param string|array $keys
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#the-accesskey-attribute
+	 */
+	public function setAccessKeys ($keys)
+	{
+		if (is_array ($keys))
+		{
+			$keys	= implode (' ', $keys);
+		}
+		
+		return $this -> setAttr ('accesskey', $keys);
+	}
+	
+	/**
+	 * Append a new access key to the accesskey list
+	 * 
+	 * @param string $key
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#the-accesskey-attribute
+	 */
+	public function addAccessKey ($key)
+	{
+		return $this -> addToAttr ('accesskey', $key);
+	}
+
+	/**
+	 * Test to see if the specified access key has been set
+	 * 
+	 * @param string $key
+	 * @return bool 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#the-accesskey-attribute
+	 */
+	public function hasAccessKey ($key)
+	{
+		return $this -> attrHasVal ('accesskey', $key);
+	}
+	
+	/**
+	 * Remove the specified access key from the access key list
+	 * 
+	 * @param string $key
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#the-accesskey-attribute
+	 */
+	public function removeAccessKey ($key)
+	{
+		return $this -> removeFromAttr ('accesskey', $key);
+	}
+		
 	/**
 	 * Get whether the element is in contenteditable mode.  
 	 * 
@@ -177,6 +233,7 @@ abstract class Widget implements iface\Widget
 	 * inheritence from the parent)
 	 * 
 	 * @return bool|NULL Boolean true or false, or NULL for inherit 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#attr-contenteditable
 	 */
 	public function getContentEditable ()
 	{
@@ -184,8 +241,38 @@ abstract class Widget implements iface\Widget
 	}
 	
 	/**
+	 * Set the contenteditable attribute to the specified value
+	 * 
+	 * @param bool|string $state Must be one of true, false, inherit, or an empty value
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
+	 * @throws \InvalidArgumentException 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#attr-contenteditable
+	 */
+	public function setContentEditable ($state)
+	{
+		if (is_bool ($state))
+		{
+			$state	= $state? 'true': 'false';
+		}
+		
+		if (($state === 'true')
+		|| ($state === 'false')
+		|| ($state === 'inherit')
+		|| (empty ($state)))
+		{
+			return $this -> setAttr ('contenteditable', $state);
+		}
+		else
+		{
+			throw new \InvalidArgumentException;
+		}
+	}
+	
+	/**
+	 * Set the ID of the context menu to associate with this element
 	 * 
 	 * @return string 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/interactive-elements.html#context-menus
 	 */
 	public function getContextMenu ()
 	{
@@ -193,12 +280,46 @@ abstract class Widget implements iface\Widget
 	}
 	
 	/**
-	 *
+	 * Get the current context menu ID
+	 * 
+	 * @param string $contextMenu
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/interactive-elements.html#context-menus
+	 */
+	public function setContextMenu ($contextMenu)
+	{
+		return $this -> setAttr ('contextmenu', $contextMenu);
+	}
+	
+	/**
+	 * Get the directionality attribute of the element
+	 * 
 	 * @return string 
 	 */
 	public function getDir ()
 	{
 		return $this -> getAttr ('dir');
+	}
+	
+	/**
+	 * Set the directionality of the element
+	 * 
+	 * @param string $dir Must be one of ltr, rtl, auto or an empty value
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
+	 */
+	public function setDir ($dir)
+	{
+		if (($dir === 'ltr')
+		|| ($dir === 'rtl')
+		|| ($dir === 'auto')
+		|| (empty ($dir)))
+		{
+			return $this -> setAttr ('dir', $dir);
+		}
+		else
+		{
+			throw new \InvalidArgumentException;
+		}
 	}
 	
 	/**
@@ -208,10 +329,36 @@ abstract class Widget implements iface\Widget
 	 * auto (the decision regarding dragability is up to the browser)
 	 * 
 	 * @return string|NULL String true, false or auto, or NULL for unset 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/dnd.html#the-draggable-attribute
 	 */
 	public function getDraggable ()
 	{
 		return $this -> getAttr ('draggable');
+	}
+	
+	/**
+	 *
+	 * @param type $draggable
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
+	 * @link http://www.whatwg.org/specs/web-apps/current-work/multipage/dnd.html#the-draggable-attribute	
+	 */
+	public function setDraggable ($draggable)
+	{
+		if (is_bool ($draggable))
+		{
+			$draggable	= $draggable? 'true': 'false';
+		}
+		return $this -> setAttr ('draggable', $draggable);
+	}
+	
+	public function unsetDraggable ()
+	{
+		
+	}
+	
+	public function resetDraggable ()
+	{
+		
 	}
 	
 	/**
@@ -311,21 +458,6 @@ abstract class Widget implements iface\Widget
 	
 	/**
 	 *
-	 * @param string|array $keys
-	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
-	 */
-	public function setAccessKeys ($keys)
-	{
-		if (is_array ($keys))
-		{
-			$keys	= implode (' ', $keys);
-		}
-		
-		return $this -> setAttr ('accesskey', $keys);
-	}
-	
-	/**
-	 *
 	 * @param string $class
 	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
 	 */
@@ -376,54 +508,6 @@ abstract class Widget implements iface\Widget
 		}
 		
 		return $this -> setAttr ('class', $classes);
-	}
-	
-	/**
-	 *
-	 * @param bool|string $state
-	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
-	 */
-	public function setContentEditable ($state)
-	{
-		if (is_bool ($state))
-		{
-			$state	= $state? 'true': 'false';
-		}
-		return $this -> setAttr ('contenteditable', $state);
-	}
-	
-	/**
-	 *
-	 * @param string $contextMenu
-	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
-	 */
-	public function setContextMenu ($contextMenu)
-	{
-		return $this -> setAttr ('contextmenu', $contextMenu);
-	}
-	
-	/**
-	 *
-	 * @param string $dir
-	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
-	 */
-	public function setDir ($dir)
-	{
-		return $this -> setAttr ('dir', $dir);
-	}
-	
-	/**
-	 *
-	 * @param type $draggable
-	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
-	 */
-	public function setDraggable ($draggable)
-	{
-		if (is_bool ($draggable))
-		{
-			$draggable	= $draggable? 'true': 'false';
-		}
-		return $this -> setAttr ('draggable', $draggable);
 	}
 	
 	/**
@@ -524,38 +608,6 @@ abstract class Widget implements iface\Widget
 		return $this -> setAttr ('title', $title);
 	}
 	
-	/**
-	 * Append a new access key to the accesskey list
-	 * 
-	 * @param string $key
-	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
-	 */
-	public function addAccessKey ($key)
-	{
-		return $this -> addToAttr ('accesskey', $key);
-	}
-
-	/**
-	 * Test to see if the specified access key has been set
-	 * 
-	 * @param string $key
-	 * @return bool 
-	 */
-	public function hasAccessKey ($key)
-	{
-		return $this -> attrHasVal ('accesskey', $key);
-	}
-	
-	/**
-	 *
-	 * @param string $key
-	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
-	 */
-	public function removeAccessKey ($key)
-	{
-		return $this -> removeFromAttr ('accesskey', $key);
-	}
-		
 	/**
 	 *
 	 * @param \DOMDocument $dom 
