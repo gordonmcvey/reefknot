@@ -23,10 +23,6 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp ()
 	{
-		if (version_compare (PHP_VERSION, '5.3.6') < 0)
-		{
-			$this -> markTestSkipped ('The Widget class requires PHP >= 5.3.6');
-		}
 		$this -> object = new WidgetMock (new \DOMDocument ());
 	}
 
@@ -38,6 +34,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Test that the getNode method returns a DOMElement and that it returns the 
 	 * same one every time 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testGetNode ()
 	{
@@ -49,6 +47,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Test that we can set a single access key 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAccessKeysWithStrings1 ()
 	{
@@ -59,6 +59,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that setting a new access key overwrites the original one 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAccessKeysWithStrings2 ()
 	{
@@ -71,6 +73,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set multiple access keys 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAccessKeysWithStrings3 ()
 	{
@@ -82,6 +86,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set a single access key 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAccessKeysWithArrays1 ()
 	{
@@ -92,6 +98,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that setting a new access key overwrites the original one 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAccessKeysWithArrays2 ()
 	{
@@ -103,6 +111,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set multiple access keys 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAccessKeysWithArrays3 ()
 	{
@@ -114,6 +124,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can add a new access key to the existing list 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAddAccessKey ()
 	{
@@ -131,6 +143,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can remove individual access keys from the list 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testRemoveAccessKey ()
 	{
@@ -149,6 +163,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set a single class
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testClassesWithStrings1 ()
 	{
@@ -159,6 +175,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that setting a new class overwrites the original one 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testClassesWithStrings2 ()
 	{
@@ -170,6 +188,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set multiple classes
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testClassesWithStrings3 ()
 	{
@@ -181,6 +201,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set a single class
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testClassesWithArrays1 ()
 	{
@@ -191,6 +213,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that setting a new class overwrites the original one 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testClassesWithArrays2 ()
 	{
@@ -202,6 +226,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set multiple classes
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testClassesWithArrays3 ()
 	{
@@ -213,6 +239,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can add a new class to the existing class list 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testAddClass ()
 	{
@@ -230,6 +258,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can remove an individual class from the list 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testRemoveClass ()
 	{
@@ -248,6 +278,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that contenteditable defaults to unset 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContentEditable1 ()
 	{
@@ -257,6 +289,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set contenteditable to true 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContentEditable2 ()
 	{
@@ -267,6 +301,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set contenteditable to inherit 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContentEditable3 ()
 	{
@@ -277,6 +313,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set contenteditable to false 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContentEditable4 ()
 	{
@@ -287,6 +325,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set contenteditable to true with a boolean 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContentEditable5 ()
 	{
@@ -297,6 +337,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set contenteditable to false with a boolean 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContentEditable6 ()
 	{
@@ -307,6 +349,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can unset contenteditable 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContentEditable7 ()
 	{
@@ -319,6 +363,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set contentmenu 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testContextMenu ()
 	{
@@ -329,6 +375,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set dir to ltr 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDir1 ()
 	{
@@ -339,6 +387,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set dir to rtl 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDir2 ()
 	{
@@ -349,6 +399,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set dir to auto 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDir3 ()
 	{
@@ -359,6 +411,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can unset dir 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDir4 ()
 	{
@@ -370,6 +424,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set draggable to true 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDraggable1 ()
 	{
@@ -380,6 +436,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Test that we can set draggable to true with boolean 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDraggable2 ()
 	{
@@ -390,6 +448,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set draggable to false 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDraggable3 ()
 	{
@@ -400,6 +460,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Test that we can set draggable to false with boolean 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDraggable4 ()
 	{
@@ -410,6 +472,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can set draggable to auto 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDraggable5 ()
 	{
@@ -420,6 +484,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that we can unset draggable 
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function testDraggable6 ()
 	{
@@ -429,6 +495,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertNotTag (array ('attributes' => array ('draggable')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6 
+	 */
 	public function testDropZone1 ()
 	{
 		$this -> object -> setDropZone ('move');
@@ -436,6 +506,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('dropzone' => 'move')), (string) $this -> object);
 	}
 
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testDropZone2 ()
 	{
 		$this -> object -> setDropZone ('copy');
@@ -443,6 +517,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('dropzone' => 'copy')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testDropZone3 ()
 	{
 		$this -> object -> setDropZone ('link');
@@ -450,6 +528,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('dropzone' => 'link')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testDropZone4 ()
 	{
 		$this -> object -> setDropZone ('move');
@@ -458,6 +540,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertNotTag (array ('attributes' => array ('dropzone')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testSetHidden ()
 	{
 		$this -> object -> setHidden ();
@@ -465,6 +551,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('hidden' => 'hidden')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testUnsetHidden ()
 	{
 		$this -> object -> setHidden ();
@@ -474,6 +564,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testId1 ()
 	{
 		$this -> object -> setId ('foo_bar_baz');
@@ -481,6 +575,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('id' => 'foo_bar_baz')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testId2 ()
 	{
 		$this -> object -> setId ('foo_bar_baz');
@@ -489,6 +587,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertNotTag (array ('attributes' => array ('id')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testLang1 ()
 	{
 		$this -> object -> setLang ('en-gb');
@@ -496,6 +598,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('lang' => 'en-gb')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testLang2 ()
 	{
 		$this -> object -> setLang ('en-gb');
@@ -505,6 +611,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		
 	}
 
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testSpellCheck1 ()
 	{
 		$this -> object -> setSpellCheck ();
@@ -512,6 +622,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('spellcheck' => 'true')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testSpellCheck2 ()
 	{
 		$this -> object -> setSpellCheck ();
@@ -520,6 +634,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('spellcheck' => 'false')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testSpellCheck3 ()
 	{
 		$this -> object -> setSpellCheck ();
@@ -527,7 +645,11 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertNull ($this -> object -> isSpellChecked ());
 		$this -> assertNotTag (array ('attributes' => array ('spellcheck')), (string) $this -> object);
 	}
-
+	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testStyle1 ()
 	{
 		$this -> object -> setStyle ('overflow:hidden;');
@@ -535,6 +657,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTag (array ('attributes' => array ('style' => 'overflow:hidden;')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testStyle2 ()
 	{
 		$this -> object -> setStyle ('overflow:hidden;');
@@ -543,13 +669,21 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertNotTag (array ('attributes' => array ('style')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testTabIndex1 ()
 	{
 		$this -> object -> setTabIndex (1);
 		$this -> assertEquals (1, $this -> object -> getTabIndex ());
 		$this -> assertTag (array ('attributes' => array ('tabindex' => '1')), (string) $this -> object);
 	}
-
+	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testTabIndex2 ()
 	{
 		$this -> object -> setTabIndex (1);
@@ -558,13 +692,21 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertNotTag (array ('attributes' => array ('tabindex')), (string) $this -> object);
 	}
 	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testTitle1 ()
 	{
 		$this -> object -> setTitle ('The quick brown fox jumps over the lazy dog');
 		$this -> assertEquals ('The quick brown fox jumps over the lazy dog', $this -> object -> getTitle ());
 		$this -> assertTag (array ('attributes' => array ('title' => 'The quick brown fox jumps over the lazy dog')), (string) $this -> object);
 	}
-
+	
+	/**
+	 * 
+	 * @requires PHP 5.3.6
+	 */
 	public function testTitle2 ()
 	{
 		$this -> object -> setTitle ('The quick brown fox jumps over the lazy dog');
@@ -575,6 +717,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Test that we get the expected tag back after a simple instantiation
+	 * 
+	 * @requires PHP 5.3.6
 	 */
 	public function test__toString ()
 	{
