@@ -94,7 +94,7 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 	{
 		$this -> assertFalse (trait_exists ('\gordian\exampleclasses\foo\FooTrait', false));
 		$this -> assertTrue (trait_exists ('\gordian\exampleclasses\foo\FooTrait', true));
-		$this -> assertContains ('gordian\exampleclasses\foo\FooTrait', new exampleclasses\foo\FooTraitClient ());
+		$this -> assertContains ('gordian\exampleclasses\foo\FooTrait', class_uses (new exampleclasses\foo\FooTraitClient ()));
 	}
 	
 	/**
@@ -134,7 +134,7 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 		$this -> object = new Autoloader (__DIR__ . '/exampleclasses', 'gordian_exampleclasses', '_');
 		$this -> assertFalse (trait_exists ('\gordian_exampleclasses_baz_BazTrait', false));
 		$this -> assertTrue (trait_exists ('\gordian_exampleclasses_baz_BazTrait', true));
-		$this -> assertContains ('gordian_exampleclasses_baz_BazTrait', new exampleclasses\foo\FooTraitClient ());
+		$this -> assertContains ('gordian_exampleclasses_baz_BazTrait', class_uses (new \gordian_exampleclasses_baz_BazTraitClient ()));
 	}
 	
 	/**
