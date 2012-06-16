@@ -52,5 +52,5 @@ defined (NS_FW .'\NS_SEP')
 	|| define (NS_FW .'\NS_SEP', '\\');
 
 // Load the autoloader
-require	( PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoload.php');
-require	( PATH_FW . DS . 'autoload' . DS . 'Autoload.php');
+require	( PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoloader.php');
+require	( PATH_FW . DS . 'autoload' . DS . 'Autoloader.php');

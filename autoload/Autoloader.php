@@ -29,7 +29,7 @@ namespace gordian\reefknot\autoload;
  * @category Reefknot
  * @package Autoload
  */
-class Autoload implements iface\Autoload
+class Autoloader implements iface\Autoloader
 {
 	const
 	
@@ -165,7 +165,7 @@ class Autoload implements iface\Autoload
 			}
 		}
 		
-		return ($found);
+		return $found;
 	}
 	
 	/**

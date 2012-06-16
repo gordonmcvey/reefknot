@@ -19,7 +19,7 @@ namespace gordian\reefknot\autoload\iface;
  * @package Autoload
  * @subpackage Interfaces
  */
-interface Autoload
+interface Autoloader
 {
 	/**
 	 * Register the autoloader with the SPL autoload stack
