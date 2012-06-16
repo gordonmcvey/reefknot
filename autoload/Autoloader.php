@@ -117,9 +117,9 @@ class Autoloader implements iface\Autoloader
 		 * given name doesn't meet these specifications then it should be up to
 		 * another autoloader to handle it. 
 		 */
-		return ($this -> pathRoot 
-			. str_replace ($this -> namespaceSep, static::DS, str_replace ($this -> namespaceRoot, '', $name)) 
-			. $this -> fileSuffix);
+		return $this -> pathRoot 
+			 . str_replace ($this -> namespaceSep, static::DS, str_replace ($this -> namespaceRoot, '', $name)) 
+			 . $this -> fileSuffix;
 	}
 	
 	/**
@@ -160,7 +160,20 @@ class Autoloader implements iface\Autoloader
 			// Include the file if it exists and report success
 			if (is_file ($file))
 			{
-				include_once ($file);
+				/*
+				 * The reason we're going with include_once here is because if 
+				 * we use include, there's a possibility that a class_exists 
+				 * call could trigger a fatal error.  If you do a class_exists 
+				 * that causes a file to be loaded but doesn't have the class
+				 * in it, and then do it again on the same class later in the 
+				 * script (say because you forgot to cache the result of the 
+				 * previous call) then the second call could result in a fatal
+				 * error.  It's my opinion that class_exists shouldn't ever 
+				 * cause a fatal error (unless you do something really dumb 
+				 * like pass in an empty string or some datatype that doesn't 
+				 * cast to string)
+				 */
+				include_once $file;
 				$found	= $this -> resourceLoaded ($name);
 			}
 		}
