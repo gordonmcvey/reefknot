@@ -219,21 +219,57 @@ class Session implements iface\Session
 	}
 	
 	/**
+	 * Get the session ID
+	 * 
+	 * This method exists surely to be replaced when being mocked so we can 
+	 * isolate the class from global state during unit tests
+	 * 
+	 * @return type 
+	 */
+	private function sessionId ()
+	{
+		return \session_id ();
+	}
+	
+	/**
+	 * Test if headers have been sent yet
+	 * 
+	 * This method exists surely to be replaced when being mocked so we can 
+	 * isolate the class from global state during unit tests
+	 * 
+	 * @return bool 
+	 */
+	private function headersSent ()
+	{
+		return \headers_sent ();
+	}
+	
+	/**
+	 * Start the session
+	 * 
+	 * This method exists surely to be replaced when being mocked so we can 
+	 * isolate the class from global state during unit tests
+	 * 
+	 * @return bool 
+	 */
+	private function startSession ()
+	{
+		return \session_start ();
+	}
+	
+	/**
+	 * Bind the storage property to the session
+	 * 
+	 * This method exists surely to be replaced when being mocked so we can 
+	 * isolate the class from global state during unit tests
+	 */
+	private function setStorage ()
+	{
+		$this -> storage	=& $_SESSION [$this -> namespace];
+	}
+	
+	/**
 	 * Initialize the back-end storage for the session
-	 * 
-	 * This method provides access for this class to the underlying PHP session
-	 * mechanism.  
-	 * 
-	 * This is the only place in the class to directly access the session, so 
-	 * if you need to swap the actual session out for a substitute (for a unit
-	 * test, for example), then you can override this method to replace the 
-	 * session with whatever storage mechanism you have in mind.  Alternatively
-	 * you can redeclare the following functionw within the Session namespace 
-	 * and this method will use them instead of the ones provided by PHP:
-	 * 
-	 * * session_id
-	 * * session_start
-	 * * headers_sent
 	 * 
 	 * @return bool Whether the newly initialized session contains data or not
 	 * @throws \RuntimeException Will be thrown if the session failed to start
@@ -244,14 +280,14 @@ class Session implements iface\Session
 		if ($this -> storage === NULL)
 		{
 			// Attempt to start the session if it hasn't already been started
-			if ((session_id () === '')
-			&& ((headers_sent ()) 
-			|| ((!session_start ()))))
+			if (($this -> sessionId () === '')
+			&& (($this -> headersSent ()) 
+			|| ((!$this -> startSession ()))))
 			{
 				throw new \RuntimeException (__METHOD__ . ': Unable to initiate session storage at this time');
 			}
-			// Alias our instance storage to the named $_SESSION variable
-			$this -> storage	=& $_SESSION [$this -> namespace];
+			// Bind the storage to the session
+			$this -> setStorage ();
 			// Make sure the session is in a usable state
 			if (!$this -> hasData ())
 			{
