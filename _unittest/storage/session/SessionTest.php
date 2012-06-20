@@ -7,22 +7,22 @@ class SessionMock extends Session
 	// Make the non-public storage property public so we can poke and prod it
 	public $storage = NULL;
 	
-	private function headersSent ()
+	protected function headersSent ()
 	{
-		return true;
+		return false;
 	}
 	
-	private function sessionId ()
+	protected function sessionId ()
 	{
 		return '';
 	}
 	
-	private function startSession ()
+	protected function startSession ()
 	{
 		return true;
 	}
 	
-	private function setStorage ()
+	protected function setStorage ()
 	{
 		$this -> storage = array ();
 	}
