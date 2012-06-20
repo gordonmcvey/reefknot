@@ -127,8 +127,8 @@ class Session implements iface\Session
 	/**
 	 * Add a new item to the session
 	 * 
-	 * @param scalar $data
-	 * @param mixed $key
+	 * @param mixed $data
+	 * @param scalar $key
 	 * @return \gordian\reefknot\storage\session\Session
 	 * @throws \InvalidArgumentException 
 	 */
