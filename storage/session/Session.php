@@ -226,7 +226,7 @@ class Session implements iface\Session
 	 * 
 	 * @return type 
 	 */
-	private function sessionId ()
+	protected function sessionId ()
 	{
 		return \session_id ();
 	}
@@ -239,7 +239,7 @@ class Session implements iface\Session
 	 * 
 	 * @return bool 
 	 */
-	private function headersSent ()
+	protected function headersSent ()
 	{
 		return \headers_sent ();
 	}
@@ -252,7 +252,7 @@ class Session implements iface\Session
 	 * 
 	 * @return bool 
 	 */
-	private function startSession ()
+	protected function startSession ()
 	{
 		return \session_start ();
 	}
@@ -263,7 +263,7 @@ class Session implements iface\Session
 	 * This method exists surely to be replaced when being mocked so we can 
 	 * isolate the class from global state during unit tests
 	 */
-	private function setStorage ()
+	protected function setStorage ()
 	{
 		$this -> storage	=& $_SESSION [$this -> namespace];
 	}
