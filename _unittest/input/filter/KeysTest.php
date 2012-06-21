@@ -35,7 +35,6 @@ class KeysTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @todo Implement testSetConfig().
 	 */
 	public function testSetConfig ()
 	{
@@ -66,7 +65,6 @@ class KeysTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @todo Implement testFilter().
 	 */
 	public function testFilter ()
 	{
