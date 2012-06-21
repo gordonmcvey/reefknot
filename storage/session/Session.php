@@ -282,7 +282,7 @@ class Session implements iface\Session
 	 */
 	protected function initStorage ()
 	{
-		// Check that storage hasn't already been initialized
+		// Check that storage hasn't already been bound to the session
 		if ($this -> storage === NULL)
 		{
 			// Attempt to start the session if it hasn't already been started
