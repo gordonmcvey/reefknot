@@ -23,6 +23,20 @@ use
 interface Session extends iface\Crud, \Countable, \Iterator
 {
 	/**
+	 * Check whethere there is data stored in the session
+	 * 
+	 * @return gordian\reefknot\storage\session\iface\Session
+	 */
+	public function hasData ();
+	
+	/**
+	 * Remove all data from the session
+	 * 
+	 * @return gordian\reefknot\storage\session\iface\Session
+	 */
+	public function reset ();
+	
+	/**
 	 * Instantise a session
 	 * 
 	 * @param string $namespace
