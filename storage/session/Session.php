@@ -122,7 +122,7 @@ class Session implements iface\Session
 		return ($key !== NULL) && ($key !== false);
 	}
 	
-	// -[ Session implementation starts here ]----------------------------------
+	// -[ Crud implementation starts here ]-------------------------------------
 	
 	/**
 	 * Add a new item to the session
@@ -196,6 +196,8 @@ class Session implements iface\Session
 		}
 		return $this;
 	}
+	
+	// -[ Session implementation starts here ]----------------------------------
 	
 	/**
 	 * Clear the session of all stored data
