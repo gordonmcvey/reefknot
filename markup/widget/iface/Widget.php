@@ -23,6 +23,7 @@ interface Widget
 	public function getDir ();
 	public function getDraggable ();
 	public function getDropZone ();
+	public function getElemType ();
 	public function getId ();
 	public function getLang ();
 	public function getNode ();

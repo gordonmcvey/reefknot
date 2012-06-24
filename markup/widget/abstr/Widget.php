@@ -20,20 +20,17 @@ use
  */
 abstract class Widget implements iface\Widget
 {
-	const
-		TYPE	= '';
-	
 	protected
-		
+				
 		/**
 		 * @var \DOMDocument 
 		 */
-		$dom	= NULL,
+		$dom		= NULL,
 		
 		/**
 		 * @var \DOMElement 
 		 */
-		$node	= NULL;
+		$node		= NULL;
 	
 	/**
 	 *
@@ -50,11 +47,21 @@ abstract class Widget implements iface\Widget
 	 */
 	public function getNode ()
 	{
-		if ($this -> node === NULL)
+		$elemType	= $this -> getElemType ();
+		if ($elemType !== '')
 		{
-			$this -> node = new \DOMElement (static::TYPE);
-			$this -> dom -> appendChild ($this -> node);
+			if (!$this -> isInitialized ())
+			{
+				$this -> node = new \DOMElement ($elemType);
+				$this -> dom -> appendChild ($this -> node);
+			}
 		}
+		else
+		{
+			// We can't generate a node if an element type hasn't been specified
+			throw new \BadMethodCallException (__METHOD__ . ': No element type defined');
+		}
+		
 		return $this -> node;
 	}
 	
@@ -77,11 +84,14 @@ abstract class Widget implements iface\Widget
 		}
 		else
 		{
-			throw new \InvalidArgumentException;
+			// Attribute name is invalid
+			throw new \InvalidArgumentException (__METHOD__ 
+												. ': Attribute name must be a string, ' 
+												. gettype ($attrName) 
+												. 'given');
 		}
 		
 		return $val;
-		
 	}
 	
 	/**
