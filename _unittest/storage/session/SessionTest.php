@@ -2,29 +2,39 @@
 
 namespace gordian\reefknot\storage\session;
 
+/**
+ * @todo Figure out how to do this with the mocking API 
+ */
 class SessionMock extends Session
 {
+	// Flags for toggling behaviour
+	
+	static public
+		$id			= 'abc123',
+		$headers	= false,
+		$start		= true;
+	
 	// Make the non-public storage property public so we can poke and prod it
 	public $storage = NULL;
-	
-	protected function headersSent ()
-	{
-		return false;
-	}
-	
-	protected function sessionId ()
-	{
-		return '';
-	}
-	
-	protected function startSession ()
-	{
-		return true;
-	}
 	
 	protected function setStorage ()
 	{
 		$this -> storage = array ();
+	}
+	
+	protected function sessionId ()
+	{
+		return self::$id;
+	}
+	
+	protected function headersSent ()
+	{
+		return self::$headers;
+	}
+	
+	protected function startSession ()
+	{
+		return self::$start;
 	}
 }
 
@@ -40,14 +50,17 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 * @var gordian\reefknot\storage\session\Session
 	 */
 	protected $object;
-
+	
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp ()
 	{
-		$this -> object = new SessionMock ('unittest');
+		SessionMock::$id		= 'abc123';
+		SessionMock::$headers	= false;
+		SessionMock::$start		= true;
+		$this -> object			= new SessionMock ('unittest');
 	}
 
 	/**
@@ -254,5 +267,30 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 			$this -> assertEquals ($val, $count);
 			$count++;
 		}
+	}
+	
+	/**
+	 * Test that attempting to start the session when headers have already been
+	 * sent throws an exception
+	 */
+	public function testContructNoSessionHeadersAlreadySentThrowsException ()
+	{
+		$this -> setExpectedException ('RuntimeException');
+		SessionMock::$id		= '';
+		SessionMock::$headers	= true;
+		SessionMock::$start		= true;
+		$this -> object			= new SessionMock ('unittest');	
+	}
+	
+	/**
+	 * Test that a failure to start the session throws an exception
+	 */
+	public function testContructCantStartSessionThrowsException ()
+	{
+		$this -> setExpectedException ('RuntimeException');
+		SessionMock::$id		= '';
+		SessionMock::$headers	= false;
+		SessionMock::$start		= false;
+		$this -> object			= new SessionMock ('unittest');	
 	}
 }
