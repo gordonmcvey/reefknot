@@ -39,7 +39,8 @@ interface Session extends iface\Crud, \Countable, \Iterator
 	/**
 	 * Instantise a session
 	 * 
+	 * @param gordian\reefknot\storage\session\iface\Binding $binding
 	 * @param string $namespace
 	 */
-	public function __construct ($namespace);
+	public function __construct (Binding $binding, $namespace);
 }

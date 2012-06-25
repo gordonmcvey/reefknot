@@ -43,6 +43,11 @@ class Session implements iface\Session
 	protected
 		
 		/**
+		 * @var iface\Binding 
+		 */
+		$binding	= NULL, 
+		
+		/**
 		 * The 'namespace' for the session data.  Maps to $_SESSION [$namespace]
 		 * 
 		 * @var string
@@ -221,56 +226,6 @@ class Session implements iface\Session
 	}
 	
 	/**
-	 * Get the session ID
-	 * 
-	 * This method exists surely to be replaced when being mocked so we can 
-	 * isolate the class from global state during unit tests
-	 * 
-	 * @return type 
-	 */
-	protected function sessionId ()
-	{
-		return \session_id ();
-	}
-	
-	/**
-	 * Test if headers have been sent yet
-	 * 
-	 * This method exists surely to be replaced when being mocked so we can 
-	 * isolate the class from global state during unit tests
-	 * 
-	 * @return bool 
-	 */
-	protected function headersSent ()
-	{
-		return \headers_sent ();
-	}
-	
-	/**
-	 * Start the session
-	 * 
-	 * This method exists surely to be replaced when being mocked so we can 
-	 * isolate the class from global state during unit tests
-	 * 
-	 * @return bool 
-	 */
-	protected function startSession ()
-	{
-		return \session_start ();
-	}
-	
-	/**
-	 * Bind the storage property to the session
-	 * 
-	 * This method exists surely to be replaced when being mocked so we can 
-	 * isolate the class from global state during unit tests
-	 */
-	protected function setStorage ()
-	{
-		$this -> storage	=& $_SESSION [$this -> namespace];
-	}
-	
-	/**
 	 * Initialize the back-end storage for the session
 	 * 
 	 * This method attempts to start the PHP session and bind the storage 
@@ -288,12 +243,12 @@ class Session implements iface\Session
 		if ($this -> storage === NULL)
 		{
 			// Attempt to start the session if it hasn't already been started
-			if (($this -> sessionId () !== '')
-			|| ((!$this -> headersSent ())
-			&& ($this -> startSession ())))
+			if (($this -> binding -> sessionId () !== '')
+			|| ((!$this -> binding -> headersSent ())
+			&& ($this -> binding -> startSession ())))
 			{
 				// Bind the storage to the session
-				$this -> setStorage ();
+				$this -> storage	=& $this -> binding -> getNamespace ($this -> namespace);
 				// Make sure the session is in a usable state
 				if (!$this -> hasData ())
 				{
@@ -311,15 +266,17 @@ class Session implements iface\Session
 	
 	/**
 	 * Class constructor
-	 * 
+	 *
+	 * @param iface\Binding $binding
 	 * @param scalar $namespace
-	 * @throws \InvalidArgumentException Thrown if no session name is provided
+	 * @throws \InvalidArgumentException 
 	 */
-	public function __construct ($namespace)
+	public function __construct (iface\Binding $binding, $namespace)
 	{
 		if ((is_scalar ($namespace))
 		&& (!empty ($namespace)))
 		{
+			$this -> binding	= $binding;
 			$this -> namespace	= $namespace;
 			$this -> initStorage ();
 		}
@@ -329,4 +286,3 @@ class Session implements iface\Session
 		}
 	}
 }
-
