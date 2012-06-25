@@ -52,15 +52,42 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	protected $object;
 	
 	/**
+	 *
+	 * @param string $sessionId
+	 * @param bool $headersSent
+	 * @param bool $startSession
+	 * @return \gordian\reefknot\storage\session\iface\Binding 
+	 */
+	protected function getBindingMock ($sessionId = 'abc123', $headersSent = false, $startSession = true)
+	{
+		$binding	= $this -> getMock ('\gordian\reefknot\storage\session\iface\Binding');
+		
+		$binding	-> expects ($this -> any ())
+					-> method ('sessionId')
+					-> will ($this -> returnValue ($sessionId));
+		
+		$binding	-> expects ($this -> any ())
+					-> method ('headersSent')
+					-> will ($this -> returnValue ($headersSent));
+		
+		$binding	-> expects ($this -> any ())
+					-> method ('startSession')
+					-> will ($this -> returnValue ($startSession));
+		
+		$binding	-> expects ($this -> any ())
+					-> method ('getNamespace')
+					-> will ($this -> returnValue (array ()));
+		
+		return $binding;
+	}
+	
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp ()
 	{
-		SessionMock::$id		= 'abc123';
-		SessionMock::$headers	= false;
-		SessionMock::$start		= true;
-		$this -> object			= new SessionMock ('unittest');
+		$this -> object	= new SessionMock ($this -> getBindingMock (), 'unittest');
 	}
 
 	/**
@@ -77,16 +104,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testConstructInvalidNamespaceThrowsException ()
 	{
-		$ex	= NULL;
-		try
-		{
-			$test	= new Session ('');
-		}
-		catch (\Exception $e)
-		{
-			$ex	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+		$this -> setExpectedException ('\InvalidArgumentException');
+		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), '');
 	}
 	
 	/**
@@ -94,16 +113,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testConstructInvalidNamespaceThrowsException2 ()
 	{
-		$ex	= NULL;
-		try
-		{
-			$test	= new Session (array (1, 2, 3));
-		}
-		catch (\Exception $e)
-		{
-			$ex	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+		$this -> setExpectedException ('\InvalidArgumentException');
+		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), array (1, 2, 3));
 	}
 	
 	/**
@@ -275,11 +286,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testContructNoSessionHeadersAlreadySentThrowsException ()
 	{
-		$this -> setExpectedException ('RuntimeException');
-		SessionMock::$id		= '';
-		SessionMock::$headers	= true;
-		SessionMock::$start		= true;
-		$this -> object			= new SessionMock ('unittest');	
+		$this -> setExpectedException ('\RuntimeException');
+		$this -> object			= new Session ($this -> getBindingMock ('', true, false), 'unittest');	
 	}
 	
 	/**
@@ -287,10 +295,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testContructCantStartSessionThrowsException ()
 	{
-		$this -> setExpectedException ('RuntimeException');
-		SessionMock::$id		= '';
-		SessionMock::$headers	= false;
-		SessionMock::$start		= false;
-		$this -> object			= new SessionMock ('unittest');	
+		$this -> setExpectedException ('\RuntimeException');
+		$this -> object			= new Session ($this -> getBindingMock ('', false, false), 'unittest');	
 	}
 }
