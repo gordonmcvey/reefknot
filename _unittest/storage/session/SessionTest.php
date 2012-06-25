@@ -7,35 +7,8 @@ namespace gordian\reefknot\storage\session;
  */
 class SessionMock extends Session
 {
-	// Flags for toggling behaviour
-	
-	static public
-		$id			= 'abc123',
-		$headers	= false,
-		$start		= true;
-	
 	// Make the non-public storage property public so we can poke and prod it
 	public $storage = NULL;
-	
-	protected function setStorage ()
-	{
-		$this -> storage = array ();
-	}
-	
-	protected function sessionId ()
-	{
-		return self::$id;
-	}
-	
-	protected function headersSent ()
-	{
-		return self::$headers;
-	}
-	
-	protected function startSession ()
-	{
-		return self::$start;
-	}
 }
 
 /**
@@ -52,7 +25,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	protected $object;
 	
 	/**
-	 *
+	 * Generate a mocked Binding configured to return the required output for 
+	 * various tests
+	 * 
 	 * @param string $sessionId
 	 * @param bool $headersSent
 	 * @param bool $startSession
@@ -100,24 +75,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that attempting to start a session with an empty namespace throws an exception.  
-	 */
-	public function testConstructInvalidNamespaceThrowsException ()
-	{
-		$this -> setExpectedException ('\InvalidArgumentException');
-		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), '');
-	}
-	
-	/**
-	 * Test that attempting to start the session with a non-scalar namespace throws an exception 
-	 */
-	public function testConstructInvalidNamespaceThrowsException2 ()
-	{
-		$this -> setExpectedException ('\InvalidArgumentException');
-		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), array (1, 2, 3));
-	}
-	
-	/**
 	 * Test that we can add an item to the session 
 	 */
 	public function testCreateItem ()
@@ -126,40 +83,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 		$this -> object ->  createItem ('This is a test', 'test');
 		$this -> assertNotEmpty ($this -> object -> storage);
 		$this -> assertEquals ('This is a test', $this -> object -> storage ['test']);
-	}
-	
-	/**
-	 * Test that trying to add an item with a non-scalar key throws an exception 
-	 */
-	public function testCreateItemInvalidKeyThrowsException ()
-	{
-		$ex	= NULL;
-		try
-		{
-			$this -> object -> createItem ('asdfdsa', array (1, 2, 3));
-		}
-		catch (\Exception $e)
-		{
-			$ex	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
-	}
-	
-	/**
-	 * Test that trying to add an item with no key throws an exception 
-	 */
-	public function testCreateItemInvalidKeyThrowsException2 ()
-	{
-		$ex	= NULL;
-		try
-		{
-			$this -> object -> createItem ('asdfdsa', NULL);
-		}
-		catch (\Exception $e)
-		{
-			$ex	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
 	}
 	
 	/**
@@ -251,11 +174,13 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	{
 		$this -> assertEquals (count ($this -> object), 0);
 		$this -> assertEquals ($this -> object -> count (), 0);
-		$this -> object -> createItem (123, 1);
-		$this -> object -> createItem ('abc', 2);
-		$this -> object -> createItem (pi (), 3);
-		$this -> object -> createItem (array (1, 2, 3), 4);
-		$this -> object -> createItem (true, 5);
+		
+		$this -> object	-> createItem (123, 1)
+						-> createItem ('abc', 2)
+						-> createItem (pi (), 3)
+						-> createItem (array (1, 2, 3), 4)
+						-> createItem (true, 5);
+		
 		$this -> assertEquals (count ($this -> object), 5);
 		$this -> assertEquals ($this -> object -> count (), 5);
 	}
@@ -265,11 +190,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testIterate ()
 	{
-		$this -> object -> createItem (1, 1);
-		$this -> object -> createItem (2, 2);
-		$this -> object -> createItem (3, 3);
-		$this -> object -> createItem (4, 4);
-		$this -> object -> createItem (5, 5);
+		$this -> object	-> createItem (1, 1)
+						-> createItem (2, 2)
+						-> createItem (3, 3)
+						-> createItem (4, 4)
+						-> createItem (5, 5);
 		
 		$count = 1;
 		foreach ($this -> object as $key => $val)
@@ -281,13 +206,65 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
+	 * Test that attempting to start a session with an empty namespace throws an exception.  
+	 */
+	public function testConstructInvalidNamespaceThrowsException ()
+	{
+		$this -> setExpectedException ('\InvalidArgumentException');
+		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), '');
+	}
+	
+	/**
+	 * Test that attempting to start the session with a non-scalar namespace throws an exception 
+	 */
+	public function testConstructInvalidNamespaceThrowsException2 ()
+	{
+		$this -> setExpectedException ('\InvalidArgumentException');
+		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), array (1, 2, 3));
+	}
+	
+	/**
+	 * Test that trying to add an item with a non-scalar key throws an exception 
+	 */
+	public function testCreateItemInvalidKeyThrowsException ()
+	{
+		$ex	= NULL;
+		try
+		{
+			$this -> object -> createItem ('asdfdsa', array (1, 2, 3));
+		}
+		catch (\Exception $e)
+		{
+			$ex	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+	}
+	
+	/**
+	 * Test that trying to add an item with no key throws an exception 
+	 */
+	public function testCreateItemInvalidKeyThrowsException2 ()
+	{
+		$ex	= NULL;
+		try
+		{
+			$this -> object -> createItem ('asdfdsa', NULL);
+		}
+		catch (\Exception $e)
+		{
+			$ex	= $e;
+		}
+		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+	}
+	
+	/**
 	 * Test that attempting to start the session when headers have already been
 	 * sent throws an exception
 	 */
 	public function testContructNoSessionHeadersAlreadySentThrowsException ()
 	{
 		$this -> setExpectedException ('\RuntimeException');
-		$this -> object			= new Session ($this -> getBindingMock ('', true, false), 'unittest');	
+		$this -> object	= new Session ($this -> getBindingMock ('', true, false), 'unittest');	
 	}
 	
 	/**
@@ -296,6 +273,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	public function testContructCantStartSessionThrowsException ()
 	{
 		$this -> setExpectedException ('\RuntimeException');
-		$this -> object			= new Session ($this -> getBindingMock ('', false, false), 'unittest');	
+		$this -> object	= new Session ($this -> getBindingMock ('', false, false), 'unittest');	
 	}
 }
