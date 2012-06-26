@@ -228,16 +228,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCreateItemInvalidKeyThrowsException ()
 	{
-		$ex	= NULL;
-		try
-		{
-			$this -> object -> createItem ('asdfdsa', array (1, 2, 3));
-		}
-		catch (\Exception $e)
-		{
-			$ex	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+		$this -> setExpectedException ('\InvalidArgumentException');
+		$this -> object -> createItem ('asdfdsa', array (1, 2, 3));
 	}
 	
 	/**
@@ -245,16 +237,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCreateItemInvalidKeyThrowsException2 ()
 	{
-		$ex	= NULL;
-		try
-		{
-			$this -> object -> createItem ('asdfdsa', NULL);
-		}
-		catch (\Exception $e)
-		{
-			$ex	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+		$this -> setExpectedException ('\InvalidArgumentException');
+		$this -> object -> createItem ('asdfdsa', NULL);
 	}
 	
 	/**
