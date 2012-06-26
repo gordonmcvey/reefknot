@@ -9,11 +9,11 @@
 namespace gordian\reefknot\storage\session;
 
 /**
- * Session management
+ * Session management class
  * 
  * Each instance of the Session object represents a "namespace" within the PHP
- * $_SESSION system.  This allows sessions to be easily managed and organized
- * within an application
+ * $_SESSION system, each namespace actually being a named sub-array.  This 
+ * allows sessions to be easily managed and organized within an application.
  * 
  * WARNING: The underlying mechanism for the Session class is the PHP $_SESSION
  * system.  This means that the data that instances of this class manage can 
@@ -31,7 +31,6 @@ namespace gordian\reefknot\storage\session;
  * the same session state in more than one place, then you are advised to pass
  * the same instance of the class to the objects that need it instead.  
  *
- * @todo implement Iterator interface
  * @author Gordon McVey
  * @category Reefknot
  * @package Storage
