@@ -10,7 +10,16 @@ namespace gordian\reefknot\storage\session;
 
 /**
  * Session binding
- *
+ * 
+ * This class serves as a binding between the Session class and the underlying 
+ * PHP $_SESSION mechanism.  The reason that this class exists is so that the
+ * Session class can be decoupled from the global state represented by the 
+ * $_SESSION superglobal.  Amongst other things, this allows for much simpler
+ * testing of the Session class, as we can mock this class for testing.  
+ * 
+ * Normally, you would never use this class directly in your code, you'd just
+ * pass an instance of it to new instances of the Session class.  
+ * 
  * @author Gordon McVey
  * @category Reefknot
  * @package Storage
