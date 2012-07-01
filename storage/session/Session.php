@@ -35,6 +35,7 @@ namespace gordian\reefknot\storage\session;
  * @category Reefknot
  * @package Storage
  * @subpackage Session
+ * @uses gordian\reefknot\storage\session\Binding
  */
 class Session implements iface\Session
 {
@@ -42,6 +43,8 @@ class Session implements iface\Session
 	protected
 		
 		/**
+		 * Instance of a Binding object to provide an interface to $_SESSION
+		 * 
 		 * @var iface\Binding 
 		 */
 		$binding	= NULL, 
@@ -242,12 +245,13 @@ class Session implements iface\Session
 		if ($this -> storage === NULL)
 		{
 			// Attempt to start the session if it hasn't already been started
-			if (($this -> binding -> sessionId () !== '')
-			|| ((!$this -> binding -> headersSent ())
-			&& ($this -> binding -> startSession ())))
+			$binding = $this -> binding;
+			if (($binding -> sessionId () !== '')
+			|| ((!$binding -> headersSent ())
+			&& ($binding -> startSession ())))
 			{
 				// Bind the storage to the session
-				$this -> storage	=& $this -> binding -> getNamespace ($this -> namespace);
+				$this -> storage	=& $binding -> getNamespace ($this -> namespace);
 				// Make sure the session is in a usable state
 				if (!$this -> hasData ())
 				{
@@ -266,9 +270,9 @@ class Session implements iface\Session
 	/**
 	 * Class constructor
 	 *
-	 * @param iface\Binding $binding
-	 * @param scalar $namespace
-	 * @throws \InvalidArgumentException 
+	 * @param iface\Binding $binding The object we're going to use to bind to the session
+	 * @param scalar $namespace Name under which we'll store our session data
+	 * @throws \InvalidArgumentException
 	 */
 	public function __construct (iface\Binding $binding, $namespace)
 	{
