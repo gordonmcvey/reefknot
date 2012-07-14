@@ -121,10 +121,10 @@ class Response implements iface\Response
 		else
 		{
 			// Status code not recognised
-			throw new \InvalidArgumentException (__METHOD__ . ': Invalid HTTP response code - ' . $status);
+			throw new \InvalidArgumentException (__METHOD__ . ': Invalid HTTP response code - ' . (string) $status);
 		}
 		
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -134,7 +134,7 @@ class Response implements iface\Response
 	 */
 	public function getStatus ()
 	{
-		return ($this -> status);
+		return $this -> status;
 	}
 	
 	/**
@@ -144,7 +144,7 @@ class Response implements iface\Response
 	 */
 	public function getStatusMessage ()
 	{
-		return ($this -> statusMessages [$this -> getStatus ()]);
+		return $this -> statusMessages [$this -> getStatus ()];
 	}
 	
 	/**
@@ -169,7 +169,7 @@ class Response implements iface\Response
 	public function setHeader ($key, $value)
 	{
 		$this -> headers [$key]	= $value;
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -190,7 +190,7 @@ class Response implements iface\Response
 			throw new \InvalidArgumentException ();
 		}
 		
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -199,7 +199,7 @@ class Response implements iface\Response
 	 */
 	public function getBody ()
 	{
-		return ($this -> body);
+		return $this -> body;
 	}
 	
 	/**
@@ -216,7 +216,7 @@ class Response implements iface\Response
 			header ($key . ': ' . $val, true);
 		}
 		
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -225,8 +225,8 @@ class Response implements iface\Response
 	 */
 	protected function sendBody ()
 	{
-		echo ($this -> body);
-		return ($this);
+		echo $this -> body;
+		return $this;
 	}
 	
 	/**

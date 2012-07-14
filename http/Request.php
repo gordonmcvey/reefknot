@@ -90,11 +90,14 @@ class Request implements iface\Request
 	*/
 	public function methodValid ($method)
 	{
-		return (in_array ($method, $this -> validMethods));
+		return in_array ($method, $this -> validMethods);
 	}
 	
 	/**
 	 * Get the Request method
+	 * 
+	 * This method returns a string containing the HTTP request method verb, or
+	 * NULL if the request verb isn't valid/is unknown. 
 	 * 
 	 * @return string 
 	 */
@@ -168,33 +171,69 @@ class Request implements iface\Request
 	/**
 	 * Determine if this is a HTTP PUT request
 	 * 
-	 * @return bool 
+	 * @return boolean True if this is a PUT request
 	 */
 	public function isPut ()
 	{
-		return ($this -> getMethod () === self::M_POT);
+		return $this -> getMethod () === static::M_POT;
 	}
 	
 	/**
 	 * Determine if this is a HTTP TRACE request
 	 * 
-	 * @return bool 
+	 * @return boolean True if this is a TRACE request
 	 */
 	public function isTrace ()
 	{
-		return ($this -> getMethod () === self::M_TRACE);
+		return $this -> getMethod () === static::M_TRACE;
 	}
 	
 	/**
-	 * Determine whether the request as made over a secure channel
+	 * Determine whether the request as made over a secure channel.  
 	 * 
-	 * @return bool 
+	 * This method checks for the presence of the HTTPS server variable.  Apache
+	 * only sets the variable for HTTPS requests, but IIS always sets it, but 
+	 * with the value of "off" for non-HTTPS requests.  
+	 * 
+	 * @return boolean True if the connection was made over HTTPS
 	 */
 	public function isSecure ()
 	{
-		return ((isset ($this -> server ['HTTPS']))
-			&& (!empty ($this -> server ['HTTPS']))
-			&& ($this -> server ['HTTPS'] !== 'off'));
+		return (!empty ($this -> server ['HTTPS']))
+			&& ($this -> server ['HTTPS'] !== 'off');
+	}
+	
+	/**
+	 * Determine whether the current request was made with an XmlHttpRequest javascript object
+	 * 
+	 * The rules that this method follows to determine if this request is being
+	 * made with XmlHttpRequest are as follows: 
+	 * 
+	 * 1) Check for a header called X-REQUESTED-WITH.  If it exists and is set
+	 * to a value of 'XmlHttpRequest' then return true (jQuery and several
+	 * other javascript libraries set this header when making an AJAX request
+	 * and you can set it manually if doing AJAX with raw javascript)
+	 * 
+	 * 2) If this request is a POST request then look for an attribute called 
+	 * 'reefknot' ['xhr'] in the POSTed data.  If it exists and is set to a 
+	 * non-empty value, then return true.  (This can be done by putting a 
+	 * hidden input field in your form called 'reefknot[xhr]' with a non-empty
+	 * value in your form)
+	 * 
+	 * 3) If this request isn't a POST request then look for an attribute called
+	 * 'reefknot ['xhr']' in the query string.  If it exists and is set to a 
+	 * non-empty value, then return true.  (This can be done with a hidden form
+	 * element in GET method forms as with POSTed forms, or you could simply 
+	 * append ?reefknot[xhr]=1 onto the URL you're requesting the resource with)
+	 * 
+	 * If none of the above criteria are met, then return false.  
+	 * 
+	 * @return boolean True if the request appears to have been made with an XHR object
+	 * @todo This method needs to be properly implemented. It currently only always returns false
+	 */
+	public function IsXhr ()
+	{
+		return false;
 	}
 	
 	/**
