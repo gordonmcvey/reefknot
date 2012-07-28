@@ -44,6 +44,13 @@ const
 	 */
 	PHP_MIN	= '5.3.10';
 
+/**
+ * Define the root path for the framework.  This can be overridden by defining
+ * it before including the bootstrap 
+ */
+defined (__NAMESPACE__ . '\PATH_FW')
+	|| define (__NAMESPACE__ . '\PATH_FW', realpath (__DIR__));
+
 // Abort with a fatal error should the PHP version requirements not be met
 if (version_compare (PHP_VERSION, PHP_MIN) < 0)
 {
@@ -52,13 +59,6 @@ if (version_compare (PHP_VERSION, PHP_MIN) < 0)
 					. PHP_VERSION . ' detected. Aborting' 
 					. PHP_EOL, E_USER_ERROR);
 }
-
-/**
- * Define the root path for the framework.  This can be overridden by defining
- * it before including the bootstrap 
- */
-defined (__NAMESPACE__ . '\PATH_FW')
-	|| define (__NAMESPACE__ . '\PATH_FW', realpath (__DIR__));
 
 // Load the autoloader
 require	( PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoloader.php');
