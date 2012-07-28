@@ -32,7 +32,7 @@ class Request implements iface\Request
 	protected
 		
 		/**
-		 * @var iface\util\RequestBody 
+		 * @var string 
 		 */
 		$requestBody	= NULL,
 		
@@ -237,9 +237,22 @@ class Request implements iface\Request
 	}
 	
 	/**
+	 * Get the request body data
+	 * 
+	 * @return string
+	 */
+	public function getRequestBody ()
+	{
+		if (is_null ($this -> requestBody))
+		{
+			$this -> requestBody	= file_get_contents ('php://input');
+		}
+		return $this -> requestBody;
+	}
+	
+	/**
 	 * Request constructor
 	 * 
-	 * @param iface\util\RequestBody $reqBody
 	 * @param array $get Where the $_GET data will come from
 	 * @param array $post Where the $_POST data will come from
 	 * @param array $cookie Where the $_COOKIE data will come from
@@ -247,8 +260,7 @@ class Request implements iface\Request
 	 * @param array $server Where the $_SERVER data will come from
 	 * @param array $env Where the $_ENV data will come crom
 	 */
-	public function __construct (	iface\util\RequestBody $reqBody,
-									array $get,
+	public function __construct (	array $get,
 									array $post,
 									array $cookie,
 									array $files,
@@ -256,7 +268,6 @@ class Request implements iface\Request
 									array $env)
 	{
 		// Get all the request data.  
-		$this -> requestBody	= $reqBody;
 		$this -> get			= $get;
 		$this -> post			= $post;
 		$this -> cookie			= $cookie;

@@ -109,4 +109,11 @@ interface Request
 	 * @return boolean True if HTTPS
 	 */
 	public function isSecure ();
+	
+	/**
+	 * Get the request body data
+	 * 
+	 * @return string
+	 */
+	public function getRequestBody ();
 }
