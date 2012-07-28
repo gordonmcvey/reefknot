@@ -24,28 +24,90 @@ use
  * @category Reefknot
  * @package HTTP
  * @subpackage Request
+ * @todo Request body parsing based on request content-* headers
  */
 class RequestBody implements iface\request\RequestBody
 {
 	const
+		
+		/**
+		 * File descriptor for the request body's stream
+		 */
 		REQ_PATH	= 'php://input',
-		BUFFER_SIZE	= 1024;
+		
+		/**
+		 * How much data to read in bytes before writing it to the target file.
+		 * Default is 10 K
+		 */
+		BUFFER_SIZE	= 10240;
 		
 	protected
+		
+		/**
+		 * The request object the body is bound to
+		 * 
+		 * @var iface\Request
+		 */
+		$request		= NULL,
 		
 		/**
 		 * The raw entity body data
 		 * 
 		 * @var mixed 
 		 */
-		$data	= NULL,
+		$data			= NULL,
 		
 		/**
 		 * The entity body data parsed as query data
 		 * 
 		 * @var array 
 		 */
-		$params	= NULL;
+		$params			= NULL, 
+		
+		/**
+		 * 
+		 */
+		$requestHandle	= false;
+	
+	/**
+	 * Obtain a handle to the request body
+	 * 
+	 * @return resource a file pointer resource on success, or <b>FALSE</b> on error.
+	 */
+	protected function getHandle ()
+	{
+		if (empty ($this -> requestHandle))
+		{
+			$this -> requestHandle	= fopen (static::REQ_PATH, 'rb');
+		}
+		return $this -> requestHandle;
+	}
+	
+	/**
+	 * Close the request body handle
+	 * 
+	 * @param resource $handle
+	 * @return boolean True on success
+	 */
+	protected function closeHandle ()
+	{
+		if ((!empty ($this -> requestHandle))
+		&& (fclose ($this -> requestHandle)))
+		{
+			$this -> requestHandle	= false;
+		}
+		return (empty ($this -> requestHandle));
+	}
+	
+	/**
+	 * Test whether or not the request data has been parsed
+	 * 
+	 * @return boolean
+	 */
+	public function bodyParsed ()
+	{
+		return !is_null ($this -> data);
+	}
 	
 	/** 
 	 * Get the raw request body data
@@ -57,16 +119,16 @@ class RequestBody implements iface\request\RequestBody
 	 */
 	public function getData ()
 	{
-		if ($this -> data === NULL)
+		if (!$this -> bodyParsed ())
 		{
 			$this -> data	= false;
-			if (false !== ($handle = fopen (static::REQ_PATH, 'r')))
+			if (false !== ($handle = $this -> getHandle ()))
 			{
-				while ($buffer = fread ($handle, static::BUFFER_SIZE))
+				while (false !== ($buffer = fread ($handle, static::BUFFER_SIZE)))
 				{
 					$this -> data	.= $buffer;
 				}
-				fclose ($handle);
+				$this -> closeHandle ();
 			}
 		}
 		
@@ -76,34 +138,45 @@ class RequestBody implements iface\request\RequestBody
 	/**
 	 * Write the raw request body data to disc
 	 * 
-	 * This method is intended for use when doing HTTP PUT operations, as 
-	 * loading the data into $this -> data could potentially be very expensive
-	 * in terms of memory use.  For most other scenarios the other getters would
-	 * normally be used.  
+	 * This method is intended for use when doing HTTP PUT operations, or other 
+	 * operations that could result in a large request body, as loading the data 
+	 * into the object and parsing it could potentially be very expensive in 
+	 * terms of both memory and processing load. 
+	 * 
+	 * As the use case that would normally be expected with large request 
+	 * bodies is uploading a file with HTTP PUT, the best thing to do in such 
+	 * circumstances is to write the request body data to a file.  This method
+	 * reads from the input stream in relatively small chunks and writes them
+	 * to the specified target path. 
+	 * 
+	 * For most other scenarios the normal getters would normally be used.  
 	 * 
 	 * @link http://www.php.net/manual/en/function.fopen.php See the fopen documentation for details of valid $mode flags
 	 * @param string $filename The filename to save the data under
 	 * @param string $mode The mode flag to use on the target.  Identical to PHP fopen() mode flag.  Must be a node that allows writing to the file
 	 * @return int Number of bytes written to disc 
 	 */
-	public function saveData ($filename, $mode = 'w')
+	public function saveData ($filename, $mode = 'wb')
 	{
 		$written	= 0;
 		
-		if (NULL === $this -> data)
+		// If we've not already read the request body then copy the source to the destination
+		if (!$this -> bodyParsed ())
 		{
 			$this -> data	= false;
 			
-			// Open files
-			if ((false !== ($source = fopen (static::REQ_PATH, 'r')))
+			// Open input stream and target file
+			if ((false !== ($source = $this -> getHandle ()))
 			&& (false !== ($target = fopen ($filename, $mode)))
 			&& (flock ($target, LOCK_EX)))
 			{
 				// Copy input data to target file in 1K chunks
-				while ($buffer = fread ($source, static::BUFFER_SIZE))
+				while (false !== ($buffer = fread ($source, static::BUFFER_SIZE)))
 				{
 					$written	+= fwrite ($target, $buffer);
 				}
+				
+				$this -> closeHandle ();
 			}
 			
 			// Clean up target file
@@ -115,8 +188,8 @@ class RequestBody implements iface\request\RequestBody
 		}
 		else
 		{
-			// If the request body was already read into $this -> data then write that to disc
-			$written	= file_put_contents ($filename, $this -> data, LOCK_EX);
+			// If the request body has already been parsed then write the contents of the parsed data to the filesystem
+			$written	= file_put_contents ($filename, $this -> getData (), LOCK_EX);
 		}
 		
 		return $written;
@@ -132,7 +205,7 @@ class RequestBody implements iface\request\RequestBody
 	 */
 	public function getAsParams ()
 	{
-		if ($this -> params === NULL)
+		if (!$this -> bodyParsed ())
 		{
 			parse_str ($this -> getData (), $this -> params);
 		}
@@ -157,5 +230,15 @@ class RequestBody implements iface\request\RequestBody
 		}
 		
 		return $val;
+	}
+	
+	/**
+	 * Class constructor
+	 * 
+	 * @param \gordian\reefknot\http\iface\Request $request
+	 */
+	public function __construct (iface\Request $request)
+	{
+		$this -> request	= $request;
 	}
 }
