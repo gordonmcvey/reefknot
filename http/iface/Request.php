@@ -116,4 +116,102 @@ interface Request
 	 * @return string
 	 */
 	public function getRequestBody ();
+	
+	/**
+	 * Get all the headers
+	 * 
+	 * @return array
+	 */
+	public function getHeaders ();
+	
+	/**
+	 * Get the specified header
+	 * 
+	 * @param strint $header
+	 * @return mixed
+	 */
+	public function getHeader ($header);
+	
+	/**
+	 * Get the URI for this request
+	 * 
+	 * @return string
+	 */
+	public function getUri ();
+	
+	/**
+	 * Get the scheme used for this request (http, ftp, etc)
+	 * 
+	 * @return string
+	 */
+	public function getScheme ();
+	
+	/**
+	 * Get the hostname refered to in this request
+	 * 
+	 * @return string
+	 */
+	public function getHost ();
+	
+	/**
+	 * Get the port this request was made over 
+	 * 
+	 * @return int
+	 */
+	public function getPort ();
+	
+	/**
+	 * Get the username encoded in the URI
+	 * 
+	 * @return string
+	 */
+	public function getUser ();
+	
+	/**
+	 * Get the password encoded in the URI
+	 * 
+	 * @return string
+	 */
+	public function getPassword ();
+	
+	/**
+	 * Get the path referenced by the URI
+	 * 
+	 * @return string
+	 */
+	public function getPath ();
+	
+	/**
+	 * Get the fragment (any text that follows a # character) in the URI
+	 * 
+	 * Note that browsers are not required to send the fragment to the server,
+	 * and several don't.  
+	 * 
+	 * @return string
+	 */
+	public function getFragment ();
+	
+	/**
+	 * Get parameters from the query string 
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getQuery ($param);
+	
+	/**
+	 * Get parameters from the POST data
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getPost ($param);
+	
+	/**
+	 * Get parameters from the request cookie
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getCookie ($param);
 }

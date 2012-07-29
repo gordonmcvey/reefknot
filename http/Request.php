@@ -32,37 +32,44 @@ class Request implements iface\Request
 	protected
 		
 		/**
+		 * The request body data is cached here after being retrieved
+		 * 
 		 * @var string 
 		 */
 		$requestBody	= NULL,
 		
 		/**
-		 * @var iface\util\Bucket 
+		 * @var array
+		 */
+		$parsedUri		= array (), 
+		
+		/**
+		 * @var array 
 		 */
 		$get			= array (),
 		
 		/**
-		 * @var iface\util\Bucket 
+		 * @var array 
 		 */
 		$post			= array (),
 		
 		/**
-		 * @var iface\util\Bucket 
+		 * @var array 
 		 */
 		$cookie			= array (),
 		
 		/**
-		 * @var iface\util\Bucket 
+		 * @var array 
 		 */
 		$files			= array (),
 		
 		/**
-		 * @var iface\util\Bucket 
+		 * @var array 
 		 */
 		$server			= array (),
 		
 		/**
-		 * @var iface\util\Bucket 
+		 * @var array 
 		 */
 		$env			= array (),
 		
@@ -83,11 +90,37 @@ class Request implements iface\Request
 		);
 
 	/**
-	* Determine if the function argument is a valid HTTP method/verb
-	* 
-	* @param string $method
-	* @return bool 
-	*/
+	 * 
+	 * @param string $source
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	protected function getParam ($source, $param = NULL)
+	{
+		$ret	= NULL;
+		
+		if (is_scalar ($param))
+		{
+			// If a particular element in the parameters was specified than return that
+			$ret	= array_key_exists ($param, $this -> $source)?
+				$this -> $source [$param]:
+				NULL;
+		}
+		else
+		{
+			// Return all parameters
+			$ret	= $this -> $source;
+		}
+		
+		return $ret;
+	}
+	
+	/**
+	 * Determine if the function argument is a valid HTTP method/verb
+	 * 
+	 * @param string $method
+	 * @return bool 
+	 */
 	public function methodValid ($method)
 	{
 		return in_array ($method, $this -> validMethods);
@@ -204,6 +237,54 @@ class Request implements iface\Request
 	}
 	
 	/**
+	 * Get query parameters
+	 * 
+	 * This method will return the entire contents of the query part of the URI 
+	 * (equivilent to $_GET) if no key is specified.  If a key is specified then
+	 * this methos will return it's value, or NULL if no value for that key was
+	 * specified
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getQuery ($param = NULL)
+	{
+		return $this -> getParam ('get', $param);
+	}
+	
+	/**
+	 * Get query parameters
+	 * 
+	 * This method will return the entire contents of the posted request data 
+	 * (equivilent to $_POST) if no key is specified.  If a key is specified 
+	 * then this methos will return it's value, or NULL if no value for that key 
+	 * was specified
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getPost ($param = NULL)
+	{
+		return $this -> getParam ('post', $param);
+	}
+	
+	/**
+	 * Get query parameters
+	 * 
+	 * This method will return the entire contents of the cookie associated with
+	 * the request (equivilent to $_COOKIE) if no key is specified.  If a key is 
+	 * specified then this method will return it's value, or NULL if no value 
+	 * for that key was specified
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getCookie ($param = NULL)
+	{
+		return $this -> getParam ('cookie', $param);
+	}
+	
+	/**
 	 * Determine whether the current request was made with an XmlHttpRequest javascript object
 	 * 
 	 * The rules that this method follows to determine if this request is being
@@ -215,13 +296,13 @@ class Request implements iface\Request
 	 * and you can set it manually if doing AJAX with raw javascript)
 	 * 
 	 * 2) If this request is a POST request then look for an attribute called 
-	 * 'reefknot' ['xhr'] in the POSTed data.  If it exists and is set to a 
+	 * '__reefknot' ['xhr'] in the POSTed data.  If it exists and is set to a 
 	 * non-empty value, then return true.  (This can be done by putting a 
 	 * hidden input field in your form called 'reefknot[xhr]' with a non-empty
 	 * value in your form)
 	 * 
 	 * 3) If this request isn't a POST request then look for an attribute called
-	 * 'reefknot ['xhr']' in the query string.  If it exists and is set to a 
+	 * '__reefknot ['xhr']' in the query string.  If it exists and is set to a 
 	 * non-empty value, then return true.  (This can be done with a hidden form
 	 * element in GET method forms as with POSTed forms, or you could simply 
 	 * append ?reefknot[xhr]=1 onto the URL you're requesting the resource with)
@@ -251,6 +332,134 @@ class Request implements iface\Request
 	}
 	
 	/**
+	 * Get the URI for this request
+	 * 
+	 * @return string
+	 */
+	public function getUri ()
+	{
+		return $this -> server ['REQUEST_URI'];
+	}
+	
+	/**
+	 * 
+	 * @return array
+	 */
+	protected function getParsedUri ()
+	{
+		if (empty ($this -> parsedUri))
+		{
+			$this -> parsedUri	= parse_url ($this -> getUri ());
+			$this -> parsedUri ['port']	= array_key_exists ('port', $this -> parsedUri)?
+				intval ($this -> parsedUri ['port']):
+				80;
+		}
+		
+		return $this -> parsedUri;
+	}
+	
+	/**
+	 * Get the fragment (any text that follows a # character) in the URI
+	 * 
+	 * Note that browsers are not required to send the fragment to the server,
+	 * and several don't.  
+	 * 
+	 * @return string
+	 */
+	public function getFragment ()
+	{
+		$parsed	= $this -> getParsedUri ();
+		return $parsed ['fragment'];
+	}
+
+	/**
+	 * Get the specified header
+	 * 
+	 * @param strint $header
+	 * @return mixed
+	 */
+	public function getHeader ($header)
+	{
+		
+	}
+
+	/**
+	 * Get all the headers
+	 * 
+	 * @return array
+	 */
+	public function getHeaders ()
+	{
+		
+	}
+
+	/**
+	 * Get the hostname refered to in this request
+	 * 
+	 * @return string
+	 */
+	public function getHost ()
+	{
+		$parsed	= $this -> getParsedUri ();
+		return $parsed ['host'];
+	}
+
+	/**
+	 * Get the password encoded in the URI
+	 * 
+	 * @return string
+	 */
+	public function getPassword ()
+	{
+		$parsed	= $this -> getParsedUri ();
+		return $parsed ['pass'];
+	}
+
+	/**
+	 * Get the path referenced by the URI
+	 * 
+	 * @return string
+	 */
+	public function getPath ()
+	{
+		$parsed	= $this -> getParsedUri ();
+		return $parsed ['path'];
+	}
+	
+	/**
+	 * Get the port this request was made over 
+	 * 
+	 * @return int
+	 */
+	public function getPort ()
+	{
+		$parsed	= $this -> getParsedUri ();
+		return $parsed ['fragment'];
+	}
+	
+	/**
+	 * Get the scheme used for this request (http, ftp, etc)
+	 * 
+	 * @return string
+	 */
+	public function getScheme ()
+	{
+		$parsed	= $this -> getParsedUri ();
+		return $parsed ['scheme'];
+	}
+
+	/**
+	 * Get the username encoded in the URI
+	 * 
+	 * @return string
+	 */
+	public function getUser ()
+	{
+		$parsed	= $this -> getParsedUri ();
+		return $parsed ['user'];
+	}
+	
+	/**
 	 * Request constructor
 	 * 
 	 * @param array $get Where the $_GET data will come from
@@ -268,11 +477,12 @@ class Request implements iface\Request
 									array $env)
 	{
 		// Get all the request data.  
-		$this -> get			= $get;
-		$this -> post			= $post;
-		$this -> cookie			= $cookie;
-		$this -> files			= $files;
-		$this -> server			= $server;
-		$this -> env			= $env;
+		$this -> get	= $get;
+		$this -> post	= $post;
+		$this -> cookie	= $cookie;
+		$this -> files	= $files;
+		$this -> server	= $server;
+		$this -> env	= $env;
 	}
+
 }
