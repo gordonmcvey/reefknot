@@ -118,21 +118,6 @@ interface Request
 	public function getRequestBody ();
 	
 	/**
-	 * Get all the headers
-	 * 
-	 * @return array
-	 */
-	public function getHeaders ();
-	
-	/**
-	 * Get the specified header
-	 * 
-	 * @param strint $header
-	 * @return mixed
-	 */
-	public function getHeader ($header);
-	
-	/**
 	 * Get the URI for this request
 	 * 
 	 * @return string
@@ -192,12 +177,41 @@ interface Request
 	public function getFragment ();
 	
 	/**
+	 * Get all the headers
+	 * 
+	 * @return array
+	 */
+	public function getHeaders ();
+	
+	/**
+	 * Get the specified header
+	 * 
+	 * @param strint $header
+	 * @return mixed
+	 */
+	public function getHeaderParam ($header);
+	
+	/**
+	 * Get the query parameters
+	 * 
+	 * @return array
+	 */
+	public function getQuery ();
+	
+	/**
 	 * Get parameters from the query string 
 	 * 
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	public function getQuery ($param);
+	public function getQueryParam ($param);
+	
+	/**
+	 * Get the POST parameters
+	 * 
+	 * @return array
+	 */
+	public function getPost ();
 	
 	/**
 	 * Get parameters from the POST data
@@ -205,7 +219,14 @@ interface Request
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	public function getPost ($param);
+	public function getPostParam ($param);
+	
+	/**
+	 * Get the Cookie parameters
+	 * 
+	 * @return array
+	 */
+	public function getCookie ();
 	
 	/**
 	 * Get parameters from the request cookie
@@ -213,5 +234,5 @@ interface Request
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	public function getCookie ($param);
+	public function getCookieParam ($param);
 }

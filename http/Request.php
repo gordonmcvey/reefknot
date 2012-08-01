@@ -36,49 +36,56 @@ class Request implements iface\Request
 		 * 
 		 * @var string 
 		 */
-		$requestBody	= NULL,
+		$requestBody		= NULL,
 		
 		/**
 		 * @var array
 		 */
-		$parsedUri		= array (), 
+		$parsedUri			= array (), 
 		
 		/**
 		 * @var array 
 		 */
-		$get			= array (),
+		$get				= array (),
 		
 		/**
 		 * @var array 
 		 */
-		$post			= array (),
+		$post				= array (),
 		
 		/**
 		 * @var array 
 		 */
-		$cookie			= array (),
+		$cookie				= array (),
 		
 		/**
 		 * @var array 
 		 */
-		$files			= array (),
+		$files				= array (),
 		
 		/**
 		 * @var array 
 		 */
-		$server			= array (),
+		$server				= array (),
 		
 		/**
 		 * @var array 
 		 */
-		$env			= array (),
+		$env				= array (),
+		
+		/**
+		 * Cache for the parsed headers
+		 * 
+		 * @var array
+		 */
+		$parsedHeaders		= array (),
 		
 		/**
 		 * List of valid HTTP verbs
 		 * 
 		 * @var array 
 		 */
-		$validMethods	= array (
+		$validMethods		= array (
 			self::M_CONNECT,
 			self::M_DELETE,
 			self::M_GET,
@@ -87,7 +94,15 @@ class Request implements iface\Request
 			self::M_POST,
 			self::M_POT,
 			self::M_TRACE
-		);
+		), 
+		
+		/**
+		 * When extracting the header data from $_SERVER we want to get these 
+		 * keya in addition to the ones that start HTTP_ OR CONTENT-
+		 * 
+		 * @var array
+		 */
+		$nonPrefixedHeaders	= array ();
 
 	/**
 	 * 
@@ -101,15 +116,15 @@ class Request implements iface\Request
 		
 		if (is_scalar ($param))
 		{
-			// If a particular element in the parameters was specified than return that
+			// Return the specified key
 			$ret	= array_key_exists ($param, $this -> $source)?
 				$this -> $source [$param]:
 				NULL;
 		}
 		else
 		{
-			// Return all parameters
-			$ret	= $this -> $source;
+			// No valid key
+			throw new \InvalidArgumentException (__METHOD__);
 		}
 		
 		return $ret;
@@ -237,6 +252,15 @@ class Request implements iface\Request
 	}
 	
 	/**
+	 * 
+	 * @return array
+	 */
+	public function getQuery ()
+	{
+		return $this -> get;
+	}
+	
+	/**
 	 * Get query parameters
 	 * 
 	 * This method will return the entire contents of the query part of the URI 
@@ -247,9 +271,14 @@ class Request implements iface\Request
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	public function getQuery ($param = NULL)
+	public function getQueryParam ($param)
 	{
 		return $this -> getParam ('get', $param);
+	}
+	
+	public function getPost ()
+	{
+		return $this -> post;
 	}
 	
 	/**
@@ -263,9 +292,18 @@ class Request implements iface\Request
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	public function getPost ($param = NULL)
+	public function getPostParam ($param)
 	{
 		return $this -> getParam ('post', $param);
+	}
+	
+	/**
+	 * 
+	 * @return array
+	 */
+	public function getCookie ()
+	{
+		return $this -> cookie;
 	}
 	
 	/**
@@ -279,7 +317,7 @@ class Request implements iface\Request
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	public function getCookie ($param = NULL)
+	public function getCookieParam ($param = NULL)
 	{
 		return $this -> getParam ('cookie', $param);
 	}
@@ -310,11 +348,12 @@ class Request implements iface\Request
 	 * If none of the above criteria are met, then return false.  
 	 * 
 	 * @return boolean True if the request appears to have been made with an XHR object
-	 * @todo This method needs to be properly implemented. It currently only always returns false
 	 */
 	public function IsXhr ()
 	{
-		return false;
+		return 'XmlHttpRequest' === $this -> getHeaderParam ('x-requested-with')
+			|| (($tmp = $this -> getPostParam ('__reefknot')) && (!empty ($tmp ['xhr'])))
+			|| (($tmp = $this -> getQueryParam ('__reefknot')) && (!empty ($tmp ['xhr'])));
 	}
 	
 	/**
@@ -371,18 +410,52 @@ class Request implements iface\Request
 		$parsed	= $this -> getParsedUri ();
 		return $parsed ['fragment'];
 	}
-
+	
 	/**
-	 * Get the specified header
+	 * Attempt to extract the header data natively
 	 * 
-	 * @param strint $header
-	 * @return mixed
+	 * @return array
 	 */
-	public function getHeader ($header)
+	protected function getHeadersNatively ()
 	{
-		
+		return function_exists ('getallheaders')? 
+			getallheaders(): 
+			array();
 	}
-
+	
+	/**
+	 * Attempt to extract the header data from the $server data
+	 * 
+	 * @return array
+	 */
+	protected function getHeadersFromServer ()
+	{
+		$headers	= array ();
+		
+		foreach ($this -> server as $key => $val)
+		{
+			// Extract any values that have a key beginning with HTTP_
+			if (0 === strpos ($key, 'HTTP_'))
+			{
+				$headers [strtolower (substr ($key, 5))]	= $val;
+			}
+			else
+			// Extract any values that have a key beginning with CONTENT-
+			if (0 === strpos ($key, 'CONTENT-'))
+			{
+				$headers [strtolower ($key)]				= $val;
+			}
+			else
+			// Extract any values that we have defined as being from the headers
+			if (in_array ($key, $this ->nonPrefixedHeaders))
+			{
+				$headers [strtolower ($key)]				= $val;
+			}
+		}
+		
+		return $headers;
+	}
+	
 	/**
 	 * Get all the headers
 	 * 
@@ -390,8 +463,29 @@ class Request implements iface\Request
 	 */
 	public function getHeaders ()
 	{
+		if (empty ($this -> parsedHeaders))
+		{
+			if (($headers = $this -> getHeadersNatively ())
+			|| ($headers = $this -> getHeadersFromServer ()))
+			{
+				$this -> parsedHeaders	= $headers;
+			}
+		}
 		
+		return $this -> parsedHeaders;
 	}
+	
+	/**
+	 * Get the specified header
+	 * 
+	 * @param strint $key
+	 * @return mixed
+	 */
+	public function getHeaderParam ($key)
+	{
+		return $this -> getParam ($this -> getHeaders (), $key);
+	}
+
 
 	/**
 	 * Get the hostname refered to in this request
