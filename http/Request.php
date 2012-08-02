@@ -26,6 +26,7 @@ namespace gordian\reefknot\http;
  * @author Gordon McVey
  * @category Reefknot
  * @package HTTP
+ * @todo Implement ENV and FILES methods 
  */
 class Request implements iface\Request
 {
@@ -106,19 +107,19 @@ class Request implements iface\Request
 
 	/**
 	 * 
-	 * @param string $source Name of the property to get an array from
+	 * @param array $source Name of the property to get an array from
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	protected function getParam ($source, $param = NULL)
+	protected function getParam (array $source, $param = NULL)
 	{
 		$ret	= NULL;
 		
 		if (is_scalar ($param))
 		{
 			// Return the specified key
-			$ret	= array_key_exists ($param, $this -> $source)?
-				$this -> $source [$param]:
+			$ret	= array_key_exists ($param, $source)?
+				$source [$param]:
 				NULL;
 		}
 		else
@@ -360,7 +361,7 @@ class Request implements iface\Request
 	 */
 	public function getQueryParam ($param)
 	{
-		return $this -> getParam ('get', $param);
+		return $this -> getParam ($this -> getQuery (), $param);
 	}
 	
 	/**
@@ -385,7 +386,7 @@ class Request implements iface\Request
 	 */
 	public function getPostParam ($param)
 	{
-		return $this -> getParam ('post', $param);
+		return $this -> getParam ($this -> getPost (), $param);
 	}
 	
 	/**
@@ -410,7 +411,7 @@ class Request implements iface\Request
 	 */
 	public function getCookieParam ($param = NULL)
 	{
-		return $this -> getParam ('cookie', $param);
+		return $this -> getParam ($this -> getCookie (), $param);
 	}
 	
 	
@@ -446,8 +447,7 @@ class Request implements iface\Request
 	 */
 	public function getHeaderParam ($key)
 	{
-		$this -> getHeaders ();
-		return $this -> getParam ('parsedHeaders', $key);
+		return $this -> getParam ($this -> getHeaders (), $key);
 	}
 	
 	/**
