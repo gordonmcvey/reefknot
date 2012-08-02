@@ -34,11 +34,137 @@ interface Request
 		/**#@-*/
 	
 	/**
+	 * Get the Cookie parameters
+	 * 
+	 * @return array
+	 */
+	public function getCookie ();
+	
+	/**
+	 * Get parameters from the request cookie
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getCookieParam ($param);
+	
+	/**
+	 * Get the fragment (any text that follows a # character) in the URI
+	 * 
+	 * Note that browsers are not required to send the fragment to the server,
+	 * and several don't.  
+	 * 
+	 * @return string
+	 */
+	public function getFragment ();
+	
+	/**
+	 * Get the specified header
+	 * 
+	 * @param strint $header
+	 * @return mixed
+	 */
+	public function getHeaderParam ($header);
+	
+	/**
+	 * Get all the headers
+	 * 
+	 * @return array
+	 */
+	public function getHeaders ();
+	
+	/**
+	 * Get the hostname refered to in this request
+	 * 
+	 * @return string
+	 */
+	public function getHost ();
+	
+	/**
 	 * Return the HTTP verb (method) that applies to this request
 	 * 
 	 * @return string
 	 */
 	public function getMethod ();
+	
+	/**
+	 * Get the password encoded in the URI
+	 * 
+	 * @return string
+	 */
+	public function getPassword ();
+	
+	/**
+	 * Get the path referenced by the URI
+	 * 
+	 * @return string
+	 */
+	public function getPath ();
+	
+	/**
+	 * Get the port this request was made over 
+	 * 
+	 * @return int
+	 */
+	public function getPort ();
+	
+	/**
+	 * Get the POST parameters
+	 * 
+	 * @return array
+	 */
+	public function getPost ();
+	
+	/**
+	 * Get parameters from the POST data
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getPostParam ($param);
+	
+	/**
+	 * Get the query parameters
+	 * 
+	 * @return array
+	 */
+	public function getQuery ();
+	
+	/**
+	 * Get parameters from the query string 
+	 * 
+	 * @param scalar $param
+	 * @return mixed
+	 */
+	public function getQueryParam ($param);
+	
+	/**
+	 * Get the request body data
+	 * 
+	 * @return string
+	 */
+	public function getRequestBody ();
+	
+	/**
+	 * Get the scheme used for this request (http, ftp, etc)
+	 * 
+	 * @return string
+	 */
+	public function getScheme ();
+	
+	/**
+	 * Get the URI for this request
+	 * 
+	 * @return string
+	 */
+	public function getUri ();
+	
+	/**
+	 * Get the username encoded in the URI
+	 * 
+	 * @return string
+	 */
+	public function getUser ();
 	
 	/**
 	 * Return true if this request was made with the CONNECT verb
@@ -90,6 +216,13 @@ interface Request
 	public function isPut ();
 	
 	/**
+	 * Return true if this request was made over an SSL connection
+	 * 
+	 * @return boolean True if HTTPS
+	 */
+	public function isSecure ();
+	
+	/**
 	 * Return true if this request was made with the TRACE verb
 	 * 
 	 * @return boolean True if TRACE request
@@ -102,137 +235,4 @@ interface Request
 	 * @return boolean True if the request appears to have been made with an XHR object
 	 */
 	public function IsXhr ();
-	
-	/**
-	 * Return true if this request was made over an SSL connection
-	 * 
-	 * @return boolean True if HTTPS
-	 */
-	public function isSecure ();
-	
-	/**
-	 * Get the request body data
-	 * 
-	 * @return string
-	 */
-	public function getRequestBody ();
-	
-	/**
-	 * Get the URI for this request
-	 * 
-	 * @return string
-	 */
-	public function getUri ();
-	
-	/**
-	 * Get the scheme used for this request (http, ftp, etc)
-	 * 
-	 * @return string
-	 */
-	public function getScheme ();
-	
-	/**
-	 * Get the hostname refered to in this request
-	 * 
-	 * @return string
-	 */
-	public function getHost ();
-	
-	/**
-	 * Get the port this request was made over 
-	 * 
-	 * @return int
-	 */
-	public function getPort ();
-	
-	/**
-	 * Get the username encoded in the URI
-	 * 
-	 * @return string
-	 */
-	public function getUser ();
-	
-	/**
-	 * Get the password encoded in the URI
-	 * 
-	 * @return string
-	 */
-	public function getPassword ();
-	
-	/**
-	 * Get the path referenced by the URI
-	 * 
-	 * @return string
-	 */
-	public function getPath ();
-	
-	/**
-	 * Get the fragment (any text that follows a # character) in the URI
-	 * 
-	 * Note that browsers are not required to send the fragment to the server,
-	 * and several don't.  
-	 * 
-	 * @return string
-	 */
-	public function getFragment ();
-	
-	/**
-	 * Get all the headers
-	 * 
-	 * @return array
-	 */
-	public function getHeaders ();
-	
-	/**
-	 * Get the specified header
-	 * 
-	 * @param strint $header
-	 * @return mixed
-	 */
-	public function getHeaderParam ($header);
-	
-	/**
-	 * Get the query parameters
-	 * 
-	 * @return array
-	 */
-	public function getQuery ();
-	
-	/**
-	 * Get parameters from the query string 
-	 * 
-	 * @param scalar $param
-	 * @return mixed
-	 */
-	public function getQueryParam ($param);
-	
-	/**
-	 * Get the POST parameters
-	 * 
-	 * @return array
-	 */
-	public function getPost ();
-	
-	/**
-	 * Get parameters from the POST data
-	 * 
-	 * @param scalar $param
-	 * @return mixed
-	 */
-	public function getPostParam ($param);
-	
-	/**
-	 * Get the Cookie parameters
-	 * 
-	 * @return array
-	 */
-	public function getCookie ();
-	
-	/**
-	 * Get parameters from the request cookie
-	 * 
-	 * @param scalar $param
-	 * @return mixed
-	 */
-	public function getCookieParam ($param);
 }
