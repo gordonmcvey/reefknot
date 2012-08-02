@@ -351,7 +351,7 @@ class Request implements iface\Request
 	 */
 	public function IsXhr ()
 	{
-		return 'XmlHttpRequest' === $this -> getHeaderParam ('x-requested-with')
+		return 'XmlHttpRequest' === $this -> getHeaderParam ('X-Requested-With')
 			|| (($tmp = $this -> getPostParam ('__reefknot')) && (!empty ($tmp ['xhr'])))
 			|| (($tmp = $this -> getQueryParam ('__reefknot')) && (!empty ($tmp ['xhr'])));
 	}
@@ -412,19 +412,52 @@ class Request implements iface\Request
 	}
 	
 	/**
+	 * Normalize the header string key
+	 * 
+	 * We use a couple of different methods for extracting the headers, but they
+	 * all return the header data with keys formatted in somewhat different 
+	 * styles.  This method attempts to put the header keys into a uniforma 
+	 * format, regardless of where they came from. 
+	 * 
+	 * @param string $header
+	 * @return string
+	 */
+	protected function normalizeHeaderKey ($header)
+	{
+		// Strip the HTTP_ that PHP prepends to headers in $_SERVER
+		if (0 === strpos ($header, 'HTTP_'))
+		{
+			$header	= substr ($header, 5);
+		}
+		
+		// Get the header key string into a uniform format
+		$header	= str_replace (' ', '-', ucwords (strtolower (str_replace (array ('-', '_'), ' ', $header))));
+		
+		return $header;
+	}
+	
+	/**
 	 * Attempt to extract the header data natively
+	 * 
+	 * If the getallheaders () function is available then using that is the best
+	 * way to get at the header data.  It's only available under Apache and 
+	 * (as of PHP 5.4) fastCGI, however.  Under other condutions the function
+	 * is unavailable and we'll have to use other methods to get the headers
 	 * 
 	 * @return array
 	 */
 	protected function getHeadersNatively ()
 	{
 		return function_exists ('getallheaders')? 
-			getallheaders(): 
-			array();
+			getallheaders (): 
+			array ();
 	}
 	
 	/**
 	 * Attempt to extract the header data from the $server data
+	 * 
+	 * PHP stores a lot of information culled from the headers in $_SERVER.  
+	 * This method attempts to extract it.  
 	 * 
 	 * @return array
 	 */
@@ -434,22 +467,12 @@ class Request implements iface\Request
 		
 		foreach ($this -> server as $key => $val)
 		{
-			// Extract any values that have a key beginning with HTTP_
-			if (0 === strpos ($key, 'HTTP_'))
+			// Extract any values from $server that meet the criteria for being from the HTTP headers
+			if ((0 === strpos ($key, 'HTTP_'))
+			|| (0 === strpos ($key, 'CONTENT-'))
+			|| (in_array ($key, $this -> nonPrefixedHeaders)))
 			{
-				$headers [strtolower (substr ($key, 5))]	= $val;
-			}
-			else
-			// Extract any values that have a key beginning with CONTENT-
-			if (0 === strpos ($key, 'CONTENT-'))
-			{
-				$headers [strtolower ($key)]				= $val;
-			}
-			else
-			// Extract any values that we have defined as being from the headers
-			if (in_array ($key, $this ->nonPrefixedHeaders))
-			{
-				$headers [strtolower ($key)]				= $val;
+				$headers [$key]	= $val;
 			}
 		}
 		
@@ -465,9 +488,14 @@ class Request implements iface\Request
 	{
 		if (empty ($this -> parsedHeaders))
 		{
+			// Attempt to get the header data
 			if (($headers = $this -> getHeadersNatively ())
 			|| ($headers = $this -> getHeadersFromServer ()))
 			{
+				// Normalize the header keys
+				$headerKeys	= array_map (array ($this, 'normalizeHeaderKey'), array_keys ($headers));
+				$headers	= array_combine ($headerKeys, $headers);
+				
 				$this -> parsedHeaders	= $headers;
 			}
 		}
