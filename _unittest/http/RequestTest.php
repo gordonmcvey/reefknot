@@ -116,6 +116,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
+	
 	/**
 	 * @covers gordian\reefknot\http\Request::isConnect
 	 * @todo Implement testIsConnect().
