@@ -290,7 +290,7 @@ class Request implements iface\Request
 	 */
 	public function isOptions ()
 	{
-		return ($this -> getMethod () === static::M_HEAD);
+		return ($this -> getMethod () === static::M_OPTIONS);
 	}
 	
 	/**
@@ -409,11 +409,10 @@ class Request implements iface\Request
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	public function getCookieParam ($param = NULL)
+	public function getCookieParam ($param)
 	{
 		return $this -> getParam ($this -> getCookie (), $param);
 	}
-	
 	
 	/**
 	 * Get all the headers
@@ -529,8 +528,7 @@ class Request implements iface\Request
 	 */
 	public function getHost ()
 	{
-		$parsed	= $this -> getParsedUri ();
-		return $parsed ['host'];
+		return $this -> server ['SERVER_NAME'];
 	}
 
 	/**
@@ -562,8 +560,7 @@ class Request implements iface\Request
 	 */
 	public function getPort ()
 	{
-		$parsed	= $this -> getParsedUri ();
-		return $parsed ['fragment'];
+		return (int) $this -> server ['SERVER_PORT'];
 	}
 	
 	/**
@@ -573,8 +570,7 @@ class Request implements iface\Request
 	 */
 	public function getScheme ()
 	{
-		$parsed	= $this -> getParsedUri ();
-		return $parsed ['scheme'];
+		return ($this -> isSecure ()? 'https': 'http');
 	}
 
 	/**

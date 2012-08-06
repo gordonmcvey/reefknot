@@ -1,7 +1,7 @@
 <?php
 namespace gordian\reefknot\http;
 
-require_once dirname (__FILE__) . '/../../http/Request.php';
+//require_once dirname (__FILE__) . '/../../http/Request.php';
 
 /**
  * Test class for Request.
@@ -53,12 +53,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 			'REMOTE_ADDR'			=> '127.0.0.1',
 			'DOCUMENT_ROOT'			=> '/usr/docs/dummy-host.example.com', 
 			'SERVER_ADMIN'			=> 'webmaster@dummy-host.example.com',
-			'SCRIPT_FILENAME'		=> '',
 			'REMOTE_PORT'			=> '50847',
 			'GATEWAY_INTERFACE'		=> 'SERVER_PROTOCOL',
 			'REQUEST_METHOD'		=> 'GET',
 			'QUERY_STRING'			=> 'queryParam1=1&queryParam2=The%20quick%20brown%20fox%20jumps%20over%20the%20lazy%20dog.',
-			'REQUEST_URI'			=> '/foo/bar.baz.php?queryParam1=1&queryParam2=The%20quick%20brown%20fox%20jumps%20over%20the%20lazy%20dog.',
+			'REQUEST_URI'			=> '/foo/bar/baz.php?queryParam1=1&queryParam2=The%20quick%20brown%20fox%20jumps%20over%20the%20lazy%20dog.#asdf',
+			'REQUEST_TIME'			=> '',
+			'SCRIPT_FILENAME'		=> '',
 			'SCRIPT_NAME'			=> '',
 			'PHP_SELF'				=> '',
 		),
@@ -67,10 +68,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	protected function prepServer ()
 	{
 		$prepped	= $this -> server;
-		$prepped ['SCRIPT_NAME']		= $_SERVER ['SCRIPT_NAME'];
-		$prepped ['SCRIPT_FILENAME']	= $_SERVER ['SCRIPT_FILENAME'];
-		$prepped ['PHP_SELF']			= $_SERVER ['PHP_SELF'];
 		$prepped ['REQUEST_TIME']		= time ();
+		$prepped ['SCRIPT_FILENAME']	= $_SERVER ['SCRIPT_FILENAME'];
+		$prepped ['SCRIPT_NAME']		= $_SERVER ['SCRIPT_NAME'];
+		$prepped ['PHP_SELF']			= $_SERVER ['PHP_SELF'];
 		return $prepped;
 	}
 	
@@ -80,7 +81,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp ()
 	{
-		$this -> object = new Request ($this -> get, $this -> post, $this -> cookie, $this -> files, $this -> prepServer (), $this -> env);
+		$this -> object = new Request (	$this -> get, 
+										$this -> post, 
+										$this -> cookie, 
+										$this -> files, 
+										$this -> prepServer (), 
+										$this -> env);
 	}
 
 	/**
@@ -93,296 +99,571 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::methodValid
-	 * @todo Implement testMethodValid().
+	 * Test that the valid HTTP methods are passed as valid
 	 */
-	public function testMethodValid ()
+	public function testMethodValidWithValidMethod ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertTrue ($this -> object -> methodValid ('CONNECT'));
+		$this -> assertTrue ($this -> object -> methodValid ('DELETE'));
+		$this -> assertTrue ($this -> object -> methodValid ('GET'));
+		$this -> assertTrue ($this -> object -> methodValid ('HEAD'));
+		$this -> assertTrue ($this -> object -> methodValid ('OPTIONS'));
+		$this -> assertTrue ($this -> object -> methodValid ('POST'));
+		$this -> assertTrue ($this -> object -> methodValid ('PUT'));
+		$this -> assertTrue ($this -> object -> methodValid ('TRACE'));
 	}
-
+	
 	/**
-	 * @covers gordian\reefknot\http\Request::getMethod
-	 * @todo Implement testGetMethod().
+	 * Test that invalid values for HTTP headers are rejected as invalid
+	 */
+	public function testMethodValidWithInvalidMethod ()
+	{
+		$this -> assertFalse ($this -> object -> methodValid ('get'));
+		$this -> assertFalse ($this -> object -> methodValid (''));
+		$this -> assertFalse ($this -> object -> methodValid (NULL));
+		$this -> assertFalse ($this -> object -> methodValid (false));
+		$this -> assertFalse ($this -> object -> methodValid (array ()));
+		$this -> assertFalse ($this -> object -> methodValid (123));
+		$this -> assertFalse ($this -> object -> methodValid (123.45));
+	}
+	
+	/**
+	 * Test getMethod returns the expected value for a GET
 	 */
 	public function testGetMethod ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('GET', $this -> object -> getMethod ());
 	}
 
+	/**
+	 * Test isConnect method for CONNECT request
+	 */
+	public function testIsConnectTrue ()
+	{
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'CONNECT';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isConnect ());
+	}
 	
 	/**
-	 * @covers gordian\reefknot\http\Request::isConnect
-	 * @todo Implement testIsConnect().
+	 * Test isConnect method when not a CONNECT request
 	 */
-	public function testIsConnect ()
+	public function testIsConnectFalse ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertFalse ($this -> object -> isConnect ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isDelete
-	 * @todo Implement testIsDelete().
+	 * Test isDelete method for DELETE request
 	 */
-	public function testIsDelete ()
+	public function testIsDeleteTrue ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'DELETE';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isDelete ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isGet
-	 * @todo Implement testIsGet().
+	 * Test isDelete method when not a DELETE request
 	 */
-	public function testIsGet ()
+	public function testIsDeleteFalse ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertFalse ($this -> object -> isDelete ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isHead
-	 * @todo Implement testIsHead().
+	 * Test isGet for GET request
 	 */
-	public function testIsHead ()
+	public function testIsGetTrue ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertTrue ($this -> object -> isGet ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isOptions
-	 * @todo Implement testIsOptions().
+	 * Test isGet when not a GET request
 	 */
-	public function testIsOptions ()
+	public function testIsGetFalse ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'POST';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertFalse ($this -> object -> isGet ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isPost
-	 * @todo Implement testIsPost().
+	 * Test isHead for HEAD request
 	 */
-	public function testIsPost ()
+	public function testIsHeadTrue ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'HEAD';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isHead ());
+	}
+	
+	/**
+	 * Test isHead method when not a HEAD request
+	 */
+	public function testIsHeadFalse ()
+	{
+		$this -> assertFalse ($this -> object -> isHead ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isPut
-	 * @todo Implement testIsPut().
+	 * Test isOptions for OPTIONS request
 	 */
-	public function testIsPut ()
+	public function testIsOptionsTrue ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'OPTIONS';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isOptions ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isTrace
-	 * @todo Implement testIsTrace().
+	 * Test isOptions method when not an OPTIONS request 
 	 */
-	public function testIsTrace ()
+	public function testIsOptionsFalse ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertFalse ($this -> object -> isOptions ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::isSecure
-	 * @todo Implement testIsSecure().
+	 * Test isPost for POST requests
 	 */
-	public function testIsSecure ()
+	public function testIsPostTrue ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'POST';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isPost ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getQuery
-	 * @todo Implement testGetQuery().
+	 * Test isPost method when not a POST request
+	 */
+	public function testIsPostFalse ()
+	{
+		$this -> assertFalse ($this -> object -> isPost ());
+	}
+
+	/**
+	 * Test isPut for PUT request
+	 */
+	public function testIsPutTrue ()
+	{
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'PUT';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isPut ());
+	}
+
+	/**
+	 * Test isPut method when not a PUT request
+	 */
+	public function testIsPutFalse ()
+	{
+		$this -> assertFalse ($this -> object -> isPut ());
+	}
+
+	/**
+	 * Test isTrace for TRACE request
+	 */
+	public function testIsTraceTrue ()
+	{
+		$server						= $this -> prepServer ();
+		$server ['REQUEST_METHOD']	= 'TRACE';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isTrace ());
+	}
+
+	/**
+	 * Test isTrace method when not a TRACE request
+	 */
+	public function testIsTraceFalse ()
+	{
+		$this -> assertFalse ($this -> object -> isTrace ());
+	}
+
+	/**
+	 * Test that isSecure returns false when there is not HTTPS token
+	 */
+	public function testIsSecureNoHttpsToken ()
+	{
+		$this -> assertFalse ($this -> object -> isSecure ());
+	}
+
+	/**
+	 * Test that isSecure returns false when there is a HTTPS token nbut its value is 'off'
+	 */
+	public function testIsSecureHttpsTokenIsOff ()
+	{
+		$server				= $this -> prepServer ();
+		$server ['HTTPS']	= 'off';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertFalse ($this -> object -> isSecure ());
+	}
+
+	/**
+	 * Test that isSecure returns true when there is a HTTPS token that doesn't have a value of 'off'
+	 */
+	public function testIsSecureHttpsTokenIsNotOff ()
+	{
+		$server				= $this -> prepServer ();
+		$server ['HTTPS']	= 'on';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> isSecure ());
+	}
+
+	/**
+	 * Test that getQuery returns valid results
 	 */
 	public function testGetQuery ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$expected	= $this -> get;
+		
+		$this -> assertSame ($expected, $this -> object -> getQuery ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getQueryParam
-	 * @todo Implement testGetQueryParam().
+	 * Test that we can get a query parameter
 	 */
-	public function testGetQueryParam ()
+	public function testGetQueryParamExists ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('The quick brown fox jumps over the lazy dog.', $this -> object -> getQueryParam ('queryParam2'));
 	}
-
+	
 	/**
-	 * @covers gordian\reefknot\http\Request::getPost
-	 * @todo Implement testGetPost().
+	 * Test that a non-existant query parameter returns NULL
+	 */
+	public function testGetQueryParamDoesntExist ()
+	{
+		$this -> assertNull ($this -> object -> getQueryParam ('queryParam3'));
+	}
+	
+	/**
+	 * Test that an exception is thrown if an invalid key type is used
+	 * 
+	 * @expectedException invalidArgumentException
+	 */
+	public function testQueryParamThrowsException ()
+	{
+		$this -> object -> getQueryParam (array ());
+	}
+	
+	/**
+	 * Test that getPost returns valid results
 	 */
 	public function testGetPost ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$expected	= $this -> post;
+		
+		$this -> assertSame ($expected, $this -> object -> getPost ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getPostParam
-	 * @todo Implement testGetPostParam().
+	 * Test we can get a post parameter
 	 */
-	public function testGetPostParam ()
+	public function testGetPostParamExists ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ("Only the fool would take trouble to verify that his sentence was composed of ten a's, three b's, four c's, four d's, forty-six e's, sixteen f's, four g's, thirteen h's, fifteen i's, two k's, nine l's, four m's, twenty-five n's, twenty-four o's, five p's, sixteen r's, forty-one s's, thirty-seven t's, ten u's, eight v's, eight w's, four x's, eleven y's, twenty-seven commas, twenty-three apostrophes, seven hyphens and, last but not least, a single !", $this -> object -> getPostParam ('postParam2'));
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getCookie
-	 * @todo Implement testGetCookie().
+	 * Test that a non-existant post parameter returns NULL
+	 */
+	public function testGetPostParamDoesntExist ()
+	{
+		$this -> assertNull ($this -> object -> getPostParam ('postParam3'));
+	}
+	
+	/**
+	 * Test that an exception is thrown if an invalid key type is used
+	 * 
+	 * @expectedException invalidArgumentException
+	 */
+	public function testGetPostParamThrowsException ()
+	{
+		$this -> object -> getPostParam (array ());
+	}
+
+	/**
+	 * Test that getCookie returns valid results
 	 */
 	public function testGetCookie ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$expected	= $this -> cookie;
+		
+		$this -> assertSame ($expected, $this -> object -> getCookie ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getCookieParam
-	 * @todo Implement testGetCookieParam().
+	 * Test that we can get a cookie parameter
 	 */
-	public function testGetCookieParam ()
+	public function testGetCookieParamExists ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('Big fjords vex quick waltz nymph.', $this -> object -> getCookieParam ('cookieParam2'));
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getHeaders
-	 * @todo Implement testGetHeaders().
+	 * Test that a non-existant cookie parameter returns NULL
 	 */
-	public function testGetHeaders ()
+	public function testGetCookieParamDoesntExist ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertNull ($this -> object -> getCookieParam ('postParam3'));
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getHeaderParam
-	 * @todo Implement testGetHeaderParam().
+	 * Test that an exception is thrown if an invalid key type is used
+	 * 
+	 * @expectedException invalidArgumentException
 	 */
-	public function testGetHeaderParam ()
+	public function testGetCookieParamThrowsException ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> object -> getCookieParam (array ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::IsXhr
-	 * @todo Implement testIsXhr().
+	 * Test that getHeaders returns valid results when pulling data from $_SERVER
 	 */
-	public function testIsXhr ()
+	public function testGetHeadersFromServer ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
+		$expected	= array (
+			"Host"				=> "localhost",
+			"User-Agent"		=> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:14.0) Gecko/20100101 Firefox/14.0.1",
+			"Accept"			=> "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", 
+			"Accept-Language"	=> "en-gb,en;q=0.5", 
+			"Accept-Encoding"	=> "gzip, deflate", 
+			"Dnt"				=> "1",
+			"Connection"		=> "keep-alive",
+			"Cookie"			=> "cookieParam1=3&cookieParam2=Big%20fjords%20vex%20quick%20waltz%20nymph."			
 		);
+		
+		$this -> assertSame ($expected, $this -> object -> getHeaders ());
 	}
-
+	
 	/**
-	 * @covers gordian\reefknot\http\Request::getRequestBody
-	 * @todo Implement testGetRequestBody().
+	 * Test that getHeaders returns valid results when pulling data from the headers using native header parsing
 	 */
-	public function testGetRequestBody ()
+	public function testGetHeadersFromNative ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
+		$expected	= array (
+			"Host"				=> "localhost",
+			"User-Agent"		=> "Mozilla/5.0 (my browser)",
+			"Accept"			=> "text/html,application/xhtml+xml,application/xml;q=0.8,*/*;q=0.6", 
+			"Accept-Language"	=> "en-gb", 
+			"Accept-Encoding"	=> "gzip, deflate", 
+			"Dnt"				=> "1",
+			"Connection"		=> "keep-alive",
+			"Cookie"			=> "cookieParam1=3&cookieParam2=Big%20fjords%20vex%20quick%20waltz%20nymph."			
 		);
+		
+		$mock	= $this -> getMock (	'gordian\reefknot\http\Request', 
+										array ('getHeadersNatively'),
+										array (
+											$this -> get, 
+											$this -> post, 
+											$this -> cookie, 
+											$this -> files, 
+											$this -> prepServer (), 
+											$this -> env));
+		
+		$mock	-> expects ($this -> any ())
+				-> method ('getHeadersNatively')
+				-> will ($this -> returnValue ($expected));
+		
+		$this -> object	= $mock;
+		
+		$this -> assertSame ($expected, $this -> object -> getHeaders ());
+	}
+	
+	/**
+	 * Test that we can get a header parameter
+	 */
+	public function testGetHeaderParamExists ()
+	{
+		$this -> assertEquals ('gzip, deflate', $this -> object -> getHeaderParam ('Accept-Encoding'));
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getUri
-	 * @todo Implement testGetUri().
+	 * Test that a non-existant header parameter returns NULL
+	 */
+	public function testGetHeaderParamDoesntExist ()
+	{
+		$this -> assertNull ($this -> object -> getHeaderParam ('Accept-Konquat'));
+	}
+	
+	/**
+	 * Test that an exception is thrown if an invalid key type is used
+	 * 
+	 * @expectedException invalidArgumentException
+	 */
+	public function testGetHeaderParamThrowsException ()
+	{
+		$this -> object -> getHeaderParam (array ());
+	}
+	
+	/**
+	 * Test that isXhr returns false if none of the requirements are met
+	 */
+	public function testIsXhrFalse ()
+	{
+		$this -> assertFalse ($this -> object -> IsXhr ());
+	}
+
+	/**
+	 * Test that setting the proper header triggers isXhr to be true
+	 */
+	public function testIsXhrHeader ()
+	{
+		$server								= $this -> prepServer ();
+		$server ['HTTP_X_REQUESTED_WITH']	= 'XmlHttpRequest';
+		
+		$this -> object	= new Request (	$this -> get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$server, 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> IsXhr ());
+	}
+	
+	/**
+	 * Test that setting the proper variable in the Query triggers isXhr to be true
+	 */
+	public function testIsXhrQuery ()
+	{
+		$get						= $this -> get;
+		$get ['__reefknot']['xhr']	= 1;
+		
+		$this -> object	= new Request (	$get, 
+										$this -> post,
+										$this -> cookie,
+										$this -> files,
+										$this -> prepServer (), 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> IsXhr ());
+	}
+	
+	/**
+	 * Test that setting the proper variable in the Post triggers isXhr to be true
+	 */
+	public function testIsXhrPost ()
+	{
+		$post						= $this -> post;
+		$post ['__reefknot']['xhr']	= 1;
+		
+		$this -> object	= new Request (	$this -> get, 
+										$post,
+										$this -> cookie,
+										$this -> files,
+										$this -> prepServer (), 
+										$this -> env);
+		
+		$this -> assertTrue ($this -> object -> IsXhr ());
+	}
+	
+	/**
+	 * Test getUri
 	 */
 	public function testGetUri ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('/foo/bar/baz.php?queryParam1=1&queryParam2=The%20quick%20brown%20fox%20jumps%20over%20the%20lazy%20dog.#asdf', $this -> object -> getUri ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getFragment
-	 * @todo Implement testGetFragment().
+	 * Test that we can get the URL fragment
 	 */
 	public function testGetFragment ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('asdf', $this -> object -> getFragment ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getHost
-	 * @todo Implement testGetHost().
+	 * Test that we can get the host
 	 */
 	public function testGetHost ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('localhost', $this -> object -> getHost ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getPassword
+	 * Test that we can get the password encoded in the URL
+	 * 
 	 * @todo Implement testGetPassword().
 	 */
 	public function testGetPassword ()
@@ -394,27 +675,19 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getPath
-	 * @todo Implement testGetPath().
+	 * Test that we can get the path part of the URL
 	 */
 	public function testGetPath ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('/foo/bar/baz.php', $this -> object -> getPath ());
 	}
 
 	/**
-	 * @covers gordian\reefknot\http\Request::getPort
-	 * @todo Implement testGetPort().
+	 * Test that we can get the port
 	 */
 	public function testGetPort ()
 	{
-		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals (80, $this -> object -> getPort ());
 	}
 
 	/**
@@ -424,9 +697,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	public function testGetScheme ()
 	{
 		// Remove the following lines when you implement this test.
-		$this -> markTestIncomplete (
-			'This test has not been implemented yet.'
-		);
+		$this -> assertEquals ('http', $this -> object -> getScheme ());
 	}
 
 	/**
@@ -442,5 +713,3 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	}
 
 }
-
-?>
