@@ -207,6 +207,36 @@ class Session implements iface\Session
 	// -[ Session implementation starts here ]----------------------------------
 	
 	/**
+	 * Get the PHP session ID
+	 * 
+	 * @return string 
+	 */
+	protected function sessionId ()
+	{
+		return \session_id ();
+	}
+	
+	/**
+	 * Test if headers have been sent yet
+	 * 
+	 * @return bool 
+	 */
+	protected function headersSent ()
+	{
+		return \headers_sent ();
+	}
+	
+	/**
+	 * Start the PHP session
+	 * 
+	 * @return bool True if the session started successfully
+	 */
+	protected function startSession ()
+	{
+		return \session_start ();
+	}
+	
+	/**
 	 * Clear the session of all stored data
 	 * 
 	 * @return \gordian\reefknot\storage\session\Session 
@@ -245,13 +275,13 @@ class Session implements iface\Session
 		if ($this -> storage === NULL)
 		{
 			// Attempt to start the session if it hasn't already been started
-			$binding = $this -> binding;
-			if (($binding -> sessionId () !== '')
-			|| ((!$binding -> headersSent ())
-			&& ($binding -> startSession ())))
+			//$binding = $this -> binding;
+			if (($this -> sessionId () !== '')
+			|| ((!$this -> headersSent ())
+			&& ($this -> startSession ())))
 			{
 				// Bind the storage to the session
-				$this -> storage	=& $binding -> getNamespace ($this -> namespace);
+				$this -> storage	=& $this -> binding -> getNamespace ($this -> namespace);
 				// Make sure the session is in a usable state
 				if (!$this -> hasData ())
 				{
@@ -264,6 +294,7 @@ class Session implements iface\Session
 				throw new \RuntimeException (__METHOD__ . ': Unable to initiate session storage at this time');
 			}
 		}
+		
 		return $this;
 	}
 	

@@ -20,27 +20,6 @@ namespace gordian\reefknot\storage\session\iface;
 interface Binding
 {
 	/**
-	 * Get the PHP session ID
-	 * 
-	 * @return string 
-	 */
-	public function sessionId ();
-	
-	/**
-	 * Test if headers have been sent yet
-	 * 
-	 * @return bool 
-	 */
-	public function headersSent ();
-	
-	/**
-	 * Start the PHP session
-	 * 
-	 * @return bool True if the session started successfully
-	 */
-	public function startSession ();
-	
-	/**
 	 * Get the specified namespace (subarray) within the PHP session
 	 * 
 	 * @param scalar $namespace
