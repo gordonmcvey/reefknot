@@ -33,21 +33,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 * @param bool $startSession
 	 * @return \gordian\reefknot\storage\session\iface\Binding 
 	 */
-	protected function getBindingMock ($sessionId = 'abc123', $headersSent = false, $startSession = true)
+	protected function getBindingMock ()
 	{
 		$binding	= $this -> getMock ('\gordian\reefknot\storage\session\iface\Binding');
-		
-		$binding	-> expects ($this -> any ())
-					-> method ('sessionId')
-					-> will ($this -> returnValue ($sessionId));
-		
-		$binding	-> expects ($this -> any ())
-					-> method ('headersSent')
-					-> will ($this -> returnValue ($headersSent));
-		
-		$binding	-> expects ($this -> any ())
-					-> method ('startSession')
-					-> will ($this -> returnValue ($startSession));
 		
 		$binding	-> expects ($this -> any ())
 					-> method ('getNamespace')
@@ -62,7 +50,22 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp ()
 	{
-		$this -> object	= new SessionMock ($this -> getBindingMock (), 'unittest');
+		//$this -> object	= new SessionMock ($this -> getBindingMock (), 'unittest');
+		$this -> object	= $this -> getMock ('\gordian\reefknot\storage\session\SessionMock',
+											array ('sessionId', 'headersSent', 'startSession'),
+											array ($this -> getBindingMock (), 'unittest'));
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('sessionId')
+						-> will ($this -> returnValue ('abc123'));
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('headersSent')
+						-> will ($this -> returnValue (false));
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('startSession')
+						-> will ($this -> returnValue (true));
 	}
 
 	/**
@@ -122,19 +125,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that trying to update an item with a non-scalar key throws an exception 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testUpdateItemInvalidKeyThrowsException ()
 	{
-		$ex	= NULL;
-		try
-		{
-			$this -> object -> updateItem ('asdfdsa', array (1, 2, 3));
-		}
-		catch (\Exception $e)
-		{
-			$ex	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $ex);
+		$this -> object -> updateItem ('asdfdsa', array (1, 2, 3));
 	}
 	
 	/**
@@ -207,56 +203,96 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that attempting to start a session with an empty namespace throws an exception.  
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testConstructInvalidNamespaceThrowsException ()
 	{
-		$this -> setExpectedException ('\InvalidArgumentException');
 		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), '');
 	}
 	
 	/**
 	 * Test that attempting to start the session with a non-scalar namespace throws an exception 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testConstructInvalidNamespaceThrowsException2 ()
 	{
-		$this -> setExpectedException ('\InvalidArgumentException');
 		$this -> object	= new Session ($this -> getMock ('\gordian\reefknot\storage\session\iface\Binding'), array (1, 2, 3));
 	}
 	
 	/**
 	 * Test that trying to add an item with a non-scalar key throws an exception 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testCreateItemInvalidKeyThrowsException ()
 	{
-		$this -> setExpectedException ('\InvalidArgumentException');
 		$this -> object -> createItem ('asdfdsa', array (1, 2, 3));
 	}
 	
 	/**
 	 * Test that trying to add an item with no key throws an exception 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testCreateItemInvalidKeyThrowsException2 ()
 	{
-		$this -> setExpectedException ('\InvalidArgumentException');
 		$this -> object -> createItem ('asdfdsa', NULL);
 	}
 	
 	/**
 	 * Test that attempting to start the session when headers have already been
 	 * sent throws an exception
+	 * 
+	 * @expectedException \RuntimeException
 	 */
 	public function testContructNoSessionHeadersAlreadySentThrowsException ()
 	{
-		$this -> setExpectedException ('\RuntimeException');
-		$this -> object	= new Session ($this -> getBindingMock ('', true, false), 'unittest');	
+		$this -> object = $this -> getMockBuilder ('\gordian\reefknot\storage\session\SessionMock')
+								-> disableOriginalConstructor ()
+								-> setMethods (array ('sessionId', 'headersSent', 'startSession'))
+								-> getMock ();
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('sessionId')
+						-> will ($this -> returnValue (''));
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('headersSent')
+						-> will ($this -> returnValue (true));
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('startSession')
+						-> will ($this -> returnValue (false));
+		
+		$this -> object	-> __construct ($this -> getBindingMock (), 'unittest');	
 	}
 	
 	/**
 	 * Test that a failure to start the session throws an exception
+	 * 
+	 * @expectedException \RuntimeException
 	 */
 	public function testContructCantStartSessionThrowsException ()
 	{
-		$this -> setExpectedException ('\RuntimeException');
-		$this -> object	= new Session ($this -> getBindingMock ('', false, false), 'unittest');	
+		$this -> object = $this -> getMockBuilder ('\gordian\reefknot\storage\session\SessionMock')
+								-> disableOriginalConstructor ()
+								-> setMethods (array ('sessionId', 'headersSent', 'startSession'))
+								-> getMock ();
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('sessionId')
+						-> will ($this -> returnValue (''));
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('headersSent')
+						-> will ($this -> returnValue (false));
+		
+		$this -> object -> expects ($this -> any ())
+						-> method ('startSession')
+						-> will ($this -> returnValue (false));
+		
+		$this -> object	-> __construct ($this -> getBindingMock (), 'unittest');	
 	}
 }
