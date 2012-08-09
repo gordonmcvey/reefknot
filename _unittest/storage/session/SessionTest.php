@@ -5,10 +5,14 @@ namespace gordian\reefknot\storage\session;
 /**
  * @todo Figure out how to do this with the mocking API 
  */
-class SessionMock extends Session
+class BindingMock implements iface\Binding
 {
-	// Make the non-public storage property public so we can poke and prod it
-	public $storage = NULL;
+	protected $storage = array ();
+	
+	public function &getNamespace ($namespace)
+	{
+		return $this -> storage [$namespace];
+	}
 }
 
 /**
@@ -25,24 +29,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	protected $object;
 	
 	/**
-	 * Generate a mocked Binding configured to return the required output for 
-	 * various tests
-	 * 
-	 * @param string $sessionId
-	 * @param bool $headersSent
-	 * @param bool $startSession
-	 * @return \gordian\reefknot\storage\session\iface\Binding 
+	 * @var gordian\reefknot\storage\session\Binding
 	 */
-	protected function getBindingMock ()
-	{
-		$binding	= $this -> getMock ('\gordian\reefknot\storage\session\iface\Binding');
-		
-		$binding	-> expects ($this -> any ())
-					-> method ('getNamespace')
-					-> will ($this -> returnValue (array ()));
-		
-		return $binding;
-	}
+	protected $binding;
 	
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -50,10 +39,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp ()
 	{
-		//$this -> object	= new SessionMock ($this -> getBindingMock (), 'unittest');
-		$this -> object	= $this -> getMock ('\gordian\reefknot\storage\session\SessionMock',
+		$this -> binding	= new BindingMock;
+		$this -> object	= $this -> getMock ('\gordian\reefknot\storage\session\Session',
 											array ('sessionId', 'headersSent', 'startSession'),
-											array ($this -> getBindingMock (), 'unittest'));
+											array ($this -> binding, 'unittest'));
 		
 		$this -> object -> expects ($this -> any ())
 						-> method ('sessionId')
@@ -82,10 +71,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCreateItem ()
 	{
-		$this -> assertEmpty ($this -> object -> storage);
+		$storage	=& $this -> binding -> getNamespace ('unittest');
+		$this -> assertEmpty ($storage);
 		$this -> object ->  createItem ('This is a test', 'test');
-		$this -> assertNotEmpty ($this -> object -> storage);
-		$this -> assertEquals ('This is a test', $this -> object -> storage ['test']);
+		$this -> assertNotEmpty ($storage);
+		$this -> assertEquals ('This is a test', $storage ['test']);
 	}
 	
 	/**
@@ -103,12 +93,13 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDeleteItem ()
 	{
-		$this -> assertEmpty ($this -> object -> storage);
+		$storage	=& $this -> binding -> getNamespace ('unittest');
+		$this -> assertEmpty ($storage);
 		$this -> object ->  createItem ('This is a test', 'test');
-		$this -> assertNotEmpty ($this -> object -> storage);
-		$this -> assertEquals ('This is a test', $this -> object -> storage ['test']);
+		$this -> assertNotEmpty ($storage);
+		$this -> assertEquals ('This is a test', $storage ['test']);
 		$this -> object ->  deleteItem ('test');
-		$this -> assertEmpty ($this -> object -> storage);
+		$this -> assertEmpty ($storage);
 	}
 
 	/**
@@ -116,11 +107,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testUpdateItem ()
 	{
-		$this -> assertEmpty ($this -> object -> storage);
+		$storage	=& $this -> binding -> getNamespace ('unittest');
+		$this -> assertEmpty ($storage);
 		$this -> object ->  createItem ('This is a test', 'test');
-		$this -> assertEquals ('This is a test', $this -> object -> storage ['test']);
+		$this -> assertEquals ('This is a test', $storage ['test']);
 		$this -> object ->  updateItem ('foofoofoo', 'test');
-		$this -> assertEquals ('foofoofoo', $this -> object -> storage ['test']);
+		$this -> assertEquals ('foofoofoo', $storage ['test']);
 	}
 	
 	/**
@@ -138,7 +130,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testReset ()
 	{
-		$this -> assertEmpty ($this -> object -> storage);
+		$storage	=& $this -> binding -> getNamespace ('unittest');
+		$this -> assertEmpty ($storage);
 		$this -> object ->  createItem ('This is a test', 'test')
 						->  createItem ('This is another test', 'test2')
 						->  createItem ('This is yet another test', 'test3');
@@ -146,9 +139,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 			'test' => 'This is a test', 
 			'test2' => 'This is another test', 
 			'test3' => 'This is yet another test'), 
-			$this -> object -> storage);
+			$storage);
 		$this -> object -> reset ();
-		$this -> assertEmpty ($this -> object -> storage);
+		$this -> assertEmpty ($storage);
 	}
 
 	/**
@@ -156,10 +149,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testHasData ()
 	{
-		$this -> assertEmpty ($this -> object -> storage);
+		$storage	=& $this -> binding -> getNamespace ('unittest');
+		$this -> assertEmpty ($storage);
 		$this -> assertFalse ($this -> object -> hasData ());
 		$this -> object ->  createItem ('This is a test', 'test');
-		$this -> assertNotEmpty ($this -> object -> storage);
+		$this -> assertNotEmpty ($storage);
 		$this -> assertTrue ($this -> object -> hasData ());
 	}
 	
@@ -249,7 +243,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testContructNoSessionHeadersAlreadySentThrowsException ()
 	{
-		$this -> object = $this -> getMockBuilder ('\gordian\reefknot\storage\session\SessionMock')
+		$this -> object = $this -> getMockBuilder ('\gordian\reefknot\storage\session\Session')
 								-> disableOriginalConstructor ()
 								-> setMethods (array ('sessionId', 'headersSent', 'startSession'))
 								-> getMock ();
@@ -266,7 +260,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 						-> method ('startSession')
 						-> will ($this -> returnValue (false));
 		
-		$this -> object	-> __construct ($this -> getBindingMock (), 'unittest');	
+		$this -> object	-> __construct (new BindingMock, 'unittest');	
 	}
 	
 	/**
@@ -276,7 +270,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testContructCantStartSessionThrowsException ()
 	{
-		$this -> object = $this -> getMockBuilder ('\gordian\reefknot\storage\session\SessionMock')
+		$this -> object = $this -> getMockBuilder ('\gordian\reefknot\storage\session\Session')
 								-> disableOriginalConstructor ()
 								-> setMethods (array ('sessionId', 'headersSent', 'startSession'))
 								-> getMock ();
@@ -293,6 +287,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 						-> method ('startSession')
 						-> will ($this -> returnValue (false));
 		
-		$this -> object	-> __construct ($this -> getBindingMock (), 'unittest');	
+		$this -> object	-> __construct (new BindingMock, 'unittest');	
 	}
 }
