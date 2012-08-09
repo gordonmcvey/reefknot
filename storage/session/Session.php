@@ -209,6 +209,9 @@ class Session implements iface\Session
 	/**
 	 * Get the PHP session ID
 	 * 
+	 * This method serves as a "test team" that can easily be replaced with one
+	 * that returns what we want for unit testing. 
+	 * 
 	 * @return string 
 	 */
 	protected function sessionId ()
@@ -219,6 +222,9 @@ class Session implements iface\Session
 	/**
 	 * Test if headers have been sent yet
 	 * 
+	 * This method serves as a "test team" that can easily be replaced with one
+	 * that returns what we want for unit testing. 
+	 * 
 	 * @return bool 
 	 */
 	protected function headersSent ()
@@ -228,6 +234,9 @@ class Session implements iface\Session
 	
 	/**
 	 * Start the PHP session
+	 * 
+	 * This method serves as a "test team" that can easily be replaced with one
+	 * that returns what we want for unit testing. 
 	 * 
 	 * @return bool True if the session started successfully
 	 */
@@ -275,7 +284,6 @@ class Session implements iface\Session
 		if ($this -> storage === NULL)
 		{
 			// Attempt to start the session if it hasn't already been started
-			//$binding = $this -> binding;
 			if (($this -> sessionId () !== '')
 			|| ((!$this -> headersSent ())
 			&& ($this -> startSession ())))
