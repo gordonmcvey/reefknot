@@ -36,7 +36,7 @@ class Autoloader implements iface\Autoloader
 		/**
 		 * Shortcut to the DIRECTORY_SEPARATOR PHP constant 
 		 */
-		DS				= \gordian\reefknot\DS;
+		DS				= \DIRECTORY_SEPARATOR;
 	
 	protected
 		
@@ -80,21 +80,29 @@ class Autoloader implements iface\Autoloader
 		 * Flag to determine if this instance of the autoloader has been 
 		 * registered onto the SPL autoload stack
 		 * 
-		 * @var bool 
+		 * @var boolean
 		 */
-		$registered		= false;
+		$registered		= false,
+		
+		/**
+		 * Flag to determine if this instance of the autoloader should attempt
+		 * to load or whether it should just be skipped. 
+		 * 
+		 * @var boolean
+		 */
+		$enabled		= false;
 	
 	/**
 	 * Determine if the given class is within the remit of this instance of the
 	 * autoloader
 	 * 
 	 * @param string $name
-	 * @return bool 
+	 * @return boolean
 	 */
 	protected function inRemit ($name)
 	{
-		return ((strpos ($name, $this -> namespaceSep) !== false)
-			&& (strpos ($name, $this -> namespaceRoot) === 0));
+		return (false !== (strpos ($name, $this -> namespaceSep))
+			&& (0 === strpos ($name, $this -> namespaceRoot)));
 	}
 	
 	/**
@@ -154,7 +162,8 @@ class Autoloader implements iface\Autoloader
 	{
 		$found	= false;
 		
-		if ($this -> inRemit ($name))
+		if (($this -> isEnabled ())
+		&& ($this -> inRemit ($name)))
 		{
 			$file	= $this -> calculatePath ($name);
 			// Include the file if it exists and report success
@@ -184,29 +193,104 @@ class Autoloader implements iface\Autoloader
 	/**
 	 * Register the autoload method with the SPL autoload stack
 	 * 
+	 * The optional $push parameter will determine whether the autoloader will 
+	 * be added at the end of the autoload queue or at the start.  If false, 
+	 * then the autoloader will be added at the end of the autoload queue, and
+	 * will only be invoked if all autoloaders ahead of it have run and failed
+	 * to load the requested class.  If true, the autoloader will be pushed to
+	 * the front of the queue and will run before any other autoloaders.  The
+	 * default is false.  
+	 * 
+	 * Note: You can prevent a particular autoloader from operating by either
+	 * unregistering it or by disabling it.  However, these aren't the same.  
+	 * Disabling an autoloader will not remove it from the queue, just cause 
+	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
+	 * will completely remove it from the queue.  This means that using the
+	 * disable/enable semantics will not cause the order of autoloading to 
+	 * change, but using the unregister/register semantics might.  
+	 * 
+	 * @param bool $push Whether or not to push the autoloader to the start of the autoload queue
 	 * @return bool True if the autoloader was registered successfully
 	 */
-	public function register ()
+	public function register ($push = false)
 	{
-		if (!$this -> registered)
+		if (false === $this -> isRegistered ())
 		{
-			$this -> registered = spl_autoload_register (array ($this, 'load'));
+			$this -> registered = spl_autoload_register (array ($this, 'load'), true, $push);
 		}
-		return ($this -> registered);
+		
+		return $this -> isRegistered ();
 	}
 	
 	/**
 	 * Unregister the autoload method from the SPL autoload stack
 	 * 
+	 * Note: You can prevent a particular autoloader from operating by either
+	 * unregistering it or by disabling it.  However, these aren't the same.  
+	 * Disabling an autoloader will not remove it from the queue, just cause 
+	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
+	 * will completely remove it from the queue.  This means that using the
+	 * disable/enable semantics will not cause the order of autoloading to 
+	 * change, but using the unregister/register semantics might.  
+
 	 * @return bool True is the autoloader was unregistered successfully
 	 */
 	public function unregister ()
 	{
-		if ($this -> registered)
+		if (true === $this -> isRegistered ())
 		{
 			$this -> registered	= !spl_autoload_unregister (array ($this, 'load'));
 		}
-		return (!$this -> registered);
+		
+		return !$this -> isRegistered ();
+	}
+	
+	public function isRegistered ()
+	{
+		return $this -> registered;
+	}
+	
+	/**
+	 * Enable the autoloader
+	 * 
+	 * Note: You can prevent a particular autoloader from operating by either
+	 * unregistering it or by disabling it.  However, these aren't the same.  
+	 * Disabling an autoloader will not remove it from the queue, just cause 
+	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
+	 * will completely remove it from the queue.  This means that using the
+	 * disable/enable semantics will not cause the order of autoloading to 
+	 * change, but using the unregister/register semantics might.  
+	 * 
+	 * @return \gordian\reefknot\autoload\Autoloader
+	 */
+	public function enable ()
+	{
+		$this -> enabled	= true;
+		return $this;
+	}
+	
+	/**
+	 * Disable the autoloader
+	 * 
+	 * Note: You can prevent a particular autoloader from operating by either
+	 * unregistering it or by disabling it.  However, these aren't the same.  
+	 * Disabling an autoloader will not remove it from the queue, just cause 
+	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
+	 * will completely remove it from the queue.  This means that using the
+	 * disable/enable semantics will not cause the order of autoloading to 
+	 * change, but using the unregister/register semantics might.  
+	 * 
+	 * @return \gordian\reefknot\autoload\Autoloader
+	 */
+	public function disable ()
+	{
+		$this -> enabled	= false;
+		return $this;
+	}
+	
+	public function isEnabled ()
+	{
+		return $this -> enabled;
 	}
 	
 	/**
@@ -230,6 +314,7 @@ class Autoloader implements iface\Autoloader
 		
 		// Add this instance of the autoloader to the SPL autoload stack
 		$this -> register ();
+		$this -> enable ();
 	}
 	
 	/**
@@ -237,6 +322,7 @@ class Autoloader implements iface\Autoloader
 	 */
 	public function __destruct ()
 	{
-		$this -> unregister ();
+		$this	-> disable () 
+				-> unregister ();
 	}
 }
