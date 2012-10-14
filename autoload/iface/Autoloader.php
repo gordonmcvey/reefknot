@@ -30,14 +30,6 @@ interface Autoloader
 	 * autoloader queue, unless the $push flag is set.  If it is, then it will
 	 * be pushed into the front of the autoloader queue
 	 * 
-	 * Note: You can prevent a particular autoloader from operating by either
-	 * unregistering it or by disabling it.  However, these aren't the same.  
-	 * Disabling an autoloader will not remove it from the queue, just cause 
-	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
-	 * will completely remove it from the queue.  This means that using the
-	 * disable/enable semantics will not cause the order of autoloading to 
-	 * change, but using the unregister/register semantics might.  
-	 * 
 	 * @param boolean $push Whether or not the autoloader should be pushed to the front of the autoload queue
 	 * @return boolean True if the autoloader was successfully registered
 	 */
@@ -72,7 +64,6 @@ interface Autoloader
 	/**
 	 * Enable the autoloader
 	 * 
-	 * 
 	 * @return Autoloader
 	 */
 	public function enable ();
@@ -83,14 +74,6 @@ interface Autoloader
 	 * Disabling an autoloader instance can be a useful optimization, as it 
 	 * allows you to skip autoloaders that you know aren't set up to autoload 
 	 * a particular class
-	 * 
-	 * Note: You can prevent a particular autoloader from operating by either
-	 * unregistering it or by disabling it.  However, these aren't the same.  
-	 * Disabling an autoloader will not remove it from the queue, just cause 
-	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
-	 * will completely remove it from the queue.  This means that using the
-	 * disable/enable semantics will not cause the order of autoloading to 
-	 * change, but using the unregister/register semantics might.  
 	 * 
 	 * @return Autoloader
 	 */
