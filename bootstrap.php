@@ -35,11 +35,6 @@ const
 	NS_FW	= __NAMESPACE__, 
 	
 	/**
-	* Define the character used as the namespace seperator.
-	*/
-	NS_SEP	= '\\',
-	
-	/**
 	 * Define the minimum PHP version currently supported by Reefknot
 	 */
 	PHP_MIN	= '5.3.10';
@@ -48,8 +43,8 @@ const
  * Define the root path for the framework.  This can be overridden by defining
  * it before including the bootstrap 
  */
-defined (__NAMESPACE__ . '\PATH_FW')
-	|| define (__NAMESPACE__ . '\PATH_FW', realpath (__DIR__));
+defined (NS_FW . '\PATH_FW')
+	|| define (NS_FW . '\PATH_FW', realpath (__DIR__));
 
 // Abort with a fatal error should the PHP version requirements not be met
 if (version_compare (PHP_VERSION, PHP_MIN) < 0)
