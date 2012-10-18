@@ -26,7 +26,7 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 	{
 		// Disable the unit test autoloader for the duration of the following test
 		global $unitTestAutoloader;
-		$unitTestAutoloader -> unregister ();
+		$unitTestAutoloader -> disable ();
 		$this -> object = new Autoloader (__DIR__ . '/exampleclasses', 'gordian\exampleclasses');
 	}
 
@@ -36,33 +36,65 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function tearDown ()
 	{
+		$this -> object -> unregister ();
 		unset ($this -> object);
 		// Restore normal autoloading when the test is done
 		global $unitTestAutoloader;
-		$unitTestAutoloader -> register ();
+		$unitTestAutoloader -> enable ();
 	}
 	
 	/**
-	 * Test that the autoloader can be enabled
+	 * Test that the autoloader can be registered
 	 */
 	public function testRegister ()
 	{
-		$arr	= array ($this -> object, 'load');
+		$entry	= array ($this -> object, 'load');
 		$this -> object -> unregister ();
-		$this -> assertFalse (in_array ($arr, spl_autoload_functions ()));
+		$this -> assertNotContains ($entry, spl_autoload_functions ());
 		$this -> object -> register ();
-		$this -> assertTrue (in_array ($arr, spl_autoload_functions ()));
+		$queue	= spl_autoload_functions ();
+		$this -> assertContains ($entry, $queue);
+		$this -> assertSame ($entry, \end ($queue));
 	}
-
+	
+	/**
+	 * Test that registering as high-priority registers the autoloader at the front of the queue
+	 */
+	public function testRegister2 ()
+	{
+		$entry	= array ($this -> object, 'load');
+		$this -> object -> unregister ();
+		$this -> assertNotContains ($entry, spl_autoload_functions ());
+		$this -> object -> register (true);
+		$queue	= spl_autoload_functions ();
+		$this -> assertContains ($entry, $queue);
+		$this -> assertSame ($entry, \reset ($queue));
+	}
+	
 	/**
 	 * Test that the autoloader can be disabled
 	 */
 	public function testUnregister ()
 	{
-		$arr	= array ($this -> object, 'load');
-		$this -> assertTrue (in_array ($arr, spl_autoload_functions ()));
+		$entry	= array ($this -> object, 'load');
+		$this -> assertContains ($entry, spl_autoload_functions ());
 		$this -> object -> unregister ();
-		$this -> assertFalse (in_array ($arr, spl_autoload_functions ()));
+		$this -> assertNotContains ($entry, spl_autoload_functions ());
+	}
+	
+	/**
+	 * Test that an autoloader can be disabled and enabled
+	 */
+	public function testEnableDisable ()
+	{
+		$entry	= array ($this -> object, 'load');
+		$this -> assertContains ($entry, spl_autoload_functions ());
+		$this -> object -> disable ();
+		$this -> assertContains ($entry, spl_autoload_functions ());
+		$this -> assertFalse (class_exists ('\gordian\exampleclasses\ClassThatShouldntLoad'));
+		$this -> object -> enable ();
+		$this -> assertContains ($entry, spl_autoload_functions ());
+		$this -> assertTrue (class_exists ('\gordian\exampleclasses\ClassThatShouldLoad'));
 	}
 	
 	/**
@@ -104,7 +136,6 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAutoloadForClassPearStylePass ()
 	{
-		unset ($this -> object);
 		$this -> object = new Autoloader (__DIR__ . '/exampleclasses', 'gordian_exampleclasses', '_');
 		$this -> assertFalse (class_exists ('\gordian_exampleclasses_baz_BazClass', false));
 		$this -> assertTrue (class_exists ('\gordian_exampleclasses_baz_BazClass', true));
@@ -117,7 +148,7 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAutoloadForInterfacePearStylePass ()
 	{
-		unset ($this -> object);
+		$this -> object -> unregister ();
 		$this -> object = new Autoloader (__DIR__ . '/exampleclasses', 'gordian_exampleclasses', '_');
 		$this -> assertFalse (interface_exists ('\gordian_exampleclasses_baz_BazInterface', false));
 		$this -> assertTrue (interface_exists ('\gordian_exampleclasses_baz_BazInterface', true));
@@ -132,7 +163,7 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAutoloadForTraitPearStylePass ()
 	{
-		unset ($this -> object);
+		$this -> object -> unregister ();
 		$this -> object = new Autoloader (__DIR__ . '/exampleclasses', 'gordian_exampleclasses', '_');
 		$this -> assertFalse (trait_exists ('\gordian_exampleclasses_baz_BazTrait', false));
 		$this -> assertTrue (trait_exists ('\gordian_exampleclasses_baz_BazTrait', true));
@@ -158,6 +189,8 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAutoloadFail2 ()
 	{
+		$this -> object -> unregister ();
+		$this -> object = new Autoloader (__DIR__ . '/exampleclasses', 'gordian\exampleclasses');
 		// Check the class doesn't already exist
 		$this -> assertFalse (class_exists ('gordian\exampleclasses\bar\BarClass', false));
 		// Check the class doesn't exist after an autoload attempt
