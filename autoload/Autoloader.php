@@ -106,13 +106,13 @@ class Autoloader implements iface\Autoloader
 	}
 	
 	/**
-	 * Generate the path from a namespaced class/interface name
+	 * Generate the path from a namespaced resource name
 	 * 
 	 * This method determines where to expect a file containing the requested
-	 * class/interface to be located in the filesystem.  This implementation 
-	 * does this by replacing the namespace seperator with the directory 
-	 * seperator, appending an expected filename suffix and prepending a path
-	 * to treat as the root path for classes. 
+	 * resource to be located in the filesystem.  This implementation does this 
+	 * by replacing the namespace seperator with the directory seperator, 
+	 * appending an expected filename suffix and prepending the autoloader's 
+	 * root path
 	 * 
 	 * @param string $name 
 	 * @return string
@@ -131,14 +131,16 @@ class Autoloader implements iface\Autoloader
 	}
 	
 	/**
-	 * Determine if a class/interface/trait was loaded successfully
+	 * Determine if a resource was loaded successfully
 	 * 
 	 * Once the autoloader has included the file that is expected to contain 
-	 * the class/interface/trait that's being requested, this method will check 
-	 * that the requested resource is now actually available to PHP.  
+	 * the resource that's being requested, this method will check that the 
+	 * requested resource is now actually available to PHP.  
+	 * 
+	 * In the context of autoloading, a resource is a class, interface or trait.
 	 * 
 	 * @param string $name Name of the resource to check
-	 * @return bool True if the resource is available
+	 * @return boolean True if the resource is available
 	 */
 	protected function resourceLoaded ($name)
 	{
@@ -209,8 +211,8 @@ class Autoloader implements iface\Autoloader
 	 * disable/enable semantics will not cause the order of autoloading to 
 	 * change, but using the unregister/register semantics might.  
 	 * 
-	 * @param bool $push Whether or not to push the autoloader to the start of the autoload queue
-	 * @return bool True if the autoloader was registered successfully
+	 * @param boolean $push Whether or not to push the autoloader to the start of the autoload queue
+	 * @return boolean True if the autoloader was registered successfully
 	 */
 	public function register ($push = false)
 	{
@@ -233,7 +235,7 @@ class Autoloader implements iface\Autoloader
 	 * disable/enable semantics will not cause the order of autoloading to 
 	 * change, but using the unregister/register semantics might.  
 
-	 * @return bool True is the autoloader was unregistered successfully
+	 * @return boolean True is the autoloader was unregistered successfully
 	 */
 	public function unregister ()
 	{
@@ -245,6 +247,11 @@ class Autoloader implements iface\Autoloader
 		return !$this -> isRegistered ();
 	}
 	
+	/**
+	 * Determine whether the autoloader is registered
+	 * 
+	 * @return boolean
+	 */
 	public function isRegistered ()
 	{
 		return $this -> registered;
@@ -288,6 +295,11 @@ class Autoloader implements iface\Autoloader
 		return $this;
 	}
 	
+	/**
+	 * Determine whether the autoloader is currently enabled
+	 * 
+	 * @return boolean
+	 */
 	public function isEnabled ()
 	{
 		return $this -> enabled;
@@ -301,9 +313,9 @@ class Autoloader implements iface\Autoloader
 	 * @param string $seperator The character(s) to treat as the namespace separator
 	 * @param string $suffix The file suffix to expect for classes
 	 */
-	public function __construct (	$path = \gordian\reefknot\PATH_FW, 
-									$namespace = \gordian\reefknot\NS_FW, 
-									$seperator = \gordian\reefknot\NS_SEP, 
+	public function __construct (	$path, 
+									$namespace, 
+									$seperator = '\\', 
 									$suffix = '.php')
 	{
 		// Set custom namespace props
@@ -315,14 +327,5 @@ class Autoloader implements iface\Autoloader
 		// Add this instance of the autoloader to the SPL autoload stack
 		$this -> register ();
 		$this -> enable ();
-	}
-	
-	/**
-	 * Do autoloader cleanup 
-	 */
-	public function __destruct ()
-	{
-		$this	-> disable () 
-				-> unregister ();
 	}
 }
