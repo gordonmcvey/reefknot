@@ -13,17 +13,20 @@ namespace gordian\reefknot\autoload;
  * 
  * The Reefknot autoloader is designed to be extremely lightweight.  It works
  * on the assumption that a namespace has a 1:1 mapping to a directory in the
- * filesystem, relative to the root path as defined by the NS_ROOT constant.  
- * It's this assumption that allows for such a lightweight autoloader.  
+ * filesystem, relative to the root path given when the autoloader is 
+ * instantiated. It's this assumption that allows for such a lightweight 
+ * autoloader.  
  * 
  * You can reuse the autoloader to provide autoloading services in your own 
  * projects by simply creating a new instance with the namespace and location 
- * of your project files as arguments.  If no arguments are provided then the 
- * new instance will default to the settings for loading Reefknot classes.  You
- * can also use this class to autoload "pseudo-namespaced" classes such as the
- * scheme used in PEAR and Zend Framework 1.x by specifying a different
- * namespace character.  Finally, you can subclass the autoloader for complete
- * control over its operation
+ * of your project files as arguments.  You can also use this class to autoload 
+ * "pseudo-namespaced" classes such as the scheme used in PEAR and Zend 
+ * Framework 1.x by specifying a different namespace character.  Finally, you 
+ * can subclass the autoloader for complete control over its operation
+ * 
+ * The following class documentation makes reference to "resources".  In the 
+ * context of the autoloader, a resource is a class, interface, or trait (for 
+ * PHP >= 5.4)
  * 
  * @author Gordon McVey
  * @category Reefknot
@@ -54,23 +57,23 @@ class Autoloader implements iface\Autoloader
 		
 		/**
 		 * The namespace segment that should be considred the "root".  The
-		 * autoloader will only attempt to load classes and interfaces within
-		 * the root namespace 
+		 * autoloader will only attempt to load resources within the root 
+		 * namespace
 		 * 
 		 * @var string
 		 */
 		$namespaceRoot	= '',
 		
 		/**
-		 * The root directory to search for classes and interfaces in.  Each 
-		 * subnamespace maps to a subdirectory of this root directory.  
+		 * The root directory to search for resources in.  Each  subnamespace 
+		 * maps to a subdirectory of this root directory.  
 		 * 
 		 * @var string
 		 */
 		$pathRoot		= '',
 		
 		/**
-		 * Filename suffix to expect class and interface files to have
+		 * Filename suffix to expect resource files to have
 		 * 
 		 * @var string 
 		 */
@@ -78,7 +81,7 @@ class Autoloader implements iface\Autoloader
 		
 		/**
 		 * Flag to determine if this instance of the autoloader has been 
-		 * registered onto the SPL autoload stack
+		 * registered onto the SPL autoload queue
 		 * 
 		 * @var boolean
 		 */
@@ -93,11 +96,18 @@ class Autoloader implements iface\Autoloader
 		$enabled		= false;
 	
 	/**
-	 * Determine if the given class is within the remit of this instance of the
-	 * autoloader
+	 * Determine if the given resource is within the remit of this instance of 
+	 * the autoloader
+	 * 
+	 * The autoloader is set up with a "root namespace" on creation.  The 
+	 * autoloader is only supposed to attempt to load classes that are within 
+	 * that namespace, skpping any that aren't and leaving them for another 
+	 * autoloader to handle.  For example, if you set 'foo' as the root 
+	 * namespace, then the autoloader should load '\foo\MyClass', but it should
+	 * not attempt to load '\bar\MyClass'
 	 * 
 	 * @param string $name
-	 * @return boolean
+	 * @return boolean True if the given resource name is within the remit of this autoloader
 	 */
 	protected function inRemit ($name)
 	{
@@ -119,12 +129,6 @@ class Autoloader implements iface\Autoloader
 	 */
 	protected function calculatePath ($name)
 	{
-		/* 
-		 * We only want to use this autoloader on classes that are within the 
-		 * specified namespace and use the correct namespace separator.  If the
-		 * given name doesn't meet these specifications then it should be up to
-		 * another autoloader to handle it. 
-		 */
 		return $this -> pathRoot 
 			 . str_replace ($this -> namespaceSep, static::DS, str_replace ($this -> namespaceRoot, '', $name)) 
 			 . $this -> fileSuffix;
@@ -136,8 +140,6 @@ class Autoloader implements iface\Autoloader
 	 * Once the autoloader has included the file that is expected to contain 
 	 * the resource that's being requested, this method will check that the 
 	 * requested resource is now actually available to PHP.  
-	 * 
-	 * In the context of autoloading, a resource is a class, interface or trait.
 	 * 
 	 * @param string $name Name of the resource to check
 	 * @return boolean True if the resource is available
@@ -152,26 +154,28 @@ class Autoloader implements iface\Autoloader
 	/**
 	 * Class/Interface autoloader
 	 * 
-	 * The autoloader expects to recieve a fully-namespaced class/interface name 
-	 * as an argument.  It will check that the namespace for the class is within 
-	 * its remit.  If it is then it will attempt to load the class/interface.  
-	 * Otherwise, it will return false and leave autoloading of the class up to
-	 * some other autoloader to handle.  
+	 * The autoloader expects to recieve a fully-namespaced resource name as an 
+	 * argument.  It will check that the namespace for the resource is within 
+	 * its remit.  If it is then it will attempt to load the resource.  
+	 * Otherwise, it will return false and leave autoloading of the resource up 
+	 * to some other autoloader in the queue.  
 	 * 
-	 * @param string $name The class to load, including namespace
+	 * @param string $name The resource to load, including namespace
 	 */
 	protected function load ($name)
 	{
 		$found	= false;
 		
+		// Check that we should attempt to autoload
 		if (($this -> isEnabled ())
 		&& ($this -> inRemit ($name)))
 		{
 			$file	= $this -> calculatePath ($name);
-			// Include the file if it exists and report success
 			if (is_file ($file))
 			{
 				/*
+				 * Include the file and report success
+				 * 
 				 * The reason we're going with include_once here is because if 
 				 * we use include, there's a possibility that a class_exists 
 				 * call could trigger a fatal error.  If you do a class_exists 
@@ -193,23 +197,15 @@ class Autoloader implements iface\Autoloader
 	}
 	
 	/**
-	 * Register the autoload method with the SPL autoload stack
+	 * Register the autoload method with the SPL autoload queue
 	 * 
 	 * The optional $push parameter will determine whether the autoloader will 
 	 * be added at the end of the autoload queue or at the start.  If false, 
 	 * then the autoloader will be added at the end of the autoload queue, and
 	 * will only be invoked if all autoloaders ahead of it have run and failed
 	 * to load the requested class.  If true, the autoloader will be pushed to
-	 * the front of the queue and will run before any other autoloaders.  The
-	 * default is false.  
-	 * 
-	 * Note: You can prevent a particular autoloader from operating by either
-	 * unregistering it or by disabling it.  However, these aren't the same.  
-	 * Disabling an autoloader will not remove it from the queue, just cause 
-	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
-	 * will completely remove it from the queue.  This means that using the
-	 * disable/enable semantics will not cause the order of autoloading to 
-	 * change, but using the unregister/register semantics might.  
+	 * the front of the queue and will run before any other registered 
+	 * autoloaders.  The default is false.  
 	 * 
 	 * @param boolean $push Whether or not to push the autoloader to the start of the autoload queue
 	 * @return \gordian\reefknot\autoload\Autoloader
@@ -230,15 +226,7 @@ class Autoloader implements iface\Autoloader
 	}
 	
 	/**
-	 * Unregister the autoload method from the SPL autoload stack
-	 * 
-	 * Note: You can prevent a particular autoloader from operating by either
-	 * unregistering it or by disabling it.  However, these aren't the same.  
-	 * Disabling an autoloader will not remove it from the queue, just cause 
-	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
-	 * will completely remove it from the queue.  This means that using the
-	 * disable/enable semantics will not cause the order of autoloading to 
-	 * change, but using the unregister/register semantics might.  
+	 * Unregister the autoload method from the SPL autoload queue
 	 * 
 	 * @return \gordian\reefknot\autoload\Autoloader
 	 * @throws \RuntimeException Thrown if the autoloader couldn't be unregistered
@@ -260,7 +248,7 @@ class Autoloader implements iface\Autoloader
 	/**
 	 * Determine whether the autoloader is registered
 	 * 
-	 * @return boolean
+	 * @return boolean True if the autoloader is currently registered
 	 */
 	public function isRegistered ()
 	{
@@ -270,13 +258,10 @@ class Autoloader implements iface\Autoloader
 	/**
 	 * Enable the autoloader
 	 * 
-	 * Note: You can prevent a particular autoloader from operating by either
-	 * unregistering it or by disabling it.  However, these aren't the same.  
-	 * Disabling an autoloader will not remove it from the queue, just cause 
-	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
-	 * will completely remove it from the queue.  This means that using the
-	 * disable/enable semantics will not cause the order of autoloading to 
-	 * change, but using the unregister/register semantics might.  
+	 * The enable/disable mechanism allows you to skip a particular autoloader
+	 * without removing it from the autoload queue.  This is useful if you want
+	 * to temporarially skip a particular autoloader, but don't want to change
+	 * the autoloading order.  
 	 * 
 	 * @return \gordian\reefknot\autoload\Autoloader
 	 */
@@ -289,13 +274,14 @@ class Autoloader implements iface\Autoloader
 	/**
 	 * Disable the autoloader
 	 * 
-	 * Note: You can prevent a particular autoloader from operating by either
-	 * unregistering it or by disabling it.  However, these aren't the same.  
-	 * Disabling an autoloader will not remove it from the queue, just cause 
-	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
-	 * will completely remove it from the queue.  This means that using the
-	 * disable/enable semantics will not cause the order of autoloading to 
-	 * change, but using the unregister/register semantics might.  
+	 * When disabled, the autoloader's load method will not attempt to resolve
+	 * a class and will simply returns false immideately.  This means that 
+	 * autoloading with this instance will be skipped.  
+	 * 
+	 * The enable/disable mechanism allows you to skip a particular autoloader
+	 * without removing it from the autoload queue.  This is useful if you want
+	 * to temporarially skip a particular autoloader, but don't want to change
+	 * the autoloading order.  
 	 * 
 	 * @return \gordian\reefknot\autoload\Autoloader
 	 */
@@ -308,7 +294,11 @@ class Autoloader implements iface\Autoloader
 	/**
 	 * Determine whether the autoloader is currently enabled
 	 * 
-	 * @return boolean
+	 * Note: This method will return true if the class currently isn't 
+	 * registered to the autoload queue.  To actually function, an autoloader
+	 * has to both be registered and enabled.  
+	 * 
+	 * @return boolean True if the autoloader is currently enabled
 	 */
 	public function isEnabled ()
 	{
