@@ -212,16 +212,21 @@ class Autoloader implements iface\Autoloader
 	 * change, but using the unregister/register semantics might.  
 	 * 
 	 * @param boolean $push Whether or not to push the autoloader to the start of the autoload queue
-	 * @return boolean True if the autoloader was registered successfully
+	 * @return \gordian\reefknot\autoload\Autoloader
+	 * @throws \RuntimeException Thrown if registration failed
 	 */
 	public function register ($push = false)
 	{
 		if (false === $this -> isRegistered ())
 		{
 			$this -> registered = spl_autoload_register (array ($this, 'load'), true, $push);
+			if (false === $this -> isRegistered ())
+			{
+				throw new \RuntimeException ('Unable to register autoloader');
+			}
 		}
 		
-		return $this -> isRegistered ();
+		return $this;
 	}
 	
 	/**
@@ -234,17 +239,22 @@ class Autoloader implements iface\Autoloader
 	 * will completely remove it from the queue.  This means that using the
 	 * disable/enable semantics will not cause the order of autoloading to 
 	 * change, but using the unregister/register semantics might.  
-
-	 * @return boolean True is the autoloader was unregistered successfully
+	 * 
+	 * @return \gordian\reefknot\autoload\Autoloader
+	 * @throws \RuntimeException Thrown if the autoloader couldn't be unregistered
 	 */
 	public function unregister ()
 	{
 		if (true === $this -> isRegistered ())
 		{
 			$this -> registered	= !spl_autoload_unregister (array ($this, 'load'));
+			if (true === $this -> isRegistered ())
+			{
+				throw new \RuntimeException ('Unable to unregister autoloader');
+			}
 		}
 		
-		return !$this -> isRegistered ();
+		return $this;
 	}
 	
 	/**
