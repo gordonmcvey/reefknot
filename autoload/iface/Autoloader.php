@@ -26,36 +26,36 @@ interface Autoloader
 	/**
 	 * Register the autoloader with the autoloader queue
 	 * 
-	 * Registering the autoloader will cause it to be appended to the end of the
-	 * autoloader queue, unless the $push flag is set.  If it is, then it will
-	 * be pushed into the front of the autoloader queue
+	 * Classes implementing this interface will be added to the autoload queue
+	 * by a call to the register method.  When called, the autoloader is 
+	 * expected to append itself to the autoload queue, unless the $push flag is
+	 * set.  In that case the autoloader is expected to push itself to the head
+	 * of the autoload queue.  
 	 * 
-	 * @param boolean $push Whether or not the autoloader should be pushed to the front of the autoload queue
-	 * @return boolean True if the autoloader was successfully registered
+	 * @param boolean $push Whether or not to push the autoloader to the start of the autoload queue
+	 * @return \gordian\reefknot\autoload\iface\Autoloader
+	 * @throws \RuntimeException Thrown if registration failed
 	 */
 	public function register ($push);
 	
 	/**
 	 * Remove the autoloader from the autoloader queue
 	 * 
-	 * Unregistering the autoloader will cause it to be removed from the 
-	 * autoloader queue.  This means the autoloader instance will no longer 
-	 * take part in resolving unloaded classes.  
+	 * Autoloaders implementing this interface can be removed from the autoload
+	 * queue by calling this method.  When called, the autoloader is expected 
+	 * to remove itsels from the autolaod queue
 	 * 
-	 * Note: You can prevent a particular autoloader from operating by either
-	 * unregistering it or by disabling it.  However, these aren't the same.  
-	 * Disabling an autoloader will not remove it from the queue, just cause 
-	 * its autoloading mechanism to be skipped.  Unregistering an autoloader
-	 * will completely remove it from the queue.  This means that using the
-	 * disable/enable semantics will not cause the order of autoloading to 
-	 * change, but using the unregister/register semantics might.  
-	 * 
-	 * @return boolean True if the autoloader was successfully unregistered
+	 * @return \gordian\reefknot\autoload\iface\Autoloader
+	 * @throws \RuntimeException Thrown if registration failed
 	 */
 	public function unregister ();
 	
 	/**
 	 * Returns whether or not the autoloader has been registered
+	 * 
+	 * This method is expected to return a true/false response, with true 
+	 * indicating that the autoloader is currently in the autoload queue, and
+	 * false otherwise. 
 	 * 
 	 * @return boolean
 	 */
@@ -64,18 +64,34 @@ interface Autoloader
 	/**
 	 * Enable the autoloader
 	 * 
-	 * @return Autoloader
+	 * Implementing classes are expected to enable their autoloader when this
+	 * method is called, causing subsequent autoload attempts to use this 
+	 * autoloader if previous autoloaders in the queue failed to load the class
+	 * 
+	 * Enabling/disabling is different from registering/unregistering, as there
+	 * should be no change in the calling order of autoload methods if enable
+	 * or disable is used.  As unregistering removes an autoloader from the 
+	 * queue entirely, using register and unregister can change the order in 
+	 * which autoloaders are executed.  
+	 * 
+	 * @return \gordian\reefknot\autoload\iface\Autoloader
 	 */
 	public function enable ();
 	
 	/**
 	 * Disable the autoloader
 	 * 
-	 * Disabling an autoloader instance can be a useful optimization, as it 
-	 * allows you to skip autoloaders that you know aren't set up to autoload 
-	 * a particular class
+	 * Implementing classes are expected to disable their autoloader when this
+	 * method is called, causing subsequent autoload attempts to bypass this 
+	 * autoloader
 	 * 
-	 * @return Autoloader
+	 * Enabling/disabling is different from registering/unregistering, as there
+	 * should be no change in the calling order of autoload methods if enable
+	 * or disable is used.  As unregistering removes an autoloader from the 
+	 * queue entirely, using register and unregister can change the order in 
+	 * which autoloaders are executed.  
+	 * 
+	 * @return \gordian\reefknot\autoload\iface\Autoloader
 	 */
 	public function disable ();
 	
@@ -90,7 +106,7 @@ interface Autoloader
 	 * Set up autoloader
 	 * 
 	 * @param string $path The root path for classes
-	 * @param string $namespace The root namespace that this instance will attempt to autoload for
+	 * @param string $namespace The root namespace that the autoloader will attempt to autoload for
 	 * @param string $seperator The namespace seperator character
 	 * @param string $suffix The class filename suffix
 	 */
@@ -98,5 +114,4 @@ interface Autoloader
 									$namespace, 
 									$seperator, 
 									$suffix);
-
 }
