@@ -41,7 +41,7 @@ class Autoloader implements iface\Autoloader
 		 */
 		DS				= \DIRECTORY_SEPARATOR;
 	
-	protected
+	private
 		
 		/**
 		 * Character to use as the namespace separator.  If you're working with 
@@ -177,7 +177,7 @@ class Autoloader implements iface\Autoloader
 				 * Include the file and report success
 				 * 
 				 * The reason we're going with include_once here is because if 
-				 * we use include, there's a possibility that a class_exists 
+				 * we use require, there's a possibility that a class_exists 
 				 * call could trigger a fatal error.  If you do a class_exists 
 				 * that causes a file to be loaded but doesn't have the class
 				 * in it, and then do it again on the same class later in the 
