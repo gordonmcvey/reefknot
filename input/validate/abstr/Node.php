@@ -25,7 +25,7 @@ use gordian\reefknot\input\validate\iface;
  */
 abstract class Node extends Validatable implements iface\Node
 {
-	protected
+	private
 		
 		/**
 		 * The Type object that defines what data type this node is expected to be

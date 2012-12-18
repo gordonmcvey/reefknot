@@ -58,3 +58,4 @@ if (version_compare (PHP_VERSION, PHP_MIN) < 0)
 // Load the autoloader
 require	( PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoloader.php');
 require	( PATH_FW . DS . 'autoload' . DS . 'Autoloader.php');
+require	( PATH_FW . DS . 'autoload' . DS . 'MappedAutoloader.php');

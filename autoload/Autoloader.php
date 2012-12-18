@@ -109,7 +109,7 @@ class Autoloader implements iface\Autoloader
 	 * @param string $name
 	 * @return boolean True if the given resource name is within the remit of this autoloader
 	 */
-	protected function inRemit ($name)
+	private function inRemit ($name)
 	{
 		return (false !== (strpos ($name, $this -> namespaceSep))
 			&& (0 === strpos ($name, $this -> namespaceRoot)));
@@ -127,7 +127,7 @@ class Autoloader implements iface\Autoloader
 	 * @param string $name 
 	 * @return string
 	 */
-	protected function calculatePath ($name)
+	private function calculatePath ($name)
 	{
 		return $this -> pathRoot 
 			 . str_replace ($this -> namespaceSep, static::DS, str_replace ($this -> namespaceRoot, '', $name)) 
@@ -144,7 +144,7 @@ class Autoloader implements iface\Autoloader
 	 * @param string $name Name of the resource to check
 	 * @return boolean True if the resource is available
 	 */
-	protected function resourceLoaded ($name)
+	private function resourceLoaded ($name)
 	{
 		return ((class_exists ($name, false)) 
 			|| (interface_exists ($name, false))
@@ -162,7 +162,7 @@ class Autoloader implements iface\Autoloader
 	 * 
 	 * @param string $name The resource to load, including namespace
 	 */
-	protected function load ($name)
+	private function load ($name)
 	{
 		$found	= false;
 		

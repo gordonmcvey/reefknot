@@ -27,7 +27,7 @@ namespace gordian\reefknot\di;
  */
 class Container implements iface\Container
 {
-	protected
+	private
 		$store	= array ();
 	
 	/**

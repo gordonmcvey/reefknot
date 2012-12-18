@@ -60,9 +60,7 @@ class Response implements iface\Response
 			self::ERR_S_UNAVAILABLE		=> 'Service Unavailable',
 			self::ERR_S_TIMEOUT			=> 'Gateway Timeout',
 			self::ERR_S_VERSION			=> 'Version Not Supported'
-		);
-	
-	protected
+		),
 		
 		/**
 		 * HTTP response status
@@ -207,7 +205,7 @@ class Response implements iface\Response
 	 * 
 	 * @return Response 
 	 */
-	protected function sendHeaders ()
+	private function sendHeaders ()
 	{
 		header ($this -> getStatusHeader ());
 		
@@ -223,7 +221,7 @@ class Response implements iface\Response
 	 *
 	 * @return Response 
 	 */
-	protected function sendBody ()
+	private function sendBody ()
 	{
 		echo $this -> body;
 		return $this;
@@ -234,7 +232,7 @@ class Response implements iface\Response
 	 * @return Response
 	 * @throws \Exception 
 	 */
-	public function send ()
+	private function send ()
 	{
 		if (!\headers_sent ())
 		{

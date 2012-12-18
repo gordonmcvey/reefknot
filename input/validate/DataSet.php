@@ -24,7 +24,7 @@ namespace gordian\reefknot\input\validate;
  */
 class DataSet extends Field implements iface\DataSet
 {
-	protected
+	private
 		
 		/**
 		 * Collection of fields that belong to this dataset
@@ -41,7 +41,7 @@ class DataSet extends Field implements iface\DataSet
 		 * 
 		 * @var bool
 		 */
-		$dataIsProcessable	= false;
+		$isDataProcessable	= false;
 	
 	/**
 	 * Register a field with the dataset
@@ -158,7 +158,7 @@ class DataSet extends Field implements iface\DataSet
 		// Check that the supplied data meets its general validation constraints
 		if (parent::isValid ())
 		{
-			$this -> dataIsProcessable	= true;
+			$this -> setIsDataProcessable ();
 			/*
 		 	 * Check each field that makes up the collection is valid
 			 * @var $field iface\Field 
@@ -167,11 +167,37 @@ class DataSet extends Field implements iface\DataSet
 			{
 				if (!$field -> isValid ())
 				{
-					$this -> invalids [$key]	= $field -> getInvalids ();
+					$this -> addInvalid ($key, $field -> getInvalids ());
 				}
 			}
 		}
 		
 		return (!$this -> hasInvalids ());
+	}
+	
+	/**
+	 * 
+	 * @return boolean
+	 */
+	protected function isDataProcessable () {
+		return $this -> isDataProcessable;
+	}
+	
+	/**
+	 * 
+	 * @return \gordian\reefknot\input\validate\DataSet
+	 */
+	protected function setIsDataProcessable () {
+		$this -> isDataProcessable	= true;
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @return \gordian\reefknot\input\validate\DataSet
+	 */
+	protected function resetIsDataProcessable () {
+		$this -> isDataProcessable	= false;
+		return $this;
 	}
 }

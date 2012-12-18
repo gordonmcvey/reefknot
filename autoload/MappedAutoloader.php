@@ -25,6 +25,8 @@ namespace gordian\reefknot\autoload;
  * well. 
  * 
  * @author Gordon McVey
+ * @category Reefknot
+ * @package Autoload
  */
 class MappedAutoloader extends Autoloader
 {
@@ -125,7 +127,7 @@ class MappedAutoloader extends Autoloader
 	 * @param string $name
 	 * @return string
 	 */
-	protected function calculatePath ($name)
+	private function calculatePath ($name)
 	{
 		if (is_null ($path = $this -> getPath ($name)))
 		{
@@ -146,7 +148,7 @@ class MappedAutoloader extends Autoloader
 	 * @param string $path The path to map the resource to
 	 * @return \gordian\reefknot\autoload\MappedAutoloader
 	 */
-	protected function addPath ($name, $path)
+	private function addPath ($name, $path)
 	{
 		$this -> classMap [$name]	= $path;
 		return $this;
@@ -158,7 +160,7 @@ class MappedAutoloader extends Autoloader
 	 * @param string $name
 	 * @return string
 	 */
-	protected function getPath ($name)
+	private function getPath ($name)
 	{
 		return isset ($this -> classMap [$name])? 
 				$this -> classMap [$name]: 

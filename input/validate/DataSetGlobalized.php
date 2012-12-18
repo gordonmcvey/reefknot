@@ -38,7 +38,7 @@ namespace gordian\reefknot\input\validate;
  */
 class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 {
-	protected
+	private
 
 		/**
 		 * Expected type for all fields
@@ -237,7 +237,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		// Run the standard validation
 		parent::isValid ();
 		
-		if ($this -> dataIsProcessable)
+		if ($this -> isDataProcessable ())
 		{
 			// Run the global validation
 			$rules	= $this -> getGlobalRules ();

@@ -20,7 +20,7 @@ use
  */
 abstract class Access implements iface\Access
 {
-	protected
+	private
 		
 		/**
 		 * The object that is requesting access to the resource

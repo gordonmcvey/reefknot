@@ -30,7 +30,7 @@ namespace gordian\reefknot\http;
  */
 class Request implements iface\Request
 {
-	protected
+	private
 		
 		/**
 		 * The request body data is cached here after being retrieved
@@ -111,7 +111,7 @@ class Request implements iface\Request
 	 * @param scalar $param
 	 * @return mixed
 	 */
-	protected function getParam (array $source, $param = NULL)
+	private function getParam (array $source, $param = NULL)
 	{
 		$ret	= NULL;
 		
@@ -136,7 +136,7 @@ class Request implements iface\Request
 	 * 
 	 * @return array
 	 */
-	protected function getParsedUri ()
+	private function getParsedUri ()
 	{
 		if (empty ($this -> parsedUri))
 		{
@@ -157,10 +157,13 @@ class Request implements iface\Request
 	 * styles.  This method attempts to put the header keys into a uniforma 
 	 * format, regardless of where they came from. 
 	 * 
+	 * NOTE: This method is used in an array_map call, though it's never called
+	 * directly.  Ignore your IDE if it tags this method as unused. 
+	 * 
 	 * @param string $header
 	 * @return string
 	 */
-	protected function normalizeHeaderKey ($header)
+	private function normalizeHeaderKey ($header)
 	{
 		// Strip the HTTP_ that PHP prepends to headers in $_SERVER
 		if (0 === strpos ($header, 'HTTP_'))

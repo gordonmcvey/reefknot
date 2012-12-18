@@ -50,7 +50,7 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 		 */
 		PATTERN			= '[1235789]\d{8,9}';
 	
-	protected 
+	private 
 		
 		/**
 		 * List of regular expression patterns for the various classes of phone number
@@ -127,7 +127,7 @@ class PhoneUk extends abstr\Prop implements iface\Prop
 	 * @param string $number 
 	 * @return bool True if the number conforms to the config
 	 */
-	protected function numberMatchesFlags ($number)
+	private function numberMatchesFlags ($number)
 	{
 		$valid	= false;
 		$cfg	= array_keys (array_filter ($this -> getConfig ()));

@@ -40,7 +40,7 @@ namespace gordian\reefknot\storage\session;
 class Session implements iface\Session
 {
 	
-	protected
+	private
 		
 		/**
 		 * Instance of a Binding object to provide an interface to $_SESSION

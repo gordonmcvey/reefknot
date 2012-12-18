@@ -35,14 +35,6 @@ namespace gordian\reefknot\input\validate;
  */
 class Field extends abstr\Node implements iface\Field
 {
-	protected
-		
-		/**
-		 * The object that defines the valid type of the data being tested. 
-		 * 
-		 * @var iface\Type
-		 */
-		$type	= NULL; 
 	
 	/**
 	 * Load data into field rules
@@ -86,7 +78,8 @@ class Field extends abstr\Node implements iface\Field
 		{
 			if (!$rule -> isValid ())
 			{
-				$this -> invalids []	= get_class ($rule);
+				//$this -> invalids []	= get_class ($rule);
+				$this -> addInvalid (NULL, get_class ($rule));
 				//break;
 			}
 		}

@@ -24,7 +24,7 @@ class Password
 		 */
 		CHARLIST	= '1234567890qwertyuiopasdfghjklzxcvbnm_-QWERTYUIOPASDFGHJKLZXCVBNM';
 	
-	protected 
+	private 
 		
 		/**
 		 * The lower length limit for the generated passsword 

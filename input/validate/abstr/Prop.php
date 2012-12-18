@@ -24,19 +24,19 @@ use gordian\reefknot\input\validate\iface;
  */
 abstract class Prop extends Validatable implements iface\Prop
 {
-	protected
+	private
 		$config	= array ();
 	
 	/**
 	 * Set the configuration for this Property
 	 * 
 	 * @param array $config
-	 * @return Prop
+	 * @return \gordian\reefknot\input\validate\abstr\Prop
 	 */
 	public function setConfig (array $config = array ())
 	{
 		$this -> config	= $config;
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -46,7 +46,7 @@ abstract class Prop extends Validatable implements iface\Prop
 	 */
 	public function getConfig ()
 	{
-		return ($this -> config);
+		return $this -> config;
 	}
 	
 	/**

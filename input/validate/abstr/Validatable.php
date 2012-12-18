@@ -24,7 +24,7 @@ use gordian\reefknot\input\validate\iface;
  */
 abstract class Validatable implements iface\Validatable
 {
-	protected
+	private
 		
 		/**
 		 * Reference back to this item's parent. Can be NULL for root items
@@ -129,5 +129,18 @@ abstract class Validatable implements iface\Validatable
 	public function hasInvalids ()
 	{
 		return (!empty ($this -> invalids));
+	}
+	
+	/**
+	 * 
+	 * @param type $key
+	 * @param type $value
+	 * @return \gordian\reefknot\input\validate\abstr\Validatable
+	 */
+	protected function addInvalid ($key = NULL, $value) {
+		!is_null ($key)?
+			$this -> invalids [$key]	= $value:
+			$this -> invalids []		= $value;
+		return $this;
 	}
 }

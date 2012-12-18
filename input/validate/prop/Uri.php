@@ -24,7 +24,7 @@ use
  */
 class Uri extends abstr\Prop implements iface\Prop
 {
-	protected
+	private
 		/**
 		 * List of URL schema that will be considered valid
 		 * 
