@@ -45,7 +45,7 @@ class OneOf extends abstr\prop\Logic implements iface\prop\Logic
 		&& (!empty ($config ['props']))
 		&& ($config ['props'] === array_filter ($config ['props'], array ($this, 'isProp'))))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{

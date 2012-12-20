@@ -47,9 +47,9 @@ abstract class Node extends Validatable implements iface\Node
 	 * You can only add a prop to a node once, attempts to add the same prop
 	 * more than once will trigger an exception. 
 	 * 
-	 * @param iface\Prop $newProp
-	 * @return Node
-	 * @throws \InvalidArgumentException 
+	 * @param \gordian\reefknot\input\validate\iface\Prop $newProp
+	 * @return \gordian\reefknot\input\validate\abstr\Node
+	 * @throws \InvalidArgumentException
 	 */
 	public function addProp (iface\Prop $newProp)
 	{
@@ -62,14 +62,14 @@ abstract class Node extends Validatable implements iface\Node
 		{
 			throw new \InvalidArgumentException ('This prop has already been added to this node');
 		}
-		return ($this);
+		return $this;
 	}
 	 
 	/**
 	 * Remove a property from the node
 	 * 
 	 * @param string $name
-	 * @return Node 
+	 * @return \gordian\reefknot\input\validate\abstr\Node
 	 */
 	public function deleteProp ($name)
 	{
@@ -77,7 +77,7 @@ abstract class Node extends Validatable implements iface\Node
 		{
 			unset ($this -> props [$name]);
 		}
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -87,7 +87,7 @@ abstract class Node extends Validatable implements iface\Node
 	 */
 	public function getProps ()
 	{
-		return ($this -> props);
+		return $this -> props;
 	}
 	
 	/**
@@ -100,7 +100,7 @@ abstract class Node extends Validatable implements iface\Node
 	{
 		$this		-> type	= $newType;
 		$newType	-> setParent ($this);
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -110,7 +110,7 @@ abstract class Node extends Validatable implements iface\Node
 	 */
 	public function getType ()
 	{
-		return ($this -> type);
+		return $this -> type;
 	}
 	
 	/**
@@ -126,7 +126,7 @@ abstract class Node extends Validatable implements iface\Node
 	public function getRules ()
 	{
 		$type	= $this -> getType ();
-		return (array_merge (array (get_class ($type) => $type), $this -> getProps ()));
+		return array_merge (array (get_class ($type) => $type), $this -> getProps ());
 	}
 	
 	/**

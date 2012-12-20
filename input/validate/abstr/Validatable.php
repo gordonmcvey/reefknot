@@ -51,12 +51,12 @@ abstract class Validatable implements iface\Validatable
 	 * Set the data to be validated
 	 * 
 	 * @param mixed $data
-	 * @return Validatable 
+	 * @return \gordian\reefknot\input\validate\abstr\Validatable
 	 */
 	public function setData ($data = NULL)
 	{
 		$this -> data	= $data;
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -66,15 +66,15 @@ abstract class Validatable implements iface\Validatable
 	 */
 	public function getData ()
 	{
-		return ($this -> data);
+		return $this -> data;
 	}
 	
 	/**
 	 * Set the parent node of this validatable.  
 	 * 
-	 * @param iface\Node $set The node that is to become the validatable's parent
-	 * @return Validatable
-	 * @throws \InvalidArgumentException 
+	 * @param \gordian\reefknot\input\validate\iface\Node $set The node that is to become the validatable's parent
+	 * @return \gordian\reefknot\input\validate\abstr\Validatable
+	 * @throws \InvalidArgumentException
 	 */
 	public function setParent (iface\Node $set)
 	{
@@ -87,7 +87,7 @@ abstract class Validatable implements iface\Validatable
 		{
 			throw new \InvalidArgumentException ('This field already has a parent');
 		}
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -97,18 +97,18 @@ abstract class Validatable implements iface\Validatable
 	 */
 	public function getParent ()
 	{
-		return ($this -> parent);
+		return $this -> parent;
 	}
 	
 	/**
 	 * Clear the validation error list
 	 * 
-	 * @return Validatable 
+	 * @return \gordian\reefknot\input\validate\abstr\Validatable
 	 */
 	public function resetInvalids ()
 	{
 		$this -> invalids	= array ();
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -118,7 +118,7 @@ abstract class Validatable implements iface\Validatable
 	 */
 	public function getInvalids ()
 	{
-		return ($this -> invalids);
+		return $this -> invalids;
 	}
 	
 	/**
@@ -128,7 +128,7 @@ abstract class Validatable implements iface\Validatable
 	 */
 	public function hasInvalids ()
 	{
-		return (!empty ($this -> invalids));
+		return !empty ($this -> invalids);
 	}
 	
 	/**

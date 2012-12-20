@@ -23,7 +23,7 @@ class Keys extends abstr\Filter
 		if ((isset ($config ['keys']))
 		&& (is_array ($config ['keys'])))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{
@@ -39,7 +39,7 @@ class Keys extends abstr\Filter
 			$this -> data	= array_intersect_key ($this -> data, array_flip ($cfg ['keys']));
 		}
 		
-		return ($this -> data);
+		return $this -> data;
 	}
 	
 	public function __construct (array $config)

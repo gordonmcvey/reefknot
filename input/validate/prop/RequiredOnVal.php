@@ -49,7 +49,7 @@ class RequiredOnVal extends Required
 		if ((array_key_exists ('requireWhenEmpty', $config ))
 		&& (array_key_exists ('dependant', $config )))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{
@@ -130,6 +130,6 @@ class RequiredOnVal extends Required
 			}
 		}
 		
-		return ($valid);
+		return $valid;
 	}
 }

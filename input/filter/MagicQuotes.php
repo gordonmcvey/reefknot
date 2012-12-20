@@ -36,10 +36,14 @@ class MagicQuotes extends abstr\Filter
 	protected function filterNeeded ()
 	{
 		var_dump (version_compare (PHP_VERSION, '5.4.0') <= 0);
+		var_dump (function_exists ('get_magic_quotes_gpc'));
 		var_dump (get_magic_quotes_gpc () === 1);
 		
-		return ((version_compare (PHP_VERSION, '5.4.0') <= 0)
-			&& (get_magic_quotes_gpc () === 1));
+		//return (version_compare (PHP_VERSION, '5.4.0') <= 0)
+		//	&& (get_magic_quotes_gpc () === 1);
+		
+		return (function_exists ('get_magic_quotes_gpc'))
+			&& (get_magic_quotes_gpc () === 1);
 	}
 	
 	/**
@@ -57,7 +61,7 @@ class MagicQuotes extends abstr\Filter
 				stripslashes ($data);
 		}
 		
-		return ($data);
+		return $data;
 	}
 	
 	/**
@@ -72,6 +76,6 @@ class MagicQuotes extends abstr\Filter
 			$this -> data	= $this -> applyFilter ($this -> data);
 		}
 		
-		return ($this -> data);
+		return $this -> data;
 	}
 }

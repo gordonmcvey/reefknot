@@ -98,7 +98,7 @@ class Response implements iface\Response
 	 */
 	public function validCode ($code)
 	{
-		return (array_key_exists (intval ($code), $this -> statusMessages));
+		return array_key_exists ((int) $code, $this -> statusMessages);
 	}
 	
 	/**
@@ -152,9 +152,9 @@ class Response implements iface\Response
 	 */
 	public function getStatusHeader ()
 	{
-		return (	self::HTTP_VER_11 . ' ' 
-					. $this -> getStatus () . ' ' 
-					. $this -> getStatusMessage());
+		return	self::HTTP_VER_11 . ' ' 
+				. $this -> getStatus () . ' ' 
+				. $this -> getStatusMessage ();
 	}
 	
 	/**
@@ -228,9 +228,9 @@ class Response implements iface\Response
 	}
 	
 	/**
-	 *
-	 * @return Response
-	 * @throws \Exception 
+	 * 
+	 * @return \gordian\reefknot\http\Response
+	 * @throws \Exception
 	 */
 	private function send ()
 	{
@@ -244,6 +244,6 @@ class Response implements iface\Response
 			// Headers already sent
 			throw new \Exception ();
 		}
-		return ($this);
+		return $this;
 	}
 }

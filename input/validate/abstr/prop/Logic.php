@@ -34,6 +34,6 @@ abstract class Logic extends Prop implements iface\prop\Logic
 	 */
 	protected function isProp ($elem)
 	{
-		return ($elem instanceof iface\Prop);
+		return $elem instanceof iface\Prop;
 	}
 }

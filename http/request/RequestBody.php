@@ -59,7 +59,7 @@ class RequestBody implements iface\RequestBody
 				fclose ($h);
 			}
 		}
-		return ($this -> data);
+		return $this -> data;
 	}
 	
 	/**
@@ -106,7 +106,7 @@ class RequestBody implements iface\RequestBody
 			// If the request body was already read into $this -> data then write that to disc
 			$written	= file_put_contents ($filename, $this -> data, LOCK_EX);
 		}
-		return ($written);
+		return $written;
 	}
 	
 	/**
@@ -120,7 +120,7 @@ class RequestBody implements iface\RequestBody
 		{
 			parse_str ($this -> getData (), $this -> dataAsParams);
 		}
-		return ($this -> dataAsParams);
+		return $this -> dataAsParams;
 	}
 	
 	/**
@@ -139,6 +139,6 @@ class RequestBody implements iface\RequestBody
 			$val	= $data [$key];
 		}
 		
-		return ($val);
+		return $val;
 	}
 }

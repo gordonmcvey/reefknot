@@ -43,7 +43,7 @@ class Equals extends abstr\Prop implements iface\Prop
 	{
 		if (isset ($config ['value']))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{

@@ -55,7 +55,7 @@ class Field extends abstr\Node implements iface\Field
 			$rule -> setData ($data);
 		}
 		
-		return (parent::setData ($data));
+		return parent::setData ($data);
 	}
 	
 	/**
@@ -85,6 +85,6 @@ class Field extends abstr\Node implements iface\Field
 		}
 		
 		// Return validity test results
-		return (!$this -> hasInvalids ());
+		return !$this -> hasInvalids ();
 	}
 }

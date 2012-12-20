@@ -42,7 +42,7 @@ class Negate extends abstr\prop\Logic implements iface\prop\Logic
 		if ((isset ($config ['prop']))
 		&& ($this -> isProp ($config ['prop'])))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{

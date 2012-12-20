@@ -64,7 +64,7 @@ class Container implements iface\Container
 			throw new \InvalidArgumentException ('Parameter ' . $key . 'not defined');
 		}
 		
-		return ($param);
+		return $param;
 	}
 	
 	/**
@@ -88,7 +88,7 @@ class Container implements iface\Container
 				$object	= $callable ($c);
 			}
 			
-			return ($object);
+			return $object;
 		});
 	}
 }

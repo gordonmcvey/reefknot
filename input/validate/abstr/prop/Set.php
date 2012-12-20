@@ -35,7 +35,7 @@ abstract class Set extends Prop implements iface\Prop
 		&& (is_array ($config ['set']))
 		&& (!empty ($config ['set'])))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{

@@ -40,9 +40,9 @@ abstract class Ranged extends Prop implements iface\prop\Ranged
 	 */
 	protected function validLimit ($limit)
 	{
-		return (($limit instanceof iface\Field)
+		return ($limit instanceof iface\Field)
 			|| ((is_numeric ($limit))
-			&& ($limit > 0)));
+			&& ($limit > 0));
 	}
 	
 	/**
@@ -69,7 +69,7 @@ abstract class Ranged extends Prop implements iface\prop\Ranged
 		{
 			$val	= $limit;
 		}
-		return ($val);
+		return $val;
 	}
 	
 	/**
@@ -87,7 +87,7 @@ abstract class Ranged extends Prop implements iface\prop\Ranged
 		if ((isset ($config ['limit']))
 		&& ($this -> validLimit ($config ['limit'])))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{

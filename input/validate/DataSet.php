@@ -53,8 +53,8 @@ class DataSet extends Field implements iface\DataSet
 	 * field more than once will trigger an exception.  
 	 * 
 	 * @param string $name
-	 * @param iface\Node $field
-	 * @return DataSet
+	 * @param \gordian\reefknot\input\validate\iface\Node $field
+	 * @return \gordian\reefknot\input\validate\DataSet
 	 * @throws \InvalidArgumentException If the given field has already been registered with the dataset
 	 */
 	public function addField ($name, iface\Node $field)
@@ -69,14 +69,14 @@ class DataSet extends Field implements iface\DataSet
 		{
 			throw new \InvalidArgumentException ('This field cannot be added to this group');
 		}
-		return ($this);
+		return $this;
 	}
 	
 	/**
 	 * Unregister the named field from the dataset
 	 * 
 	 * @param string $name
-	 * @return DataSet 
+	 * @return \gordian\reefknot\input\validate\DataSet
 	 */
 	public function deleteField ($name)
 	{
@@ -84,7 +84,7 @@ class DataSet extends Field implements iface\DataSet
 		{
 			unset ($this -> fields [$name]);
 		}
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -98,10 +98,9 @@ class DataSet extends Field implements iface\DataSet
 	 */
 	public function getField ($name)
 	{
-
-		return (isset ($this -> fields [$name])? 
-				$this -> fields [$name]: 
-				NULL);
+		return isset ($this -> fields [$name])? 
+			$this -> fields [$name]: 
+			NULL;
 	}
 	
 	/**
@@ -111,7 +110,7 @@ class DataSet extends Field implements iface\DataSet
 	 */
 	public function getFields ()
 	{
-		return ($this -> fields);
+		return $this -> fields;
 	}
 	
 	/**
@@ -124,6 +123,11 @@ class DataSet extends Field implements iface\DataSet
 	 * @return DataSet
 	 * @todo There's room for optimization here, lots of data gets copied when it doesn't need to be
 	 */
+	/**
+	 * 
+	 * @param type $data
+	 * @return type
+	 */
 	public function setData ($data = NULL)
 	{
 		$isArr	= is_array ($data);
@@ -135,7 +139,7 @@ class DataSet extends Field implements iface\DataSet
 				NULL);
 		}
 		
-		return (parent::setData ($data));
+		return parent::setData ($data);
 	}
 	
 	/**
@@ -172,7 +176,7 @@ class DataSet extends Field implements iface\DataSet
 			}
 		}
 		
-		return (!$this -> hasInvalids ());
+		return !$this -> hasInvalids ();
 	}
 	
 	/**

@@ -32,6 +32,6 @@ class IsNull extends abstr\Validatable implements iface\Type
 	 */
 	public function isValid ()
 	{
-		return (is_null ($this -> getData ()));
+		return is_null ($this -> getData ());
 	}
 }

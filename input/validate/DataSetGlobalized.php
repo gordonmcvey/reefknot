@@ -68,7 +68,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 */
 	public function getGlobalInvalids ()
 	{
-		return ($this -> globalInvalids);
+		return $this -> globalInvalids;
 	}
 	
 	/**
@@ -79,7 +79,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	public function resetInvalids ()
 	{
 		$this -> globalInvalids	= array ();
-		return (parent::resetInvalids ());
+		return parent::resetInvalids ();
 	}
 	
 	/**
@@ -89,8 +89,8 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 */
 	public function hasInvalids ()
 	{
-		return ((!empty ($this -> globalInvalids))
-			|| (parent::hasInvalids ()));
+		return (!empty ($this -> globalInvalids))
+			|| (parent::hasInvalids ());
 	}
 	
 	/**
@@ -100,9 +100,9 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 * in the DataSet.  They are intended to allow easy validation of data that
 	 * is expected to be quite uniform in nature.  
 	 * 
-	 * @param iface\Prop $newProp
-	 * @return DataSetGlobalized
-	 * @throws \InvalidArgumentException 
+	 * @param \gordian\reefknot\input\validate\iface\Prop $newProp
+	 * @return \gordian\reefknot\input\validate\DataSetGlobalized
+	 * @throws \InvalidArgumentException
 	 */
 	public function addGlobalProp (iface\Prop $newProp)
 	{
@@ -115,14 +115,14 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		{
 			throw new \InvalidArgumentException ('This prop has already been added to this node');
 		}
-		return ($this);
+		return $this;
 	}
 	
 	/**
 	 * Delete a global property
 	 * 
 	 * @param string $propName The class name of the property you want to remove
-	 * @return DataSetGlobalized
+	 * @return \gordian\reefknot\input\validate\DataSetGlobalized
 	 */
 	public function deleteGlobalProp ($propName)
 	{
@@ -130,7 +130,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		{
 			unset ($this -> globalProps [$propName]);
 		}
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -140,20 +140,20 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 */
 	public function getGlobalProps ()
 	{
-		return ($this -> globalProps);
+		return $this -> globalProps;
 	}
 	
 	/**
 	 * Set the type that all fields in the dataset are expected to be.  
 	 * 
-	 * @param iface\Type $newType
-	 * @return DataSetGlobalized 
+	 * @param \gordian\reefknot\input\validate\iface\Type $newType
+	 * @return \gordian\reefknot\input\validate\DataSetGlobalized
 	 */
 	public function setGlobalType (iface\Type $newType)
 	{
 		$this		-> globalType	= $newType;
 		$newType	-> setParent ($this);
-		return ($this);
+		return $this;
 	}
 	
 	/**
@@ -163,7 +163,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	 */
 	public function getGlobalType ()
 	{
-		return ($this -> globalType);
+		return $this -> globalType;
 	}
 	
 	/**
@@ -178,7 +178,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 	public function getGlobalRules ()
 	{
 		$type	= $this -> getGlobalType ();
-		return (array_merge (array (get_class ($type) => $type), $this -> getGlobalProps ()));
+		return array_merge (array (get_class ($type) => $type), $this -> getGlobalProps ());
 	}
 	
 	/**
@@ -222,7 +222,7 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 			}
 		}
 				
-		return ($invalids);
+		return $invalids;
 	}
 	
 	/**
@@ -263,6 +263,6 @@ class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 		}
 		
 		// Return validity
-		return (!$this -> hasInvalids ());
+		return !$this -> hasInvalids ();
 	}
 }

@@ -67,7 +67,7 @@ class Password
 			}
 			$this -> password	= $pw;
 		}
-		return ($this -> password);
+		return $this -> password;
 	}
 	
 	/**
@@ -107,6 +107,6 @@ class Password
 	 */
 	public function __toString ()
 	{
-		return ($this -> getPassword ());
+		return $this -> getPassword ();
 	}
 }

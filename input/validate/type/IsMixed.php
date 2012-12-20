@@ -34,10 +34,11 @@ class IsMixed extends abstr\Validatable implements iface\Type
 	 * Check that the given data is a Mixed datatype
 	 * 
 	 * Everything in PHP is a mixed datatype, so this method always returns true
-	 * @return bool Always true 
+	 * 
+	 * @return boolean
 	 */
 	public function isValid ()
 	{
-		return (true);
+		return true;
 	}
 }

@@ -175,9 +175,9 @@ class Session implements iface\Session
 	 */
 	public function readItem ($key)
 	{
-		return (array_key_exists ($key, $this -> storage)? 
+		return array_key_exists ($key, $this -> storage)? 
 			$this -> storage [$key]: 
-			NULL);
+			NULL;
 	}
 	
 	/**
@@ -263,7 +263,7 @@ class Session implements iface\Session
 	 */
 	public function hasData ()
 	{
-		return (!empty ($this -> storage));
+		return !empty ($this -> storage);
 	}
 	
 	/**

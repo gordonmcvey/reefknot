@@ -88,6 +88,6 @@ class Uri extends abstr\Prop implements iface\Prop
 				throw new \InvalidArgumentException (__CLASS__ . ': This property cannot be applied to data of type ' . gettype ($data));
 			break;
 		}
-		return ($valid);
+		return $valid;
 	}
 }

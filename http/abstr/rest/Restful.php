@@ -80,6 +80,6 @@ abstract class Restful implements iface\rest\Restful
 			break;
 		}
 		
-		return ($supported);
+		return $supported;
 	}
 }

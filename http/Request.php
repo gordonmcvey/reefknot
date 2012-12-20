@@ -241,9 +241,9 @@ class Request implements iface\Request
 	 */
 	public function getMethod ()
 	{
-		return ($this -> methodValid ($this -> server ['REQUEST_METHOD'])?
-				$this -> server ['REQUEST_METHOD']:
-				NULL);
+		return $this -> methodValid ($this -> server ['REQUEST_METHOD'])?
+			$this -> server ['REQUEST_METHOD']:
+			NULL;
 	}
 	
 	/**
@@ -253,7 +253,7 @@ class Request implements iface\Request
 	 */
 	public function isConnect ()
 	{
-		return ($this -> getMethod () === static::M_CONNECT);
+		return $this -> getMethod () === static::M_CONNECT;
 	}
 	
 	/**
@@ -263,7 +263,7 @@ class Request implements iface\Request
 	 */
 	public function isDelete ()
 	{
-		return ($this -> getMethod () === static::M_DELETE);
+		return $this -> getMethod () === static::M_DELETE;
 	}
 	
 	/**
@@ -273,7 +273,7 @@ class Request implements iface\Request
 	 */
 	public function isGet ()
 	{
-		return ($this -> getMethod () === static::M_GET);
+		return $this -> getMethod () === static::M_GET;
 	}
 	
 	/**
@@ -283,7 +283,7 @@ class Request implements iface\Request
 	 */
 	public function isHead ()
 	{
-		return ($this -> getMethod () === static::M_HEAD);
+		return $this -> getMethod () === static::M_HEAD;
 	}
 	
 	/**
@@ -293,7 +293,7 @@ class Request implements iface\Request
 	 */
 	public function isOptions ()
 	{
-		return ($this -> getMethod () === static::M_OPTIONS);
+		return $this -> getMethod () === static::M_OPTIONS;
 	}
 	
 	/**
@@ -303,7 +303,7 @@ class Request implements iface\Request
 	 */
 	public function isPost ()
 	{
-		return ($this -> getMethod () === static::M_POST);
+		return $this -> getMethod () === static::M_POST;
 	}
 	
 	/**
@@ -573,7 +573,7 @@ class Request implements iface\Request
 	 */
 	public function getScheme ()
 	{
-		return ($this -> isSecure ()? 'https': 'http');
+		return $this -> isSecure ()? 'https': 'http';
 	}
 
 	/**

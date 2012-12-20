@@ -21,18 +21,18 @@ abstract class Filter implements iface\Filter
 	public function setData ($data)
 	{
 		$this -> data	= $data;
-		return ($this);
+		return $this;
 	}
 	
 	public function setConfig (array $config)
 	{
 		$this -> config	= $config;
-		return ($this);
+		return $this;
 	}
 	
 	public function getConfig ()
 	{
-		return ($this -> config);
+		return $this -> config;
 	}
 	
 	public function __construct (array $config	= NULL)

@@ -44,7 +44,7 @@ abstract class TextMatch extends Prop implements iface\prop
 		&& (is_string ($config ['needle']))
 		&& (strlen ($config ['needle']) > 0))
 		{
-			return (parent::setConfig ($config));
+			return parent::setConfig ($config);
 		}
 		else
 		{
