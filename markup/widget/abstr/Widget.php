@@ -33,7 +33,8 @@ abstract class Widget implements iface\Widget
 		$node		= NULL;
 	
 	/**
-	 *
+	 * Determine if we've initialized the DOM node
+	 * 
 	 * @return bool True if the DOM node has been initialized 
 	 */
 	protected function isInitialized ()
@@ -42,7 +43,8 @@ abstract class Widget implements iface\Widget
 	}
 	
 	/**
-	 *
+	 * Get the DOM node
+	 * 
 	 * @return \DOMElement 
 	 */
 	public function getNode ()
@@ -50,6 +52,7 @@ abstract class Widget implements iface\Widget
 		$elemType	= $this -> getElemType ();
 		if ($elemType !== '')
 		{
+			// Do lazy node initialization
 			if (!$this -> isInitialized ())
 			{
 				$this -> node = new \DOMElement ($elemType);
@@ -66,20 +69,21 @@ abstract class Widget implements iface\Widget
 	}
 	
 	/**
+	 * Return the value of the named element attribute (if it exists)
 	 *
 	 * @param string $attrName
-	 * @return string
+	 * @return string The attribute value (or an empty string if it isn't set)
 	 * @throws \InvalidArgumentException 
 	 */
 	protected function getAttr ($attrName)
 	{
-		$val	= '';
+		$attrValue	= '';
 		
 		if (is_string ($attrName))
 		{
 			if ($this -> isInitialized ())
 			{
-				$val	= $this -> getNode () -> getAttribute ($attrName);
+				$attrValue	= $this -> getNode () -> getAttribute ($attrName);
 			}
 		}
 		else
@@ -91,11 +95,12 @@ abstract class Widget implements iface\Widget
 												. 'given');
 		}
 		
-		return $val;
+		return $attrValue;
 	}
 	
 	/**
-	 *
+	 * Set the named element attribute to the given value
+	 * 
 	 * @param string $attrName
 	 * @param string $newVal
 	 * @return \gordian\reefknot\markup\widget\abstr\Widget 
@@ -139,8 +144,9 @@ abstract class Widget implements iface\Widget
 	/**
 	 * Remove an item from an attribute list
 	 * 
-	 * @param type $attrName
-	 * @param type $val 
+	 * @param string $attrName
+	 * @param string $val 
+	 * @return \gordian\reefknot\markup\widget\abstr\Widget
 	 */
 	protected function removeFromAttr ($attrName, $val)
 	{

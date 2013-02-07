@@ -338,7 +338,7 @@ class Request implements iface\Request
 	public function isSecure ()
 	{
 		return (!empty ($this -> server ['HTTPS']))
-			&& ($this -> server ['HTTPS'] !== 'off');
+			&& (strtolower ($this -> server ['HTTPS']) !== 'off');
 	}
 	
 	/**
