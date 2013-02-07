@@ -33,20 +33,21 @@ class PropTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test that we can set the configuration
 	 */
 	public function testSetConfig ()
 	{
 		$this -> object -> setConfig (array ());
-		$this -> assertEquals ($this -> object -> getConfig (), array ());
+		$this -> assertSame ($this -> object -> getConfig (), array ());
 		$this -> object -> setConfig (array ('foo' => 'bar', 'baz' => 'quux'));
-		$this -> assertEquals ($this -> object -> getConfig (), array ('foo' => 'bar', 'baz' => 'quux'));
+		$this -> assertSame ($this -> object -> getConfig (), array ('foo' => 'bar', 'baz' => 'quux'));
 	}
 
 	/**
+	 * Test that we can get the configuration
 	 */
 	public function testGetConfig ()
 	{
-		$this -> assertEquals ($this -> object -> getConfig (), array ('mockkey' => 'mockvalue'));
+		$this -> assertSame ($this -> object -> getConfig (), array ('mockkey' => 'mockvalue'));
 	}
-
 }

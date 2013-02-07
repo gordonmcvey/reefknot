@@ -32,99 +32,62 @@ class SetTest extends \PHPUnit_Framework_TestCase
 		
 	}
 	
+	/**
+	 * Test empty configurations trigger an exception
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigEmptyThrowsException ()
 	{
-		$oldCfg		= $this -> object -> getConfig ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ());
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () === $oldCfg);
+		$this -> object -> setConfig (array ());
 	}
 	
+	/**
+	 * Check that a config without a set in it throws an exception
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigNoSetThrowsException ()
 	{
-		$oldCfg		= $this -> object -> getConfig ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('foo' => 'bar'));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () === $oldCfg);
+		$this -> object -> setConfig (array ('foo' => 'bar'));
 	}
 	
+	/**
+	 * Check that a config with an invalid set in it throws an exception
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigInvalidSetThrowsException ()
 	{
-		$oldCfg		= $this -> object -> getConfig ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('set' => NULL));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () === $oldCfg);
+		$this -> object -> setConfig (array ('set' => NULL));
 	}
 	
+	/**
+	 * Check that a config with an invalid set in it throws an exception
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigInvalidSetThrowsException2 ()
 	{
-		$oldCfg		= $this -> object -> getConfig ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('set' => 'asdf'));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () === $oldCfg);
+		$this -> object -> setConfig (array ('set' => 'asdf'));
 	}
 	
-	public function testSetConfigInvalidSetThrowsException3 ()
+	/**
+	 * Check that a config with an empty set in it throws an exception
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testSetConfigEmptySetThrowsException ()
 	{
-		$oldCfg		= $this -> object -> getConfig ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('set' => array ()));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () === $oldCfg);
+		$this -> object -> setConfig (array ('set' => array ()));
 	}
 	
+	/**
+	 * Check that we can configure the object with a non-empty set
+	 */
 	public function testSetConfigPasses ()
 	{
-		$oldCfg		= $this -> object -> getConfig ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('set' => array ('foo', 'bar', 'baz', 'quux')));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
-		$this -> assertFalse ($this -> object -> getConfig () === $oldCfg);
+		$this -> object -> setConfig (array ('set' => array ('foo', 'bar', 'baz', 'quux')));
+		$this -> assertSame ($this -> object -> getConfig (), array ('set' => array ('foo', 'bar', 'baz', 'quux')));
 	}
 }

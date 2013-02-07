@@ -94,23 +94,15 @@ class DataSetGlobalizedTest extends \PHPUnit_Framework_TestCase
 		$this -> object -> addGlobalProp ($prop);
 		$this -> assertTrue (in_array ($prop, $this -> object -> getGlobalProps (), true));
 	}
-
+	
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testAddSameGlobalPropThrowsException ()
 	{
-		$exception	= NULL;
 		$prop	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop');
-		$this -> assertFalse (in_array ($prop, $this -> object -> getGlobalProps (), true));
 		$this -> object -> addGlobalProp ($prop);
-		$this -> assertTrue (in_array ($prop, $this -> object -> getGlobalProps (), true));
-		try
-		{
-			$this -> object -> addGlobalProp ($prop);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
+		$this -> object -> addGlobalProp ($prop);
 	}
 	
 	/**

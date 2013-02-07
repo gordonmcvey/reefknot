@@ -38,74 +38,42 @@ class RangedTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Test that trying to configure with no data triggers an InvalidArgumentException
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigEmptyThrowsException ()
 	{
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ());
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () == array ('limit' => 5));
+		$this -> object -> setConfig (array ());
 	}
 	
 	/**
-	 * Test that trying to configure with no limit data triggers an InvalidArgumentException 
+	 * Test that trying to configure with no limit data triggers an InvalidArgumentException
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigNoLimitThrowsException ()
 	{
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('foo' => 'bar'));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () == array ('limit' => 5));
+		$this -> object -> setConfig (array ('foo' => 'bar'));
 	}
 	
 	/**
 	 * Test that trying to set a limit with invalid data triggers an InvalidArgumentException 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigInvalidLimitThrowsException ()
 	{
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('limit' => 'invalid'));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () == array ('limit' => 5));
+		$this -> object -> setConfig (array ('limit' => 'invalid'));
 	}
 	
 	/**
-	 * Test that trying to set a limit below 1 triggers an InvalidArgumentException 
+	 * Test that trying to set a limit below 1 triggers an InvalidArgumentException
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigZeroLimitThrowsException ()
 	{
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('limit' => 0));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertTrue ($this -> object -> getConfig () == array ('limit' => 5));
+		$this -> object -> setConfig (array ('limit' => 0));
 	}
 	
 	/**
@@ -113,17 +81,8 @@ class RangedTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetConfigPasses ()
 	{
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig (array ('limit' => 10));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
-		$this -> assertTrue ($this -> object -> getConfig () == array ('limit' => 10));
+		$this -> object -> setConfig (array ('limit' => 10));
+		$this -> assertSame ($this -> object -> getConfig (), array ('limit' => 10));
 	}
 	
 	/**
@@ -135,15 +94,8 @@ class RangedTest extends \PHPUnit_Framework_TestCase
 		$field		= $this	-> getMockBuilder ('gordian\reefknot\input\validate\Field')
 							-> disableOriginalConstructor ()
 							-> getMock ();
-		try
-		{
-			$this -> object -> setConfig (array ('limit' => $field));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
-		$this -> assertTrue ($this -> object -> getConfig () == array ('limit' => $field));
+		
+		$this -> object -> setConfig (array ('limit' => $field));
+		$this -> assertSame ($this -> object -> getConfig (), array ('limit' => $field));
 	}
 }

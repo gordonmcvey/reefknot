@@ -67,33 +67,24 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAddField ()
 	{
-		$field = $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
 		$this -> assertEmpty ($this -> object -> getFields ());
+		$field = $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
 		$this -> object -> addField ('testfield', $field);
 		$this -> assertNotEmpty ($this -> object -> getFields ());
-		$this -> assertTrue (array ('testfield' => $field) === $this -> object -> getFields ());
+		$this -> assertArrayHasKey ('testfield', $this -> object -> getFields ());
+		$this -> assertContains ($field, $this -> object -> getFields ());
 	}
 
 	/**
 	 * Test that adding the same field to the dataset more than once throws an exception 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testAddFieldThrowsException ()
 	{
-		$exception = NULL;
 		$field = $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
-
-		try
-		{
-			$this -> object -> addField ('testfield', $field)
-				-> addField ('testfield2', $field);
-		}
-		catch (\Exception $e)
-		{
-			$exception = $e;
-		}
-
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertTrue (array ('testfield' => $field) === $this -> object -> getFields ());
+		$this -> object	-> addField ('testfield', $field)
+						-> addField ('testfield2', $field);
 	}
 
 	/**
@@ -101,9 +92,9 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetField ()
 	{
-		$this -> object -> addField ('field1', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'))
-			-> addField ('field2', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'))
-			-> addField ('field3', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'));
+		$this -> object	-> addField ('field1', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'))
+						-> addField ('field2', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'))
+						-> addField ('field3', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'));
 
 		$this -> assertInstanceOf ('\gordian\reefknot\input\validate\iface\Field', $this -> object -> getField ('field2'));
 		$this -> assertNull ($this -> object -> getField ('field4'));
@@ -115,9 +106,10 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	public function testDeleteField ()
 	{
 		$field = $this -> getMock ('\gordian\reefknot\input\validate\iface\Field');
-		$this -> assertInstanceOf ('\gordian\reefknot\input\validate\iface\Field', $field);
 		$this -> object -> addField ('testfield', $field);
 		$this -> assertNotEmpty ($this -> object -> getFields ());
+		$this -> assertArrayHasKey ('testfield', $this -> object -> getFields ());
+		$this -> assertContains ($field, $this -> object -> getFields ());
 		$this -> object -> deleteField ('testfield');
 		$this -> assertEmpty ($this -> object -> getFields ());
 	}
@@ -146,13 +138,13 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetData ()
 	{
-		$this -> object -> addField ('test', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'));
+		//$this -> object -> addField ('test', $this -> getMock ('\gordian\reefknot\input\validate\iface\Field'));
 		$this -> object -> setData ('test');
-		$this -> assertEquals ('test', $this -> object -> getData ());
+		$this -> assertSame ('test', $this -> object -> getData ());
 		$this -> object -> setData (pi ());
-		$this -> assertEquals (pi (), $this -> object -> getData ());
+		$this -> assertSame (pi (), $this -> object -> getData ());
 		$this -> object -> setData (array (1, 3, 5));
-		$this -> assertEquals (array (1, 3, 5), $this -> object -> getData ());
+		$this -> assertSame (array (1, 3, 5), $this -> object -> getData ());
 	}
 
 	/**
@@ -184,7 +176,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	{
 		// We're using a real IsArray type object here
 		$this -> object -> setType (new type\IsArray ())
-			-> setData (array ());
+						-> setData (array ());
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 
@@ -210,10 +202,10 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	{
 		// We're using a real IsArray type object here
 		$this -> object -> setType (new type\IsArray ())
-			-> addField ('foo', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
-			-> addField ('bar', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
-			-> addField ('baz', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
-			-> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+						-> addField ('foo', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
+						-> addField ('bar', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
+						-> addField ('baz', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
+						-> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
 
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
@@ -221,10 +213,10 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	public function testIsValidInvalidFieldFails ()
 	{
 		$this -> object -> setType (new type\IsArray ())
-			-> addField ('foo', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
-			-> addField ('bar', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field', NULL, false))
-			-> addField ('baz', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
-			-> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+						-> addField ('foo', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
+						-> addField ('bar', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field', NULL, false))
+						-> addField ('baz', $this -> makeStub ('\gordian\reefknot\input\validate\iface\Field'))
+						-> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
 
 		$this -> assertFalse ($this -> object -> isValid ());
 		$this -> assertTrue (array_key_exists ('bar', $this -> object -> getInvalids ()));

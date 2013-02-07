@@ -59,50 +59,95 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 	{
 		
 	}
-
+	
 	/**
+	 * Test that we can set NULL as the data
 	 */
-	public function testSetData ()
+	public function testSetDataNull ()
 	{
 		$this -> object -> setData (NULL);
 		$this -> assertNull ($this -> object -> getData ());
-		$this -> object -> setData (123);
-		$this -> assertEquals ($this -> object -> getData (), 123);
-		$this -> object -> setData (pi ());
-		$this -> assertEquals ($this -> object -> getData (), pi ());
-		$this -> object -> setData (array ());
-		$this -> assertEquals ($this -> object -> getData (), array ());
-		$this -> object -> setData (array (1, 2, 3));
-		$this -> assertEquals ($this -> object -> getData (), array (1, 2, 3));
-		$this -> object -> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
-		$this -> assertEquals ($this -> object -> getData (), array ('foo' => 1, 'bar' => 2, 'baz' => 3));
 	}
-
+	
+	/**
+	 * Test that we can set an integer as the data
+	 */
+	public function testSetDataInt () 
+	{
+		$this -> object -> setData (123);
+		$this -> assertSame ($this -> object -> getData (), 123);
+	}
+	
+	/**
+	 * Test that we can set a float as the data
+	 */
+	public function testSetDataFloat ()
+	{
+		$this -> object -> setData (pi ());
+		$this -> assertSame ($this -> object -> getData (), pi ());
+	}
+	
+	/**
+	 * Test that we can set an empty array as the data
+	 */
+	public function testSetDataEmptyArray ()
+	{
+		$this -> object -> setData (array ());
+		$this -> assertSame ($this -> object -> getData (), array ());
+	}
+	
+	/**
+	 * Test that we can set an indexed array as the data
+	 */
+	public function testSetDataIndexedArray ()
+	{
+		$this -> object -> setData (array (1, 2, 3));
+		$this -> assertSame ($this -> object -> getData (), array (1, 2, 3));
+	}
+	
+	/**
+	 * Test that we can set an associative array as the data
+	 */
+	public function testSetDataAssocArray ()
+	{
+		$this -> object -> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+		$this -> assertSame ($this -> object -> getData (), array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+	}
+	
+	/**
+	 * Test that setData works when there are props defined
+	 */
 	public function testSetDataWithFields ()
 	{
 		$this -> object -> addProp ($this -> makeStub ('Prop'))
 						-> addProp ($this -> makeStub ('Prop'))
 						-> addProp ($this -> makeStub ('Prop'))
-			
 						-> setData (NULL);
+		
 		$this -> assertNull ($this -> object -> getData ());
 		$this -> object -> setData (123);
-		$this -> assertEquals ($this -> object -> getData (), 123);
+		$this -> assertSame ($this -> object -> getData (), 123);
 		$this -> object -> setData (pi ());
-		$this -> assertEquals ($this -> object -> getData (), pi ());
+		$this -> assertSame ($this -> object -> getData (), pi ());
 		$this -> object -> setData (array ());
-		$this -> assertEquals ($this -> object -> getData (), array ());
+		$this -> assertSame ($this -> object -> getData (), array ());
 		$this -> object -> setData (array (1, 2, 3));
-		$this -> assertEquals ($this -> object -> getData (), array (1, 2, 3));
+		$this -> assertSame ($this -> object -> getData (), array (1, 2, 3));
 		$this -> object -> setData (array ('foo' => 1, 'bar' => 2, 'baz' => 3));
-		$this -> assertEquals ($this -> object -> getData (), array ('foo' => 1, 'bar' => 2, 'baz' => 3));
+		$this -> assertSame ($this -> object -> getData (), array ('foo' => 1, 'bar' => 2, 'baz' => 3));
 	}
 	
+	/**
+	 * Test that we can validate
+	 */
 	public function testIsValidPasses ()
 	{
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * test that if all props say that the data is valid then a valid response is returned
+	 */
 	public function testIsValidWithPropsPasses ()
 	{
 		$this -> object -> addProp ($this -> makeStub ('Prop'))
@@ -112,6 +157,9 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that an invalid type causes validation to fail
+	 */
 	public function testIsValidFails ()
 	{
 		$this -> object -> setType ($this -> makeStub ('Type', NULL, false));
@@ -119,6 +167,9 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that invalid props cause validation to fail
+	 */
 	public function testIsValidWithPropsFails ()
 	{
 		$this -> object -> addProp ($this -> makeStub ('Prop', NULL, false))

@@ -32,78 +32,46 @@ class TextMatchTest extends \PHPUnit_Framework_TestCase
 		
 	}
 
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigNoValueThrowsException ()
 	{
-		$exception = NULL;
-
-		try
-		{
-			$this -> object -> setConfig (array ());
-		}
-		catch (\Exception $e)
-		{
-			$exception = $e;
-		}
-
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertEquals ($this -> object -> getConfig (), array ('needle' => 'asdf'));
+		$this -> object -> setConfig (array ());
 	}
 
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigEmptyValueThrowsException ()
 	{
-		$exception = NULL;
-
-		try
-		{
-			$this -> object -> setConfig (array ('needle' => NULL));
-		}
-		catch (\Exception $e)
-		{
-			$exception = $e;
-		}
-
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertEquals ($this -> object -> getConfig (), array ('needle' => 'asdf'));
+		$this -> object -> setConfig (array ('needle' => NULL));
 	}
 
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigEmptyValueThrowsException2 ()
 	{
-		$exception = NULL;
-
-		try
-		{
-			$this -> object -> setConfig (array ('needle' => ''));
-		}
-		catch (\Exception $e)
-		{
-			$exception = $e;
-		}
-
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertEquals ($this -> object -> getConfig (), array ('needle' => 'asdf'));
+		$this -> object -> setConfig (array ('needle' => ''));
 	}
 
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigInvalidValueThrowsException ()
 	{
-		$exception	= NULL;
-		
-		try
-		{
-			$this -> object -> setConfig (array ('needle', new \stdClass()));
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertEquals ($this -> object -> getConfig (), array ('needle' => 'asdf'));
+		$this -> object -> setConfig (array ('needle', new \stdClass()));
 	}
 	
 	public function testSetConfigPasses ()
 	{
 		$this -> object -> setConfig (array ('needle' => 'The quick brown fox jumps over the lazy dog'));
-		$this -> assertEquals ($this -> object -> getConfig (), array ('needle' => 'The quick brown fox jumps over the lazy dog'));
+		$this -> assertSame ($this -> object -> getConfig (), array ('needle' => 'The quick brown fox jumps over the lazy dog'));
 	}
 
 }

@@ -34,45 +34,42 @@ class NodeTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test that we can add properties
 	 */
 	public function testAddProp ()
 	{
 		$prop	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop');
-		$this -> assertFalse (in_array ($prop, $this -> object -> getProps (), true));
+		$this -> assertNotContains ($prop, $this -> object -> getProps ());
 		$this -> object -> addProp ($prop);
-		$this -> assertTrue (in_array ($prop, $this -> object -> getProps (), true));
-	}
-	
-	public function testAddSamePropThrowsException ()
-	{
-		$exception	= NULL;
-		$prop	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop');
-		$this -> assertFalse (in_array ($prop, $this -> object -> getProps (), true));
-		$this -> object -> addProp ($prop);
-		$this -> assertTrue (in_array ($prop, $this -> object -> getProps (), true));
-		try
-		{
-			$this -> object -> addProp ($prop);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
+		$this -> assertContains ($prop, $this -> object -> getProps ());
 	}
 	
 	/**
+	 * Test that we can't add the same property twice
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testAddSamePropThrowsException ()
+	{
+		$prop	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop');
+		$this -> object -> addProp ($prop);
+		$this -> object -> addProp ($prop);
+	}
+	
+	/**
+	 * Test that we can remove a property
 	 */
 	public function testDeleteProp ()
 	{
 		$prop	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Prop');
 		$this -> object -> addProp ($prop);
-		$this -> assertTrue (in_array ($prop, $this -> object -> getProps (), true));
+		$this -> assertContains ($prop, $this -> object -> getProps ());
 		$this -> object -> deleteProp (get_class ($prop));
-		$this -> assertFalse (in_array ($prop, $this -> object -> getProps (), true));
+		$this -> assertNotContains ($prop, $this -> object -> getProps ());
 	}
 
 	/**
+	 * Test that we can get a list of properties
 	 */
 	public function testGetProps ()
 	{
@@ -86,30 +83,36 @@ class NodeTest extends \PHPUnit_Framework_TestCase
 			get_class ($prop3)	=> $prop3
 		);
 		
-		$this -> object -> addProp ($prop1) -> addProp ($prop2) -> addProp ($prop3);
+		$this -> object -> addProp ($prop1) 
+						-> addProp ($prop2) 
+						-> addProp ($prop3);
 		
-		$this -> assertTrue ($this -> object -> getProps () === $props);
+		$this -> assertSame ($this -> object -> getProps (), $props);
 	}
 
 	/**
+	 * Test that we can set the node's type
 	 */
 	public function testSetType ()
 	{
 		$mock	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Type');
 		$this -> object -> setType ($mock);
-		$this -> assertTrue ($mock === $this -> object -> getType ());
+		$this -> assertSame ($mock, $this -> object -> getType ());
 	}
 
 	/**
+	 * Test that we can get the node's type
 	 */
 	public function testGetType ()
 	{
-		$this -> assertInstanceOf ('\gordian\reefknot\input\validate\iface\Type', $this -> object -> getType ());
 		$mock	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Type');
 		$this -> object -> setType ($mock);
-		$this -> assertTrue ($mock === $this -> object -> getType ());
+		$this -> assertSame ($mock, $this -> object -> getType ());
 	}
 	
+	/**
+	 * Test that we can get the node's rules
+	 */
 	public function testGetRules ()
 	{
 		$type	= $this -> getMock ('\gordian\reefknot\input\validate\iface\Type');
@@ -124,9 +127,12 @@ class NodeTest extends \PHPUnit_Framework_TestCase
 			get_class ($prop3)	=> $prop3
 		);
 		
-		$this -> object -> setType ($type) -> addProp ($prop1) -> addProp ($prop2) -> addProp ($prop3);
+		$this -> object	-> setType ($type) 
+						-> addProp ($prop1) 
+						-> addProp ($prop2) 
+						-> addProp ($prop3);
 		
-		$this -> assertTrue ($this -> object -> getRules () === $rules);
+		$this -> assertSame ($this -> object -> getRules (), $rules);
 		
 	}
 }
