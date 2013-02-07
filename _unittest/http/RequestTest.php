@@ -101,30 +101,67 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Test that the valid HTTP methods are passed as valid
 	 */
-	public function testMethodValidWithValidMethod ()
+	public function testMethodValidConnect ()
 	{
 		$this -> assertTrue ($this -> object -> methodValid ('CONNECT'));
-		$this -> assertTrue ($this -> object -> methodValid ('DELETE'));
-		$this -> assertTrue ($this -> object -> methodValid ('GET'));
-		$this -> assertTrue ($this -> object -> methodValid ('HEAD'));
-		$this -> assertTrue ($this -> object -> methodValid ('OPTIONS'));
-		$this -> assertTrue ($this -> object -> methodValid ('POST'));
-		$this -> assertTrue ($this -> object -> methodValid ('PUT'));
-		$this -> assertTrue ($this -> object -> methodValid ('TRACE'));
 	}
 	
 	/**
-	 * Test that invalid values for HTTP headers are rejected as invalid
+	 * Test that the valid HTTP methods are passed as valid
 	 */
-	public function testMethodValidWithInvalidMethod ()
+	public function testMethodValidDelete ()
 	{
-		$this -> assertFalse ($this -> object -> methodValid ('get'));
-		$this -> assertFalse ($this -> object -> methodValid (''));
-		$this -> assertFalse ($this -> object -> methodValid (NULL));
-		$this -> assertFalse ($this -> object -> methodValid (false));
-		$this -> assertFalse ($this -> object -> methodValid (array ()));
-		$this -> assertFalse ($this -> object -> methodValid (123));
-		$this -> assertFalse ($this -> object -> methodValid (123.45));
+		$this -> assertTrue ($this -> object -> methodValid ('DELETE'));
+
+	}
+	
+	/**
+	 * Test that the valid HTTP methods are passed as valid
+	 */
+	public function testMethodValidGet ()
+	{
+		$this -> assertTrue ($this -> object -> methodValid ('GET'));
+
+	}
+	
+	/**
+	 * Test that the valid HTTP methods are passed as valid
+	 */
+	public function testMethodValidHead ()
+	{
+		$this -> assertTrue ($this -> object -> methodValid ('HEAD'));
+	}
+	
+	/**
+	 * Test that the valid HTTP methods are passed as valid
+	 */
+	public function testMethodValidOptions ()
+	{
+		$this -> assertTrue ($this -> object -> methodValid ('OPTIONS'));
+	}
+	
+	/**
+	 * Test that the valid HTTP methods are passed as valid
+	 */
+	public function testMethodValidPost ()
+	{
+		$this -> assertTrue ($this -> object -> methodValid ('POST'));
+	}
+	
+	/**
+	 * Test that the valid HTTP methods are passed as valid
+	 */
+	public function testMethodValidPut ()
+	{
+		$this -> assertTrue ($this -> object -> methodValid ('PUT'));
+	}
+	
+	/**
+	 * Test that the valid HTTP methods are passed as valid
+	 */
+	public function testMethodValidTrace ()
+	{
+		$this -> assertTrue ($this -> object -> methodValid ('TRACE'));
 	}
 	
 	/**
