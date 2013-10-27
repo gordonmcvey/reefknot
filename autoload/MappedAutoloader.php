@@ -8,21 +8,20 @@
 
 namespace gordian\reefknot\autoload;
 
+use gordian\reefknot\autoload\classmap\iface\ClassMap;
+
 /**
  * Class-mapped autoloader
  *
- * This is an extension of the standard autoloader that includes a lookup table
- * for faster resource - file resolution.  
+ * This is an extension of the standard autoloader that utilises a ClassMap 
+ * instance for faster resource - path resolution
  * 
- * In theory, using a classmap can result in faster autoloading than techniques
- * that involve string manipulation of resource names to map them to a path.  
+ * In theory, using a classmap should result in faster autoloading than 
+ * techniques that involve string manipulation of resource names to map them to 
+ * a path.  
  * 
  * If the class isn't in the class map then the standard class-resolution 
  * mechanism will be used as a fallback.
- * 
- * While we call it a classmap, it should be noted that it can contain lookup
- * references for all autoloadable resources, including interfaces and traits as 
- * well. 
  * 
  * @author Gordon McVey
  * @category Reefknot
@@ -35,12 +34,9 @@ class MappedAutoloader extends Autoloader
 		/**
 		 * A map of resources to paths.  
 		 * 
-		 * This is an associative array where the keys represent namespaced 
-		 * resources and the values are the paths to those resources
-		 * 
-		 * @var array
+		 * @var ClassMap
 		 */
-		$classMap		= array (),
+		$classMap		= null,
 		
 		/**
 		 * Autopopulate flag
@@ -56,16 +52,12 @@ class MappedAutoloader extends Autoloader
 		$autoPopulate	= true;
 	
 	/**
-	 * Set a classmap up for the autoloader
+	 * Set a classmap for the autloader
 	 * 
-	 * This method allows you to preload the autoloader with a classmap.  The
-	 * classmap consists of an associative array where the key is the namespaced
-	 * resource name, and the value is the path to that resource.  
-	 * 
-	 * @param array $classMap
+	 * @param \gordian\reefknot\autoload\classmap\iface\ClassMap $classMap
 	 * @return \gordian\reefknot\autoload\MappedAutoloader
 	 */
-	public function setClassMap (array $classMap)
+	public function setClassMap (ClassMap $classMap)
 	{
 		$this -> classMap	= $classMap;
 		return $this;
@@ -81,7 +73,7 @@ class MappedAutoloader extends Autoloader
 	 * new clasmaps from scratch.  After autoloading resources you can export 
 	 * the current classmap and store it for later use. 
 	 * 
-	 * @return array
+	 * @return \gordian\reefknot\autoload\classmap\iface\ClassMap
 	 */
 	public function getClassMap ()
 	{
@@ -129,41 +121,16 @@ class MappedAutoloader extends Autoloader
 	 */
 	private function calculatePath ($name)
 	{
-		if (is_null ($path = $this -> getPath ($name)))
+		if (is_null ($path = $this -> classMap -> getPath ($name)))
 		{
+			// The class isn't in the map so fall back to the normal resolution method
 			$path	= parent::calculatePath ($name);
 			if ($this -> autoPopulate)
 			{
-				$this -> addPath ($name, $path);
+				$this -> classMap -> addPath ($name, $path);
 			}
 		}
 		
 		return $path;
-	}
-	
-	/**
-	 * Add a path to the classmap
-	 * 
-	 * @param string $name The namespaced resource to map
-	 * @param string $path The path to map the resource to
-	 * @return \gordian\reefknot\autoload\MappedAutoloader
-	 */
-	private function addPath ($name, $path)
-	{
-		$this -> classMap [$name]	= $path;
-		return $this;
-	}
-	
-	/**
-	 * Get the path for the given resource 
-	 * 
-	 * @param string $name
-	 * @return string
-	 */
-	private function getPath ($name)
-	{
-		return isset ($this -> classMap [$name])? 
-				$this -> classMap [$name]: 
-				NULL;
 	}
 }
