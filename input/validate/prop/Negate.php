@@ -21,8 +21,7 @@ use
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\prop
  */
 class Negate extends abstr\prop\Logic implements iface\prop\Logic
 {
@@ -60,7 +59,7 @@ class Negate extends abstr\prop\Logic implements iface\prop\Logic
 	 * returned.  
 	 * 
 	 * NOTE: If the property you're negating expects data of a particular type,
-	 * then an exception will be thrown should the data assigned to this Prop
+	 * then an execpt will be thrown should the data assigned to this Prop
 	 * is not of the expected type.  
 	 * 
 	 * @return bool 

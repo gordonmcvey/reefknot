@@ -9,7 +9,7 @@
 namespace gordian\reefknot;
 
 /**
- * Framework bootstrapper 
+ * Framework bootstrap file
  * 
  * This file contains the code needed to bootstrap the framework's autoloader.
  * Including this file in your code will set up some parameters the autoloader
@@ -22,22 +22,29 @@ namespace gordian\reefknot;
  * @package Bootstrap
  */
 
-const
+/**
+ * Define the minimum PHP version currently supported by Reefknot
+ */
+const	PHP_MIN	= '5.5.0';
 
-	/**
-	 * Shorthand for PHP's DIRECTORY_SEPERATOR constant.
-	 */
-	DS		= DIRECTORY_SEPARATOR,
-	
-	/**
-	 * Framework root namespace.
-	 */
-	NS_FW	= __NAMESPACE__, 
-	
-	/**
-	 * Define the minimum PHP version currently supported by Reefknot
-	 */
-	PHP_MIN	= '5.3.10';
+// Abort with a fatal error should the PHP version requirements not be met
+if (version_compare (PHP_VERSION, PHP_MIN) < 0)
+{
+	trigger_error (	'Reefknot requires PHP version '
+		. PHP_MIN . ' or higher. Version '
+		. PHP_VERSION . ' detected. Aborting'
+		. PHP_EOL, E_USER_ERROR);
+}
+
+/**
+ * Shorthand for PHP's DIRECTORY_SEPARATOR constant.
+ */
+const	DS		= DIRECTORY_SEPARATOR;
+
+/**
+ * Framework root namespace.
+ */
+const	NS_FW	= __NAMESPACE__;
 
 /**
  * Define the root path for the framework.  This can be overridden by defining
@@ -46,16 +53,10 @@ const
 defined (NS_FW . '\PATH_FW')
 	|| define (NS_FW . '\PATH_FW', realpath (__DIR__));
 
-// Abort with a fatal error should the PHP version requirements not be met
-if (version_compare (PHP_VERSION, PHP_MIN) < 0)
-{
-	trigger_error (	'Reefknot requires PHP version ' 
-					. PHP_MIN . ' or higher. Version ' 
-					. PHP_VERSION . ' detected. Aborting' 
-					. PHP_EOL, E_USER_ERROR);
-}
-
-// Load the autoloader
-require	( PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoloader.php');
-require	( PATH_FW . DS . 'autoload' . DS . 'Autoloader.php');
-require	( PATH_FW . DS . 'autoload' . DS . 'MappedAutoloader.php');
+// Bring all the infrastructure required for autoloading in (except for a class
+// map implementation)
+require	(PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoloader.php');
+require	(PATH_FW . DS . 'autoload' . DS . 'classmap' . DS . 'iface' . DS . 'ClassMap.php');
+require	(PATH_FW . DS . 'autoload' . DS . 'classmap' . DS . 'abstr' . DS . 'ClassMap.php');
+require	(PATH_FW . DS . 'autoload' . DS . 'Autoloader.php');
+require	(PATH_FW . DS . 'autoload' . DS . 'MappedAutoloader.php');

@@ -19,23 +19,21 @@ use
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\prop
  */
 class Uri extends abstr\Prop implements iface\Prop
 {
-	private
-		/**
-		 * List of URL schema that will be considered valid
-		 * 
-		 * @var array 
-		 */
-		$schemaList	= array (
-			'http',
-			'https',
-			'ftp', 
-			'gopher'
-		);
+	/**
+	 * List of URL schema that will be considered valid
+	 *
+	 * @var array
+	 */
+	private	$schemaList	= array (
+		'http',
+		'https',
+		'ftp',
+		'gopher'
+	);
 	
 	/**
 	 * Test the URI for validity

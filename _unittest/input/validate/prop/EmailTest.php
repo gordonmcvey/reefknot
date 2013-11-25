@@ -137,7 +137,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test test@example 
+	 * Test test@example
 	 */
 	public function testIsValidGoodAddrPasses10 ()
 	{
@@ -223,21 +223,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that trying to validate a non-string throws an exception  
+	 * Test that trying to validate a non-string throws an execpt
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testIsValidWrongTypeThrowsException ()
 	{
-		$exception	= NULL;
 		$this -> object -> setData (new \stdClass ());
-		try 
-		{
-			$this -> object -> isValid ();
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
+		$this -> object -> isValid ();
 	}
 }
 

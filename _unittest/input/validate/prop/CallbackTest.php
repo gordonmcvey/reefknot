@@ -70,12 +70,18 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		
 	}
 	
+	/**
+	 * Test that NULL always passes
+	 */
 	public function testIsValidNullPasses ()
 	{
 		$this -> object	-> setData (NULL);
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that validation passes if the callback returns true
+	 */
 	public function testIsValidFunctionTruePasses ()
 	{
 		$cfg	= array (
@@ -87,6 +93,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that validation always fails if the callback returns false
+	 */
 	public function testIsValidFunctionFalseFails ()
 	{
 		$cfg	= array (
@@ -98,6 +107,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that an anonymous function that returns true always causes validation to pass
+	 */
 	public function testIsValidAnonTruePasses ()
 	{
 		$cfg	= array (
@@ -109,6 +121,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that an anonymous function that returns false always causes validation to vail
+	 */
 	public function testIsValidAnonFalseFails ()
 	{
 		$cfg	= array (
@@ -120,6 +135,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that using a static function that always returns true causes validation to always pass
+	 */
 	public function testIsValidStaticTruePasses ()
 	{
 		$cfg	= array (
@@ -131,6 +149,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that using a static function that always returns false causes validation to always fail
+	 */
 	public function testIsValidStaticFalseFails ()
 	{
 		$cfg	= array (
@@ -142,6 +163,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Check always pass static method with alternative calling convention
+	 */
 	public function testIsValidStaticTruePasses2 ()
 	{
 		$cfg	= array (
@@ -153,6 +177,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Check always fail static method with alternative calling convention
+	 */
 	public function testIsValidStaticFalseFails2 ()
 	{
 		$cfg	= array (
@@ -164,6 +191,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test instance method that always returns true makes validation pass
+	 */
 	public function testIsValidInstanceTruePasses ()
 	{
 		$obj	= new Callbacks;
@@ -176,6 +206,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test instance method that always returns false makes validation fail
+	 */
 	public function testIsValidInstanceFalseFails ()
 	{
 		$obj	= new Callbacks;
@@ -188,6 +221,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test a callback function can be passed arguments that will affect the validation outcome
+	 */
 	public function testIsValidWithArgsTruePasses ()
 	{
 		$cfg	= array (
@@ -200,6 +236,9 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test a callback function can be passed arguments that will affect the validation outcome
+	 */
 	public function testIsValidWithArgsFalseFails ()
 	{
 		$cfg	= array (
@@ -211,97 +250,48 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 						-> setData (3);
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
-
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigEmptyThrowsException ()
 	{
 		$cfg		= array ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$this -> object -> setConfig ($cfg);
 	}
 	
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigNoPropsThrowsException ()
 	{
 		$cfg		= array ('foo' => 'bar');
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$this -> object -> setConfig ($cfg);
 	}
 	
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigInvalidPropsThrowsException ()
 	{
 		$cfg		= array ('callback' => pi ());
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$this -> object -> setConfig ($cfg);
 	}
 	
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigInvalidPropsThrowsException2 ()
 	{
 		$cfg		= array (
 			'callback'	=> __NAMESPACE__ . '\alwaysFalse',
 			'args'		=> pi ()
 		);
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$this -> object -> setConfig ($cfg);
 	}
 	
 	public function testSetConfigPasses ()
@@ -309,17 +299,8 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 		$cfg		= array (
 			'callback'	=> __NAMESPACE__ . '\alwaysFalse',
 		);
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
-		$this -> assertTrue ($this -> object -> getConfig () == $cfg);
+		$this -> object -> setConfig ($cfg);
+		$this -> assertSame ($this -> object -> getConfig (), $cfg);
 	}
 	
 	public function testSetConfigPasses2 ()
@@ -328,16 +309,7 @@ class CallbackTest extends \PHPUnit_Framework_TestCase
 			'callback'	=> __NAMESPACE__ . '\withArgs',
 			'args'		=> array (2, 1)
 		);
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
+		$this -> object -> setConfig ($cfg);
 		$this -> assertTrue ($this -> object -> getConfig () == $cfg);
 	}
 }

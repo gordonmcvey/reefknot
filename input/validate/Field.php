@@ -31,7 +31,7 @@ namespace gordian\reefknot\input\validate;
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
+ * @package gordian\reefknot\input\validate
  */
 class Field extends abstr\Node implements iface\Field
 {

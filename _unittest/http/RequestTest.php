@@ -451,7 +451,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that an exception is thrown if an invalid key type is used
+	 * Test that an execpt is thrown if an invalid key type is used
 	 * 
 	 * @expectedException invalidArgumentException
 	 */
@@ -487,7 +487,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that an exception is thrown if an invalid key type is used
+	 * Test that an execpt is thrown if an invalid key type is used
 	 * 
 	 * @expectedException invalidArgumentException
 	 */
@@ -523,7 +523,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test that an exception is thrown if an invalid key type is used
+	 * Test that an execpt is thrown if an invalid key type is used
 	 * 
 	 * @expectedException invalidArgumentException
 	 */
@@ -603,7 +603,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that an exception is thrown if an invalid key type is used
+	 * Test that an execpt is thrown if an invalid key type is used
 	 * 
 	 * @expectedException invalidArgumentException
 	 */

@@ -24,8 +24,12 @@ use gordian\reefknot\input\validate\iface;
  */
 abstract class Prop extends Validatable implements iface\Prop
 {
-	private
-		$config	= array ();
+	/**
+	 * Configuration settings for the property
+	 *
+	 * @var array
+	 */
+	private $config	= array ();
 	
 	/**
 	 * Set the configuration for this Property

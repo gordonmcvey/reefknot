@@ -23,7 +23,7 @@ namespace gordian\reefknot\di;
  * @link http://www.slideshare.net/fabpot/dependency-injection-with-php-53 Dependency Injection with PHP 5.3
  * @author Gordon McVey
  * @category Reefknot
- * @package DependencyInjection
+ * @package gordian\reefknot\di
  */
 class Container implements iface\Container
 {

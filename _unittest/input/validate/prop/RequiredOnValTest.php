@@ -19,8 +19,8 @@ class RequiredOnValTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Helper for building validatables
 	 * 
-	 * @param mixed $value
-	 * @param bool $isValid
+	 * @param mixed $value What value the mock should return when its getData() method is called
+	 * @param bool $isValid Whether the mock returns true or false when isValid() is called on it
 	 * @return gordian\reefknot\input\validate\Field 
 	 */
 	protected function makeStubField ($value = NULL, $isValid = true)
@@ -59,14 +59,6 @@ class RequiredOnValTest extends \PHPUnit_Framework_TestCase
 	protected function tearDown ()
 	{
 		
-	}
-	
-	public function testSetConfigValidPasses ()
-	{
-		$cfg	= array (
-			'dependant'			=> NULL, 
-			'requireWhenEmpty'	=> true
-		);
 	}
 	
 	/**
@@ -283,6 +275,10 @@ class RequiredOnValTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * If the dependant is a field and it doesn't validate, then our data also
+	 * can't be validated
+	 */
 	public function testIsValidAgainstInvalidFail1 ()
 	{
 		$dep	= $this -> makeStubField (NULL, false);
@@ -293,6 +289,10 @@ class RequiredOnValTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * If the dependant is a field and it doesn't validate, then our data also
+	 * can't be validated
+	 */
 	public function testIsValidAgainstInvalidFail2 ()
 	{
 		$dep	= $this -> makeStubField (NULL, false);
@@ -303,6 +303,10 @@ class RequiredOnValTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * If the dependant is a field and it doesn't validate, then our data also
+	 * can't be validated
+	 */
 	public function testIsValidAgainstInvalidFail3 ()
 	{
 		$dep	= $this -> makeStubField (NULL, false);
@@ -313,6 +317,10 @@ class RequiredOnValTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * If the dependant is a field and it doesn't validate, then our data also
+	 * can't be validated
+	 */
 	public function testIsValidAgainstInvalidFail4 ()
 	{
 		$dep	= $this -> makeStubField (NULL, false);
@@ -323,77 +331,47 @@ class RequiredOnValTest extends \PHPUnit_Framework_TestCase
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
-	
 	/**
 	 * Test that trying to configure with no data triggers an InvalidArgumentException
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigEmptyThrowsException ()
 	{
-		$cfg		= array ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () === $cfg);
+		$cfg	= array ();
+		$this -> object -> setConfig ($cfg);
 	}
 	
 	/**
 	 * Test that trying to configure with no prop data triggers an InvalidArgumentException 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigNoPropsThrowsException ()
 	{
-		$cfg		= array ('foo' => 'bar');
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () === $cfg);
+		$cfg	= array ('foo' => 'bar');
+		$this -> object -> setConfig ($cfg);
 	}
 	
 	/**
-	 * Test that valid needles can be passed to the object 
+	 * Test that we can create a valid configuration using a simple value as the 
+	 * dependant
 	 */
 	public function testSetConfigPasses ()
 	{
-		$cfg		= array ('dependant' => 12321, 'requireWhenEmpty' => false);
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
-		$this -> assertTrue ($this -> object -> getConfig () === $cfg);
+		$cfg	= array ('dependant' => 12321, 'requireWhenEmpty' => false);
+		$this -> object -> setConfig ($cfg);
+		$this -> assertSame ($this -> object -> getConfig (), $cfg);
 	}
 	
+	/**
+	 * Test that we can create a valid configuration using a Field object as the
+	 * dependant
+	 */
 	public function testSetConfigPasses2 ()
 	{
-		$cfg		= array ('dependant' => $this -> makeStubField ('123', true), 'requireWhenEmpty' => false);
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
+		$cfg	= array ('dependant' => $this -> makeStubField ('123', true), 'requireWhenEmpty' => false);
+		$this -> object -> setConfig ($cfg);
 		$this -> assertTrue ($this -> object -> getConfig () === $cfg);
 	}
 }

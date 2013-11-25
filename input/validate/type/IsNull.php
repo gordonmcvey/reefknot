@@ -20,8 +20,7 @@ use
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Type
+ * @package gordian\reefknot\input\validate\type
  */
 class IsNull extends abstr\Validatable implements iface\Type
 {

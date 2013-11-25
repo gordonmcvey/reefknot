@@ -30,63 +30,61 @@ namespace gordian\reefknot\http;
  */
 class Request implements iface\Request
 {
-	private
-		
-		/**
-		 * The request body data is cached here after being retrieved
-		 * 
-		 * @var string 
-		 */
-		$requestBody		= NULL,
-		
-		/**
-		 * @var array
-		 */
-		$parsedUri			= array (), 
-		
-		/**
-		 * @var array 
-		 */
-		$get				= array (),
-		
-		/**
-		 * @var array 
-		 */
-		$post				= array (),
-		
-		/**
-		 * @var array 
-		 */
-		$cookie				= array (),
-		
-		/**
-		 * @var array 
-		 */
-		$files				= array (),
-		
-		/**
-		 * @var array 
-		 */
-		$server				= array (),
-		
-		/**
-		 * @var array 
-		 */
-		$env				= array (),
-		
-		/**
-		 * Cache for the parsed headers
-		 * 
-		 * @var array
-		 */
-		$parsedHeaders		= array (),
-		
-		/**
-		 * List of valid HTTP verbs
-		 * 
-		 * @var array 
-		 */
-		$validMethods		= array (
+	/**
+	 * The request body data is cached here after being retrieved
+	 *
+	 * @var string
+	 */
+	private	$requestBody		= NULL;
+
+	/**
+	 * @var array
+	 */
+	private	$parsedUri			= array ();
+
+	/**
+	 * @var array
+	 */
+	private	$get				= array ();
+
+	/**
+	 * @var array
+	 */
+	private $post				= array ();
+
+	/**
+	 * @var array
+	 */
+	private	$cookie				= array ();
+
+	/**
+	 * @var array
+	 */
+	private	$files				= array ();
+
+	/**
+	 * @var array
+	 */
+	private	$server				= array ();
+
+	/**
+	 * @var array
+	 */
+	private	$env				= array ();
+
+	/**
+	 * Cache for the parsed headers
+	 *
+	 * @var array
+	 */
+	private	$parsedHeaders		= array ();
+
+	/**
+	 * List of valid HTTP verbs
+	 *
+	 * @var array
+	 */
+	private	$validMethods		= array (
 			self::M_CONNECT,
 			self::M_DELETE,
 			self::M_GET,
@@ -95,21 +93,22 @@ class Request implements iface\Request
 			self::M_POST,
 			self::M_POT,
 			self::M_TRACE
-		), 
-		
-		/**
-		 * When extracting the header data from $_SERVER we want to get these 
-		 * keya in addition to the ones that start HTTP_ OR CONTENT-
-		 * 
-		 * @var array
-		 */
-		$nonPrefixedHeaders	= array ();
+	);
+
+	/**
+	 * When extracting the header data from $_SERVER we want to get these
+	 * keya in addition to the ones that start HTTP_ OR CONTENT-
+	 *
+	 * @var array
+	 */
+	private	$nonPrefixedHeaders	= array ();
 
 	/**
 	 * 
 	 * @param array $source Name of the property to get an array from
 	 * @param scalar $param
 	 * @return mixed
+	 * @throws \InvalidArgumentException
 	 */
 	private function getParam (array $source, $param = NULL)
 	{

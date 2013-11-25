@@ -51,6 +51,9 @@ class AnyOfTest extends \PHPUnit_Framework_TestCase
 		$this -> object = new AnyOf (array ('props' => array ($this -> makeStubProp (111, true))));
 	}
 	
+	/**
+	 * Test that NULL values pass validation. 
+	 */
 	public function testIsValidNullPasses ()
 	{
 		$cfg	= array (
@@ -67,6 +70,9 @@ class AnyOfTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that validation passes if the value is valid for one property
+	 */
 	public function testIsValidOneValidPasses ()
 	{
 		$cfg	= array (
@@ -84,6 +90,9 @@ class AnyOfTest extends \PHPUnit_Framework_TestCase
 		
 	}
 	
+	/**
+	 * Test that validation passes if the value is valid for all properties
+	 */
 	public function testIsValidAllValidPasses ()
 	{
 		$cfg	= array (
@@ -101,6 +110,9 @@ class AnyOfTest extends \PHPUnit_Framework_TestCase
 		
 	}
 	
+	/**
+	 * Test that validation fails if the value is invalid for all properties 
+	 */
 	public function testIsValidAlllInvalidFails ()
 	{
 		$cfg	= array (
@@ -116,106 +128,65 @@ class AnyOfTest extends \PHPUnit_Framework_TestCase
 		
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
-	
-	
-	
 
 	/**
 	 * Test that trying to configure with no data triggers an InvalidArgumentException
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigEmptyThrowsException ()
 	{
-		$cfg		= array ();
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$cfg	= array ();
+		$this -> object -> setConfig ($cfg);
 	}
 	
 	/**
 	 * Test that trying to configure with no prop data triggers an InvalidArgumentException 
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigNoPropsThrowsException ()
 	{
-		$cfg		= array ('foo' => 'bar');
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$cfg	= array ('foo' => 'bar');
+		$this -> object -> setConfig ($cfg);
 	}
 	
 	/**
-	 * Test that trying to set a props with invalid data triggers an InvalidArgumentException 
+	 * Test that trying to set a props with invalid data triggers an InvalidArgumentException
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigInvalidPropsThrowsException ()
 	{
-		$cfg		= array ('props' => pi ());
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$cfg	= array ('props' => pi ());
+		$this -> object -> setConfig ($cfg);
 	}
 	
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testSetConfigInvalidPropsThrowsException2 ()
 	{
-		$cfg		= array (
+		$cfg	= array (
 			'props' => array (
 				new \stdClass (),
 				new \stdClass (),
 				new \stdClass ()
 			)
 		);
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$this -> object -> setConfig ($cfg);
 	}
 	
 	/**
-	 * Test that trying to set an empty props triggers an InvalidArgumentException 
+	 * Test that trying to set an empty props triggers an InvalidArgumentException
+	 * 
+	 * @expectedException \InvalidArgumentException
 	 */
 	public function testSetConfigEmptyNeedleThrowsException ()
 	{
-		$cfg		= array ('props' => array ());
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertInstanceOf ('\InvalidArgumentException', $exception);
-		$this -> assertFalse ($this -> object -> getConfig () == $cfg);
+		$cfg	= array ('props' => array ());
+		$this -> object -> setConfig ($cfg);
 	}
 	
 	/**
@@ -231,16 +202,7 @@ class AnyOfTest extends \PHPUnit_Framework_TestCase
 				$this -> makeStubProp ('The quick brown fox jumps over the lazy dog', true)
 			)
 		);
-		$exception	= NULL;
-		try
-		{
-			$this -> object -> setConfig ($cfg);
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		$this -> assertNull ($exception);
-		$this -> assertTrue ($this -> object -> getConfig () == $cfg);
+		$this -> object -> setConfig ($cfg);
+		$this -> assertSame ($this -> object -> getConfig (), $cfg);
 	}
 }

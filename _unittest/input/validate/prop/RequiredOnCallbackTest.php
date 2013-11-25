@@ -3,9 +3,9 @@
 namespace gordian\reefknot\input\validate\prop;
 
 /* Simple callbacks for testing */
-function roc_alwaysTrue( ) {return true;}
-function roc_alwaysFalse () {return false;}
-function roc_argSet ($arg = NULL) {return (isset ($arg));}
+function roc_alwaysTrue () { return true; }
+function roc_alwaysFalse () { return false; }
+function roc_argSet ($arg = NULL) { return (isset ($arg)); }
 
 class CallbackSuite
 {

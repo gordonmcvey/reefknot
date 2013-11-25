@@ -41,52 +41,66 @@ class SubsetTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that an empty set is validated as a subset of the given set
+	 */
 	public function testIsValidEmptyArrayPasses ()
 	{
 		$this -> object -> setData (array ());
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that a set identical to the given set validates as a subset
+	 */
 	public function testIsValidSameArrayPasses ()
 	{
 		$this -> object -> setData (array (1, 2, 4, 8));
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test a typical strict subset validates as a subset
+	 */
 	public function testIsValidSubsetPasses ()
 	{
 		$this -> object -> setData (array (2, 8));
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that a set that contains non-set members is invalid
+	 */
 	public function testIsValidPartialSubsetFails ()
 	{
 		$this -> object -> setData (array (1, 2, 3, 4));
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that a set with no overlap at all with the given set fails validation
+	 */
 	public function testIsValidNoSubsetFails ()
 	{
 		$this -> object -> setData (array (11, 22, 44, 88));
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test that a set that's actually a superset of the given set fails validation
+	 */
+	public function testIsValidSupersetFails () {
+		$this -> object -> setData (array (1, 2, 4, 8, 16, 32));
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * 
+	 * @expectedException \InvalidArgumentException
+	 */
 	public function testIsValidNotArrayThrowsException ()
 	{
 		$this -> object -> setData ('Test');
-		$exception	= NULL;
-		$valid		= NULL;
-		
-		try
-		{
-			$valid	= $this -> object -> isValid ();
-		}
-		catch (\Exception $e)
-		{
-			$exception	= $e;
-		}
-		
-		$this -> assertTrue ($exception instanceof \InvalidArgumentException);
-		$this -> assertNull ($valid);
+		$this -> object -> isValid ();
 	}
 }

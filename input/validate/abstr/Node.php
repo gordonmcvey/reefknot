@@ -21,31 +21,29 @@ use gordian\reefknot\input\validate\iface;
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
+ * @package gordian\reefknot\input\validate\abstr
  */
 abstract class Node extends Validatable implements iface\Node
 {
-	private
-		
-		/**
-		 * The Type object that defines what data type this node is expected to be
-		 * 
-		 * @var iface\Type
-		 */
-		$type	= NULL, 
-		
-		/**
-		 * List of Property objects that the node is expected to conform to
-		 * 
-		 * @var array
-		 */
-		$props	= array ();
+	/**
+	 * The Type object that defines what data type this node is expected to be
+	 *
+	 * @var iface\Type
+	 */
+	private $type	= NULL;
+
+	/**
+	 * List of Property objects that the node is expected to conform to
+	 *
+	 * @var array
+	 */
+	private	$props	= array ();
 	
 	/**
 	 * Add a new property to the node
 	 * 
 	 * You can only add a prop to a node once, attempts to add the same prop
-	 * more than once will trigger an exception. 
+	 * more than once will trigger an execpt.
 	 * 
 	 * @param \gordian\reefknot\input\validate\iface\Prop $newProp
 	 * @return \gordian\reefknot\input\validate\abstr\Node
@@ -93,8 +91,8 @@ abstract class Node extends Validatable implements iface\Node
 	/**
 	 * Set the expected type for this node
 	 * 
-	 * @param iface\Type $type
-	 * @return Node 
+	 * @param iface\Type $newType
+	 * @return $this
 	 */
 	public function setType (iface\Type $newType)
 	{
@@ -130,7 +128,7 @@ abstract class Node extends Validatable implements iface\Node
 	}
 	
 	/**
-	 * Instantize the node
+	 * Instantiate the node
 	 * 
 	 * As all nodes are required to have a type, you have to supply one to the 
 	 * class at construction time, otherwise an error will occur.  

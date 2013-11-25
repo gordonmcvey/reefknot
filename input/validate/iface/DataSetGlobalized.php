@@ -13,7 +13,7 @@ namespace gordian\reefknot\input\validate\iface;
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
+ * @package gordian\reefknot\input\validate\iface
  */
 interface DataSetGlobalized extends DataSet
 {
@@ -24,14 +24,15 @@ interface DataSetGlobalized extends DataSet
 	 * fields within the DataSet.  This is useful when you are expecting your 
 	 * data to all be of a uniform format. 
 	 * 
-	 * @param Prop $prop 
+	 * @param Prop $newProp
 	 * @return DataSetGlobalized
 	 */
 	public function addGlobalProp (Prop $newProp);
 	
 	/**
 	 * Remove the named global property 
-	 * 
+	 *
+	 * @param string $propName
 	 * @return DataSetGlobalized
 	 */
 	public function deleteGlobalProp ($propName);
@@ -45,7 +46,8 @@ interface DataSetGlobalized extends DataSet
 	
 	/**
 	 * Set the global data type 
-	 * 
+	 *
+	 * @param Type $type
 	 * @return DataSetGlobalized
 	 */
 	public function setGlobalType (Type $type);
@@ -64,5 +66,4 @@ interface DataSetGlobalized extends DataSet
 	 * @return array 
 	 */
 	public function getGlobalInvalids ();
-
 }

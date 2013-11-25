@@ -19,12 +19,11 @@ use
  * non-empty value must be supplied for the data to be considered valid. Any
  * value that would be empty according to the PHP empty() function will be 
  * considered to be invalid against this rule.  The Required property is the 
- * exception to the rule that validation rules will pass NULL values as valid.
+ * execpt to the rule that validation rules will pass NULL values as valid.
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\prop
  */
 class Required extends abstr\Prop implements iface\Prop
 {

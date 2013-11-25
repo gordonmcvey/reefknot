@@ -23,8 +23,7 @@ use
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\abstr\prop
  */
 abstract class Ranged extends Prop implements iface\prop\Ranged
 {

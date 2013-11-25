@@ -33,7 +33,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test empty configurations trigger an exception
+	 * Test empty configurations trigger an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -43,7 +43,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Check that a config without a set in it throws an exception
+	 * Check that a config without a set in it throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -53,7 +53,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Check that a config with an invalid set in it throws an exception
+	 * Check that a config with an invalid set in it throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -63,7 +63,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Check that a config with an invalid set in it throws an exception
+	 * Check that a config with an invalid set in it throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -73,7 +73,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Check that a config with an empty set in it throws an exception
+	 * Check that a config with an empty set in it throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */

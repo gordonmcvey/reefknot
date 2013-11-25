@@ -22,8 +22,7 @@ use
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\abstr\prop
  */
 abstract class TextMatch extends Prop implements iface\prop
 {

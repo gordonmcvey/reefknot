@@ -114,7 +114,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that trying to update an item with a non-scalar key throws an exception 
+	 * Test that trying to update an item with a non-scalar key throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -194,7 +194,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that attempting to start a session with an empty namespace throws an exception.  
+	 * Test that attempting to start a session with an empty namespace throws an execpt.
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -204,7 +204,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that attempting to start the session with a non-scalar namespace throws an exception 
+	 * Test that attempting to start the session with a non-scalar namespace throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -214,7 +214,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that trying to add an item with a non-scalar key throws an exception 
+	 * Test that trying to add an item with a non-scalar key throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -224,7 +224,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that trying to add an item with no key throws an exception 
+	 * Test that trying to add an item with no key throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */
@@ -235,7 +235,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	
 	/**
 	 * Test that attempting to start the session when headers have already been
-	 * sent throws an exception
+	 * sent throws an execpt
 	 * 
 	 * @expectedException \RuntimeException
 	 */
@@ -262,7 +262,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test that a failure to start the session throws an exception
+	 * Test that a failure to start the session throws an execpt
 	 * 
 	 * @expectedException \RuntimeException
 	 */

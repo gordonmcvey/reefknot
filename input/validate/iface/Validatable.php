@@ -14,11 +14,11 @@ namespace gordian\reefknot\input\validate\iface;
  * This interface designates a "full" validatable item that includes data
  * management as well as the standard validation features of the core 
  * BasicValidatable interface.  Most kinds of validation units in the validate
- * package implement this interface, the notable exception being groups.
+ * package implement this interface, the notable execpt being groups.
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
+ * @package gordian\reefknot\input\validate\iface
  */
 interface Validatable
 {
@@ -43,7 +43,7 @@ interface Validatable
 	 * When a validatable is added to a container (A dataset), its parent 
 	 * reference should be set back to the set to which it was added. 
 	 * 
-	 * @param DataSet $set
+	 * @param Node $set
 	 * @return Validatable The item should return itself so chaining can occur
 	 * @throws \InvalidArgumentException
 	 */

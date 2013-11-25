@@ -20,12 +20,10 @@ use
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\prop
  */
 class Luhn extends abstr\Prop implements iface\Prop
 {
-	
 	/**
 	 * Apply the Luhn algorithim to the provided data
 	 * 

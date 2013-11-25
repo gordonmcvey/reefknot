@@ -2,7 +2,7 @@
 
 namespace gordian\reefknot\autoload\classmap;
 
-require_once dirname (__FILE__) . '/../../../autoload/classmap/ArrayClassMap.php';
+require_once dirname(__FILE__) . '/../../../autoload/classmap/ArrayClassMap.php';
 
 /**
  * Test class for ArrayClassMap.

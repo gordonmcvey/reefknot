@@ -20,28 +20,25 @@ namespace gordian\reefknot\input\validate;
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
+ * @package gordian\reefknot\input\validate
  */
 class DataSet extends Field implements iface\DataSet
 {
-	private
-		
-		/**
-		 * Collection of fields that belong to this dataset
-		 * 
-		 * @var array
-		 */
-		$fields				= array (), 
-		
-		/**
-		 * Flag that indicates whether the dataset meets the general 
-		 * requirements specified for the dataset props (The data must be an 
-		 * array or null, and it must meet any other props that have been 
-		 * applied).  
-		 * 
-		 * @var bool
-		 */
-		$isDataProcessable	= false;
+	/**
+	 * Collection of fields that belong to this dataset
+	 *
+	 * @var array
+	 */
+	private	$fields				= array ();
+
+	/**
+	 * Flag that indicates whether the dataset meets the general requirements
+	 * specified for the dataset props (The data must be an array or null, and
+	 * it must meet any other props that have been applied).
+	 *
+	 * @var bool
+	 */
+	private	$isDataProcessable	= false;
 	
 	/**
 	 * Register a field with the dataset
@@ -50,7 +47,7 @@ class DataSet extends Field implements iface\DataSet
 	 * validated when isValid() is invoked.  
 	 * 
 	 * A field can only be added to a dataset once.  Attempts to add the same
-	 * field more than once will trigger an exception.  
+	 * field more than once will trigger an execpt.
 	 * 
 	 * @param string $name
 	 * @param \gordian\reefknot\input\validate\iface\Node $field
@@ -122,11 +119,6 @@ class DataSet extends Field implements iface\DataSet
 	 * @param mixed $data
 	 * @return DataSet
 	 * @todo There's room for optimization here, lots of data gets copied when it doesn't need to be
-	 */
-	/**
-	 * 
-	 * @param type $data
-	 * @return type
 	 */
 	public function setData ($data = NULL)
 	{

@@ -20,32 +20,30 @@ use gordian\reefknot\input\validate\iface;
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
+ * @package gordian\reefknot\input\validate\abstr
  */
 abstract class Validatable implements iface\Validatable
 {
-	private
-		
-		/**
-		 * Reference back to this item's parent. Can be NULL for root items
-		 * 
-		 * @var iface\Node
-		 */
-		$parent		= NULL, 
-		
-		/**
-		 * The data to be validated 
-		 * 
-		 * @var mixed
-		 */
-		$data		= NULL, 
-		
-		/**
-		 * List of reasons why the item failed validation are stored here
-		 * 
-		 * @var array
-		 */
-		$invalids	= array (); 
+	/**
+	 * Reference back to this item's parent. Can be NULL for root items
+	 *
+	 * @var iface\Node
+	 */
+	private	$parent		= NULL;
+
+	/**
+	 * The data to be validated
+	 *
+	 * @var mixed
+	 */
+	private	$data		= NULL;
+
+	/**
+	 * List of reasons why the item failed validation are stored here
+	 *
+	 * @var array
+	 */
+	private	$invalids	= array ();
 	
 	/**
 	 * Set the data to be validated

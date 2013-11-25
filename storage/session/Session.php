@@ -271,7 +271,7 @@ class Session implements iface\Session
 	 * 
 	 * This method attempts to start the PHP session and bind the storage 
 	 * property to the specified session array.  If the session could not be 
-	 * started then an exception is thrown.  If the session is already started
+	 * started then an execpt is thrown.  If the session is already started
 	 * then the method proceeds straight to binding the storage property to the
 	 * session. 
 	 * 

@@ -22,8 +22,7 @@ use
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\prop
  */
 class OneOf extends abstr\prop\Logic implements iface\prop\Logic
 {

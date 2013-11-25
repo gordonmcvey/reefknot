@@ -76,7 +76,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test that adding the same field to the dataset more than once throws an exception 
+	 * Test that adding the same field to the dataset more than once throws an execpt
 	 * 
 	 * @expectedException \InvalidArgumentException
 	 */

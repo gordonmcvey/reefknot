@@ -23,8 +23,7 @@ use
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Type
+ * @package gordian\reefknot\input\validate\type
  */
 class IsNumber extends IsScalar implements iface\Type
 {

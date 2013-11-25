@@ -15,17 +15,17 @@ namespace \gordian\reefknot\http;
  */
 class Uri implements iface\Uri
 {
-	private
-		$constructerUri	= NULL,
-		$uri			= NULL,
-		$scheme			= 'http',
-		$host			= '',
-		$port			= 80,
-		$user			= '',
-		$password		= '',
-		$path			= '/',
-		$query			= '',
-		$fragment		= '';
+
+	private	$constructerUri	= NULL;
+	private	$uri			= NULL;
+	private	$scheme			= 'http';
+	private	$host			= '';
+	private	$port			= 80;
+	private	$user			= '';
+	private	$password		= '';
+	private	$path			= '/';
+	private	$query			= '';
+	private	$fragment		= '';
 	
 	public function __construct ($uri)
 	{

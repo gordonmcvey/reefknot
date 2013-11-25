@@ -20,12 +20,10 @@ use
  *
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\prop
  */
 class Subset extends abstr\Prop\Set implements iface\Prop
 {
-	
 	/**
 	 * Perform the subset test
 	 * @param array $data 

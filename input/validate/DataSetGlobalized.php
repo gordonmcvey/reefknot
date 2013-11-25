@@ -34,32 +34,30 @@ namespace gordian\reefknot\input\validate;
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
+ * @package gordian\reefknot\input\validate
  */
 class DataSetGlobalized extends DataSet implements iface\DataSetGlobalized
 {
-	private
+	/**
+	 * Expected type for all fields
+	 *
+	 * @var iface\Type
+	 */
+	private	$globalType		= NULL;
 
-		/**
-		 * Expected type for all fields
-		 * 
-		 * @var iface\Type 
-		 */
-		$globalType		= NULL,
-		
-		/**
-		 * Props to apply to all fields
-		 * 
-		 * @var array
-		 */
-		$globalProps	= array (),
-		
-		/**
-		 * List of fields that failed validation due to global invalids and why
-		 * 
-		 * @var array 
-		 */
-		$globalInvalids	= array ();
+	/**
+	 * Props to apply to all fields
+	 *
+	 * @var array
+	 */
+	private	$globalProps	= array ();
+
+	/**
+	 * List of fields that failed validation due to global invalids and why
+	 *
+	 * @var array
+	 */
+	private	$globalInvalids	= array ();
 	
 	/**
 	 * Get the global invalid field list

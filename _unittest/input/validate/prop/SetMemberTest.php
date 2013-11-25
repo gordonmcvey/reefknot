@@ -20,7 +20,7 @@ class SetMemberTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp ()
 	{
-		$this -> object = new SetMember (array ('set' => array (1, 2, 4, 8)));
+		$this -> object = new SetMember (array ('set' => array (1, 2, 4, 8, pi(), 'test', array ('foo', 'bar'), true, false)));
 	}
 
 	/**
@@ -41,15 +41,104 @@ class SetMemberTest extends \PHPUnit_Framework_TestCase
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test integers can be set members
+	 */
 	public function testIsValidInSetPasses ()
 	{
 		$this -> object -> setData (4);
 		$this -> assertTrue ($this -> object -> isValid ());
 	}
 	
+	/**
+	 * Test floats can be set members
+	 */
+	public function testIsValidInSetPasses2 ()
+	{
+		$this -> object -> setData (pi ());
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test strings can be set members
+	 */
+	public function testIsValidInSetPasses3 ()
+	{
+		$this -> object -> setData ('test');
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test arrays can be set members
+	 */
+	public function testIsValidInSetPasses4 ()
+	{
+		$this -> object -> setData (array ('foo', 'bar'));
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test that references to the same object pass as valid
+	 */
+	public function testIsValidInSetPasses5 () {
+		$member		= new \stdClass;
+		$reference	= $member;
+		
+		$this -> object -> setConfig (array ('set' => array ($member)));
+		$this -> object -> setData ($reference);
+		
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test positive booleans can be set members
+	 */
+	public function testIsValidInSetPasses6 ()
+	{
+		$this -> object -> setData (true);
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test negative booleans can be set members
+	 */
+	public function testIsValidInSetPasses7 ()
+	{
+		$this -> object -> setData (false);
+		$this -> assertTrue ($this -> object -> isValid ());
+	}
+
+	/**
+	 * Test that a value not in the set doesn't validate
+	 */
 	public function testIsValisNotInSetFails ()
 	{
 		$this -> object -> setData (3);
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	/**
+	 * Test that ian identical but distinct object to one in the set is not validated as a set member
+	 */
+	public function testIsValidInSetFails2 () {
+		$member	= new \stdClass;
+		$nonMember = clone ($member);
+		
+		$this -> object -> setConfig (array ('set' => array ($member)));
+		$this -> object -> setData ($nonMember);
+		
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidInSetFails3 () {
+		$this -> object -> setConfig (array ('set' => array (0, 1, 2, 3)));
+		$this -> object -> setData (true);
+		$this -> assertFalse ($this -> object -> isValid ());
+	}
+	
+	public function testIsValidInSetFails4 () {
+		$this -> object -> setConfig (array ('set' => array (0, 1, 2, 3)));
+		$this -> object -> setData (false);
 		$this -> assertFalse ($this -> object -> isValid ());
 	}
 }

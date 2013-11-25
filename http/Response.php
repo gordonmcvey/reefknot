@@ -17,78 +17,76 @@ namespace gordian\reefknot\http;
  */
 class Response implements iface\Response
 {
-	private 
-		$statusMessages	= array (
-			self::INF_CONTINUE			=> 'Continue',
-			self::INF_SWITCHING			=> 'Switching Protocols',
-			self::SUC_OK				=> 'OK',
-			self::SUC_CREATED			=> 'Created',
-			self::SUC_ACCEPTED			=> 'Accepted',
-			self::SUC_NON_AUTH			=> 'Non-Authoritative Information',
-			self::SUC_NO_CONTENT		=> 'No Content',
-			self::SUC_RESET_CONTENT		=> 'Reset Content',
-			self::SUC_PARTIAL			=> 'Partial Content',
-			self::RDR_MULTIPLE			=> 'Multiple Choices',
-			self::RDR_PERMANENT			=> 'Moved Permanently',
-			self::RDR_FOUND				=> 'Found',
-			self::RDR_SEEOTHER			=> 'See Other',
-			self::RDR_NOTMODDED			=> 'Not Modified',
-			self::RDR_PROXY				=> 'Use Proxy',
-			self::RDR_RESERVED			=> 'unused',
-			self::RDR_TEMPORARY			=> 'Temporary Redirect',
-			self::ERR_C_BADREQ			=> 'Bad Request',
-			self::ERR_C_UNAUTHED		=> 'Unauthorized',
-			self::ERR_C_PAYREQ			=> 'Payment Required',
-			self::ERR_C_FORBIDDEN		=> 'Forbidden',
-			self::ERR_C_NOTFOUND		=> 'Not Found',
-			self::ERR_C_METHOD			=> 'Method Not Allowed',
-			self::ERR_C_UNACCEPTABLE	=> 'Not Acceptable',
-			self::ERR_C_AUTH_PROXY		=> 'Proxy Authentication Required',
-			self::ERR_C_TIMEOUT			=> 'Request Timeout',
-			self::ERR_C_CONFLICT		=> 'Conflict',
-			self::ERR_C_GONE			=> 'Gone',
-			self::ERR_C_NOLENGTH		=> 'Length Required',
-			self::ERR_C_PRECONDITION	=> 'Precondition Failed',
-			self::ERR_C_TOOLARGE		=> 'Request Entity Too Large',
-			self::ERR_C_URILONG			=> 'Request-URI Too Long',
-			self::ERR_C_MEDIATYPE		=> 'Unsupported Media Type',
-			self::ERR_C_RANGE			=> 'Requested Range Not Satisfiable',
-			self::ERR_C_EXPECTATION		=> 'Expectation Failed',
-			self::ERR_S_INTERNAL		=> 'Internal Server Error',
-			self::ERR_S_UNIMPLEMENTED	=> 'Not Implemented',
-			self::ERR_S_GATEWAY			=> 'Bad Gateway',
-			self::ERR_S_UNAVAILABLE		=> 'Service Unavailable',
-			self::ERR_S_TIMEOUT			=> 'Gateway Timeout',
-			self::ERR_S_VERSION			=> 'Version Not Supported'
-		),
+	private	$statusMessages	= array (
+		self::INF_CONTINUE			=> 'Continue',
+		self::INF_SWITCHING			=> 'Switching Protocols',
+		self::SUC_OK				=> 'OK',
+		self::SUC_CREATED			=> 'Created',
+		self::SUC_ACCEPTED			=> 'Accepted',
+		self::SUC_NON_AUTH			=> 'Non-Authoritative Information',
+		self::SUC_NO_CONTENT		=> 'No Content',
+		self::SUC_RESET_CONTENT		=> 'Reset Content',
+		self::SUC_PARTIAL			=> 'Partial Content',
+		self::RDR_MULTIPLE			=> 'Multiple Choices',
+		self::RDR_PERMANENT			=> 'Moved Permanently',
+		self::RDR_FOUND				=> 'Found',
+		self::RDR_SEEOTHER			=> 'See Other',
+		self::RDR_NOTMODDED			=> 'Not Modified',
+		self::RDR_PROXY				=> 'Use Proxy',
+		self::RDR_RESERVED			=> 'unused',
+		self::RDR_TEMPORARY			=> 'Temporary Redirect',
+		self::ERR_C_BADREQ			=> 'Bad Request',
+		self::ERR_C_UNAUTHED		=> 'Unauthorized',
+		self::ERR_C_PAYREQ			=> 'Payment Required',
+		self::ERR_C_FORBIDDEN		=> 'Forbidden',
+		self::ERR_C_NOTFOUND		=> 'Not Found',
+		self::ERR_C_METHOD			=> 'Method Not Allowed',
+		self::ERR_C_UNACCEPTABLE	=> 'Not Acceptable',
+		self::ERR_C_AUTH_PROXY		=> 'Proxy Authentication Required',
+		self::ERR_C_TIMEOUT			=> 'Request Timeout',
+		self::ERR_C_CONFLICT		=> 'Conflict',
+		self::ERR_C_GONE			=> 'Gone',
+		self::ERR_C_NOLENGTH		=> 'Length Required',
+		self::ERR_C_PRECONDITION	=> 'Precondition Failed',
+		self::ERR_C_TOOLARGE		=> 'Request Entity Too Large',
+		self::ERR_C_URILONG			=> 'Request-URI Too Long',
+		self::ERR_C_MEDIATYPE		=> 'Unsupported Media Type',
+		self::ERR_C_RANGE			=> 'Requested Range Not Satisfiable',
+		self::ERR_C_EXPECTATION		=> 'Expectation Failed',
+		self::ERR_S_INTERNAL		=> 'Internal Server Error',
+		self::ERR_S_UNIMPLEMENTED	=> 'Not Implemented',
+		self::ERR_S_GATEWAY			=> 'Bad Gateway',
+		self::ERR_S_UNAVAILABLE		=> 'Service Unavailable',
+		self::ERR_S_TIMEOUT			=> 'Gateway Timeout',
+		self::ERR_S_VERSION			=> 'Version Not Supported'
+	);
 		
-		/**
-		 * HTTP response status
-		 * 
-		 * The HTTP response status code (200 for OK, 404 for not found, etc)
-		 * 
-		 * @var int
-		 */
-		$status		= self::ERR_S_INTERNAL,
+	/**
+	 * HTTP response status
+	 *
+	 * The HTTP response status code (200 for OK, 404 for not found, etc)
+	 *
+	 * @var int
+	 */
+	private	$status			= self::ERR_S_INTERNAL;
 	
-		/**
-		 * HTTP headers to be sent with this response
-		 * 
-		 * The headers are encoded as an associative array, with the key 
-		 * defining the header key (the text to the left of the : character) and 
-		 * the value defining the header value (the text to the right of the 
-		 * : character)
-		 * 
-		 * @var array 
-		 */
-		$headers	= array (),
-		
-		/**
-		 * Body of the response to be sent
-		 * 
-		 * @var mixed 
-		 */
-		$body		= NULL;
+	/**
+	 * HTTP headers to be sent with this response
+	 *
+	 * The headers are encoded as an associative array, with the key defining
+	 * the header key (the text to the left of the : character) and the value
+	 * defining the header value (the text to the right of the : character)
+	 *
+	 * @var array
+	 */
+	private	$headers		= array ();
+
+	/**
+	 * Body of the response to be sent
+	 *
+	 * @var mixed
+	 */
+	private $body			= NULL;
 	
 	/**
 	 * Determine if the given code is a valid HTTP status code

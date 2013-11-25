@@ -13,13 +13,12 @@ namespace gordian\reefknot\autoload\iface;
  * 
  * This interface defines a standardized Reefknot autoloading API.  Autoloaders
  * in Reefknot utilize the SPL autoloading functionality and therefore multiple 
- * autoloaders can be stacned up, and are intended to be well behaved so they
+ * autoloaders can be stacked up, and are intended to be well behaved so they
  * can be used alongside other similarly designed autoloading systems.  
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Autoload
- * @subpackage Interfaces
+ * @package gordian\reefknot\autoload\iface
  */
 interface Autoloader
 {
@@ -33,7 +32,7 @@ interface Autoloader
 	 * of the autoload queue.  
 	 * 
 	 * @param boolean $push Whether or not to push the autoloader to the start of the autoload queue
-	 * @return \gordian\reefknot\autoload\iface\Autoloader
+	 * @return $this
 	 * @throws \RuntimeException Thrown if registration failed
 	 */
 	public function register ($push);
@@ -43,9 +42,9 @@ interface Autoloader
 	 * 
 	 * Autoloaders implementing this interface can be removed from the autoload
 	 * queue by calling this method.  When called, the autoloader is expected 
-	 * to remove itsels from the autolaod queue
+	 * to remove itself from the autolaod queue
 	 * 
-	 * @return \gordian\reefknot\autoload\iface\Autoloader
+	 * @return $this
 	 * @throws \RuntimeException Thrown if registration failed
 	 */
 	public function unregister ();
@@ -70,11 +69,11 @@ interface Autoloader
 	 * 
 	 * Enabling/disabling is different from registering/unregistering, as there
 	 * should be no change in the calling order of autoload methods if enable
-	 * or disable is used.  As unregistering removes an autoloader from the 
+	 * or disable is used.  As unregistering removes an autoloader from the
 	 * queue entirely, using register and unregister can change the order in 
 	 * which autoloaders are executed.  
 	 * 
-	 * @return \gordian\reefknot\autoload\iface\Autoloader
+	 * @return $this
 	 */
 	public function enable ();
 	
@@ -91,7 +90,7 @@ interface Autoloader
 	 * queue entirely, using register and unregister can change the order in 
 	 * which autoloaders are executed.  
 	 * 
-	 * @return \gordian\reefknot\autoload\iface\Autoloader
+	 * @return $this
 	 */
 	public function disable ();
 	
@@ -101,17 +100,4 @@ interface Autoloader
 	 * @return boolean
 	 */
 	public function isEnabled ();
-	
-	/**
-	 * Set up autoloader
-	 * 
-	 * @param string $path The root path for classes
-	 * @param string $namespace The root namespace that the autoloader will attempt to autoload for
-	 * @param string $seperator The namespace seperator character
-	 * @param string $suffix The class filename suffix
-	 */
-	public function __construct (	$path, 
-									$namespace, 
-									$seperator, 
-									$suffix);
 }

@@ -17,8 +17,7 @@ use
  * 
  * @author Gordon McVey
  * @category Reefknot
- * @package Validate
- * @subpackage Prop
+ * @package gordian\reefknot\input\validate\prop
  */
 class RequiredOnCallback extends Required
 {
