@@ -1,0 +1,16 @@
+{
+    "name": "vendor/reefknot",
+    "description": "Description of project Reefknot.",
+    "authors": [
+        {
+            "name": "gordonmcvey",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+
+    },
+    "require-dev": {
+        "mikey179/vfsStream": "dev-master"
+    }
+}
