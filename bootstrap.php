@@ -55,8 +55,5 @@ defined (NS_FW . '\PATH_FW')
 
 // Bring all the infrastructure required for autoloading in (except for a class
 // map implementation)
-require	(PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoloader.php');
-require	(PATH_FW . DS . 'autoload' . DS . 'classmap' . DS . 'iface' . DS . 'ClassMap.php');
-require	(PATH_FW . DS . 'autoload' . DS . 'classmap' . DS . 'abstr' . DS . 'ClassMap.php');
-require	(PATH_FW . DS . 'autoload' . DS . 'Autoloader.php');
-require	(PATH_FW . DS . 'autoload' . DS . 'MappedAutoloader.php');
+require (PATH_FW . DS . 'autoload' . DS . 'iface' . DS . 'Autoloader.php');
+require (PATH_FW . DS . 'autoload' . DS . 'Autoloader.php');
