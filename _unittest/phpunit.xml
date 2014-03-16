@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<phpunit
-	bootstrap="./bootstrap.php" 
-	colors="false"
-/>
+<phpunit bootstrap="./bootstrap.php" colors="true">
+	<filter>
+		<blacklist>
+			<directory suffix=".php">../vendor</directory>
+			<file>../bootstrap.php</file>
+		</blacklist>
+	</filter>
+</phpunit>
