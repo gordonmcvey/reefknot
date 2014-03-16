@@ -8,8 +8,7 @@
 
 namespace gordian\reefknot\autoload\classmap\abstr;
 
-use gordian\reefknot as rf,
-	gordian\reefknot\autoload\classmap\iface;
+use gordian\reefknot\autoload\classmap\iface;
 
 /**
  * Class FileClassMap
@@ -21,6 +20,8 @@ use gordian\reefknot as rf,
  */
 abstract class FileClassMap extends ClassMap implements iface\FileClassMap
 {
+	const FILE_DATE_FORMAT	= "c";
+
 	/**
 	 * The absolute path to the file to use for the class map
 	 *
@@ -46,6 +47,8 @@ abstract class FileClassMap extends ClassMap implements iface\FileClassMap
 	}
 
 	/**
+	 * Set the path to the resource that will be used for classmap data
+	 * 
 	 * @param string $fileName
 	 * @return $this
 	 * @throws \InvalidArgumentException
@@ -92,36 +95,26 @@ abstract class FileClassMap extends ClassMap implements iface\FileClassMap
 	/**
 	 * Load the raw data for the class map
 	 *
-	 * It's up to the subclass to implement a decoding strategy for the raw data
+	 * This is a simple helper method for subclasses that loads the content of 
+	 * the specified classmap file without attempting to parse it.  It's up to 
+	 * the subclass to implement a decoding strategy for the raw data
 	 *
 	 * @return string The raw data from the file
 	 * @throws \RuntimeException
 	 */
 	protected function loadRaw () {
 		$fileName	= $this -> getFileName ();
-
+		
+		if (!$fileName) {
+			throw new \RuntimeException ("No class map file specified");
+		}
+		
 		if (false === ($raw = file_get_contents ($fileName))) {
 			throw new \RuntimeException ("Failed to load class map file '$fileName'");
 		}
 
 		return $raw;
 	}
-
-	/**
-	 * Load the class map
-	 *
-	 * @return $this
-	 * @throws \RuntimeException
-	 */
-	abstract protected function load ();
-
-	/**
-	 * Save the class map
-	 *
-	 * @return $this
-	 * @throws /RuntimeException
-	 */
-	abstract protected function save ();
 
 	/**
 	 * Validate the given path
@@ -139,20 +132,11 @@ abstract class FileClassMap extends ClassMap implements iface\FileClassMap
 		$validatedPath	= NULL;
 
 		if (!empty ($unvalidatedPath)) {
-			// If the file already exists and is writable then return its path
-			if (($fullPath = realpath ($unvalidatedPath))
-			&& (is_file ($fullPath))
-			&& (is_writable ($fullPath))) {
-				$validatedPath	= $fullPath;
-			} else
-			// If the file isn't valid, but its parent directory exists, is
-			// writable and doesn't contain an invalid file of the given name
-			// then return the file's path with the filename appended.
-			if ((!$fullPath)
-			&& ($dirPath = realpath (dirname ($unvalidatedPath)))
-			&& (is_dir ($dirPath))
-			&& (is_writable ($dirPath))) {
-				$validatedPath	= $dirPath . rf\DS . basename ($unvalidatedPath);
+			$unvalidatedPath	= $this -> getCanonicalPath ($unvalidatedPath);
+			if (($this -> isFileAvailable ($unvalidatedPath)) 
+				|| ((!file_exists ($unvalidatedPath)) 
+					&& ($this -> isDirectoryAvailable (dirname ($unvalidatedPath))))) {
+				$validatedPath	= $unvalidatedPath;
 			}
 		}
 
@@ -160,7 +144,53 @@ abstract class FileClassMap extends ClassMap implements iface\FileClassMap
 	}
 
 	/**
-	 * Do automatic autosave on shutdown if it's enabled
+	 * Attempt to normalise the given path to a canonical one
+	 * 
+	 * This methos tries to get a canonical path for the given one.  If it can't
+	 * then it returns the original path.  
+	 * 
+	 * We want canonical paths when saving classmaps, but we can't get one for 
+	 * items accessed through a file wrapper so we'll just leave it as is if we
+	 * can't normalise it.  
+	 * 
+	 * @param string $rawPath
+	 * @return string
+	 */
+	private function getCanonicalPath ($rawPath) {
+		$canonicalPath	= realpath ($rawPath);
+		if (false === $canonicalPath) {
+			$canonicalPath	= $rawPath;
+		}
+
+		return $canonicalPath;
+	}
+	
+	/**
+	 * Check that the given filename exists and is writable
+	 * 
+	 * @param string $path
+	 * @return boolean
+	 */
+	private function isFileAvailable ($path) {
+		return is_file ($path) 
+			&& is_readable ($path) 
+			&& is_writable ($path);
+	}
+	
+	/**
+	 * Check that the given directory exists and is writable
+	 * 
+	 * @param string $path
+	 * @return boolean
+	 */
+	private function isDirectoryAvailable ($path) {
+		return is_dir ($path) 
+			&& is_readable ($path) 
+			&& is_writable ($path);
+	}
+	
+	/**
+	 * Do automatic save on shutdown if it's enabled
 	 */
 	public function __destruct () {
 		if ($this -> autoSave) {
@@ -168,8 +198,7 @@ abstract class FileClassMap extends ClassMap implements iface\FileClassMap
 				$this -> save ();
 			} catch (\Exception $e) {
 				// You can't allow exceptions to propagate from destructors
-				error_log ($e -> getMessage ());
-				error_log ($e -> getTraceAsString ());
+				error_log ((string) $e);
 			}
 		}
 	}

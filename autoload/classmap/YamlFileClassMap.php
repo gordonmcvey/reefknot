@@ -17,13 +17,19 @@ namespace gordian\reefknot\autoload\classmap;
  */
 class YamlFileClassMap extends abstr\FileClassMap {
 
-	protected function load()
+	public function load ()
 	{
 		// TODO: Implement load() method.
 	}
 
-	protected function save()
+	public function save ()
 	{
 		// TODO: Implement save() method.
+	}
+
+	public function __construct () {
+		if (!extension_loaded ('yaml')) {
+			throw new \RuntimeException ("This class requires the YAML extension");
+		}
 	}
 }

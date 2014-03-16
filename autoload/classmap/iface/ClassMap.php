@@ -29,7 +29,7 @@ interface ClassMap {
 	 * @param string $class
 	 * @return string
 	 */
-	public function getPath ($class);
+	public function getMapping ($class);
 
 	/**
 	 * Add a path to the class map
@@ -38,7 +38,7 @@ interface ClassMap {
 	 * @param string $path The path to map the resource to
 	 * @return ClassMap
 	 */
-	public function addPath ($class, $path);
+	public function addMapping ($class, $path);
 
 	/**
 	 * Remote the specified class map entry
@@ -46,7 +46,7 @@ interface ClassMap {
 	 * @param string $class
 	 * @return ClassMap
 	 */
-	public function removePath ($class);
+	public function removeMapping ($class);
 
 	/**
 	 * Get all mappings currently in the class map

@@ -17,12 +17,12 @@ namespace gordian\reefknot\autoload\classmap;
  */
 class XmlFileClassMap extends abstr\FileClassMap {
 
-	protected function load ()
+	public function load ()
 	{
 		// TODO: Implement load() method.
 	}
 
-	protected function save ()
+	public function save ()
 	{
 		// TODO: Implement save() method.
 	}

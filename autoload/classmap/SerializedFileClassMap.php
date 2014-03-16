@@ -18,7 +18,7 @@ class SerializedFileClassMap extends abstr\FileClassMap {
 	 * @return $this
 	 * @throws \RuntimeException
 	 */
-	protected function load ()
+	public function load ()
 	{
 		if (false === ($parsed = @unserialize ($this -> loadRaw()))) {
 			throw new \RuntimeException ("Failed to parse class map file {$this -> getFileName ()}");
@@ -31,7 +31,7 @@ class SerializedFileClassMap extends abstr\FileClassMap {
 	 * @return $this
 	 * @throws \RuntimeException
 	 */
-	protected function save ()
+	public function save ()
 	{
 		$fileName	= $this -> getFileName ();
 

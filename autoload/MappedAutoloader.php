@@ -119,13 +119,13 @@ class MappedAutoloader extends Autoloader
 	 */
 	protected function calculatePath ($name)
 	{
-		if (is_null ($path = $this -> classMap -> getPath ($name)))
+		if (is_null ($path = $this -> classMap -> getMapping ($name)))
 		{
 			// The class isn't in the map so fall back to the normal resolution method
 			$path	= parent::calculatePath ($name);
 			if ($this -> isAutoPopulateEnabled ())
 			{
-				$this -> classMap -> addPath ($name, $path);
+				$this -> classMap -> addMapping ($name, $path);
 			}
 		}
 		

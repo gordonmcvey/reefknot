@@ -44,4 +44,20 @@ interface FileClassMap extends ClassMap {
 	 * @return $this
 	 */
 	public function disableAutoSave ();
-} 
+
+	/**
+	 * Load the class map file
+	 *
+	 * @return $this
+	 * @throws \RuntimeException
+	 */
+	public function load ();
+
+	/**
+	 * Save the class map file
+	 *
+	 * @return $this
+	 * @throws \RuntimeException
+	 */
+	public function save ();
+}

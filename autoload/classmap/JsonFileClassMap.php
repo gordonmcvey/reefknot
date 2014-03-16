@@ -18,7 +18,7 @@ class JsonFileClassMap extends abstr\FileClassMap {
 	 * @return ArrayClassMap
 	 * @throws \RuntimeException
 	 */
-	protected function load ()
+	public function load ()
 	{
 		if (NULL === ($parsed = json_decode ($this -> loadRaw (), true))) {
 			throw new \RuntimeException ("Failed to parse class map file {$this -> getFileName ()}");
@@ -27,8 +27,18 @@ class JsonFileClassMap extends abstr\FileClassMap {
 		return $this -> populate ($parsed);
 	}
 
-	protected function save()
+	/**
+	 * @return $this
+	 * @throws \RuntimeException
+	 */
+	public function save ()
 	{
-		// TODO: Implement save() method.
+		$fileName	= $this -> getFileName ();
+
+		if (false === file_put_contents ($fileName, json_encode ($this -> getAll ()), LOCK_EX)) {
+			throw new \RuntimeException ("Failed to write class map file $fileName");
+		}
+
+		return $this;
 	}
 }

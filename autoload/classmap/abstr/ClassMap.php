@@ -37,7 +37,7 @@ abstract class ClassMap implements iface\ClassMap {
 	 * @param string $class
 	 * @return string
 	 */
-	public function getPath ($class)
+	public function getMapping ($class)
 	{
 		return isset ($this -> classMap [$class])?
 			$this -> classMap [$class]:
@@ -46,14 +46,17 @@ abstract class ClassMap implements iface\ClassMap {
 
 	/**
 	 * Add a path for the specified class/interface/trait
-	 *
+	 * 
+	 * If you add a class/path mapping that already exists, the old value will
+	 * be overwritten
+	 * 
 	 * @param string $class
 	 * @param string $path
-	 * @return \gordian\reefknot\autoload\classmap\ArrayClassMap
+	 * @return $this
 	 */
-	public function addPath ($class, $path)
+	public function addMapping ($class, $path)
 	{
-		$this -> classMap [$class]	= $path;
+		$this -> classMap [(string) $class]	= (string) $path;
 		return $this;
 	}
 
@@ -62,9 +65,9 @@ abstract class ClassMap implements iface\ClassMap {
 	 *
 	 *
 	 * @param string $class
-	 * @return \gordian\reefknot\autoload\classmap\ArrayClassMap
+	 * @return $this
 	 */
-	public function removePath ($class)
+	public function removeMapping ($class)
 	{
 		if (isset ($this -> classMap [$class])) {
 			unset ($this -> classMap [$class]);
@@ -76,7 +79,7 @@ abstract class ClassMap implements iface\ClassMap {
 	/**
 	 * Remove all entries from the class map
 	 *
-	 * @return \gordian\reefknot\autoload\classmap\ArrayClassMap
+	 * @return $this
 	 */
 	public function reset ()
 	{
@@ -92,7 +95,7 @@ abstract class ClassMap implements iface\ClassMap {
 	 * namespaced resource name, and the value is the path to that resource.
 	 *
 	 * @param array $classMap Associative array to use as data to populate the class map
-	 * @return \gordian\reefknot\autoload\classmap\ArrayClassMap
+	 * @return $this
 	 */
 	protected function populate (array $classMap)
 	{
