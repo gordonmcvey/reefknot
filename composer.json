@@ -1,10 +1,10 @@
 {
-    "name": "vendor/reefknot",
-    "description": "Description of project Reefknot.",
+    "name": "gordian/reefknot",
+    "description": "Reefknot framework for PHP",
     "authors": [
         {
-            "name": "gordonmcvey",
-            "email": "your@email.here"
+            "name": "Gordon McVey",
+            "email": "grj.mcvey@gmail.com"
         }
     ],
     "require": {
