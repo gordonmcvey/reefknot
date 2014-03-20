@@ -20,10 +20,30 @@ class SerializedFileClassMap extends abstr\FileClassMap {
 	 */
 	public function load ()
 	{
-		if (false === ($parsed = @unserialize ($this -> loadRaw()))) {
-			throw new \RuntimeException ("Failed to parse class map file {$this -> getFileName ()}");
-		}
+		$raw	= $this -> loadRaw ();
+		if ('' !== $raw)
+		{
+			// Disable warning level messages while reading the ini file
+			$prevLevel	= error_reporting ();
+			error_reporting ($prevLevel & (~E_NOTICE));
 
+			// Parse loaded file
+			$parsed	= unserialize ($raw);
+
+			// Restore previous error_reporting mode
+			error_reporting ($prevLevel);
+
+			if (FALSE === $parsed)
+			{
+				$lastErr	= error_get_last ();
+				throw new \RuntimeException ("Failed to parse class map file '{$this -> getFileName ()}'. Error message: '$lastErr[message]'");
+			}
+		}
+		else
+		{
+			$parsed	= [];
+		}
+		
 		return $this -> populate ($parsed);
 	}
 
@@ -33,12 +53,6 @@ class SerializedFileClassMap extends abstr\FileClassMap {
 	 */
 	public function save ()
 	{
-		$fileName	= $this -> getFileName ();
-
-		if (false === file_put_contents ($fileName, serialize ($this -> getAll ()), LOCK_EX)) {
-			throw new \RuntimeException ("Failed to write class map file $fileName");
-		}
-
-		return $this;
+		return $this -> saveRaw (serialize ($this -> getAll ()));
 	}
 }

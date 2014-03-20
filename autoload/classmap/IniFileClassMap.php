@@ -19,9 +19,7 @@ namespace gordian\reefknot\autoload\classmap;
 class IniFileClassMap extends abstr\FileClassMap {
 
 	const FILE_HEADER	= "; Reefknot class map INI file\n; Generated on: ";
-	
-	private $exLock		= true;
-	
+		
 	/**
 	 * Load class map from an .ini file
 	 * 
@@ -30,22 +28,24 @@ class IniFileClassMap extends abstr\FileClassMap {
 	 */
 	public function load ()
 	{
-		$fileName	= $this -> getFileName ();
-		
 		// Disable warning level messages while reading the ini file
-		$currentLevel	= error_reporting ();		
-		error_reporting ($currentLevel ^ E_WARNING);
+		$prevLevel	= error_reporting ();
+		error_reporting ($prevLevel & (~E_WARNING));
 		
-		// Load file
-		$failed	= false === ($classMap = parse_ini_file ($fileName));
+		try {
+			// Parse loaded file
+			$classMap	= parse_ini_string ($this -> loadRaw ());
+		} finally {
+			// Restore previous error_reporting mode
+			error_reporting ($prevLevel);
+		}
 		
-		// Restore previous error_reporting mode
-		error_reporting ($currentLevel);
-		if ($failed) {
+		if ((is_null ($classMap)) || (false === $classMap)) {
 			$lastErr	= error_get_last ();
+			$fileName	= $this -> getFileName ();
 			throw new \RuntimeException ("Failed to parse class map file $fileName. Error message: '$lastErr[message]'");
 		}
-
+		
 		return $this -> populate ($classMap);
 	}
 
@@ -57,34 +57,7 @@ class IniFileClassMap extends abstr\FileClassMap {
 	 */
 	public function save ()
 	{
-		$fileName	= $this -> getFileName ();
-		
-		// Disable warning level messages while reading the ini file
-		$currentLevel	= error_reporting ();		
-		error_reporting ($currentLevel ^ E_WARNING);
-		
-		// Load file
-		$failed	= false === file_put_contents ($fileName, $this -> buildIniFileData (), ($this -> exLock? LOCK_EX: 0));
-		
-		// Restore previous error_reporting mode
-		error_reporting ($currentLevel);
-
-		if ($failed) {
-			$lastErr	= error_get_last ();
-			throw new \RuntimeException ("Failed to write class map file $fileName. Error message: '$lastErr[message]'");
-		}
-
-		return $this;
-	}
-	
-	public function disableTest () {
-		$this -> exLock	= TRUE;
-		return $this;
-	}
-	
-	public function enableTest () {
-		$this -> exLock	= FALSE;
-		return $this;
+		return $this -> saveRaw ($this -> buildIniFileData ());
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-<?php
+<?php // @codeCoverageIgnoreStart
 /**
  * Reefknot framework
  * 

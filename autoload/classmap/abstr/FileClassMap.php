@@ -102,20 +102,62 @@ abstract class FileClassMap extends ClassMap implements iface\FileClassMap
 	 * @return string The raw data from the file
 	 * @throws \RuntimeException
 	 */
-	protected function loadRaw () {
+	protected function loadRaw ()
+	{
 		$fileName	= $this -> getFileName ();
 		
-		if (!$fileName) {
+		if (!$fileName)
+		{
 			throw new \RuntimeException ("No class map file specified");
 		}
 		
-		if (false === ($raw = file_get_contents ($fileName))) {
-			throw new \RuntimeException ("Failed to load class map file '$fileName'");
+		// Disable warning level messages while reading the file
+		$prevLevel	= error_reporting ();
+		error_reporting ($prevLevel & (~E_WARNING));
+		
+		// Attempt to load file
+		$raw = file_get_contents ($fileName);
+		
+		// Restore previous error_reporting level
+		error_reporting ($prevLevel);
+		
+		// Check if we were successful
+		if (false === ($raw))
+		{
+			$lastErr	= error_get_last ();
+			throw new \RuntimeException ("Failed to load class map file '$fileName'. Error message: '$lastErr[message]'");
 		}
 
 		return $raw;
 	}
+	
+	/**
+	 * Save class map as an .ini file
+	 * 
+	 * @return $this
+	 * @throws \RuntimeException
+	 */
+	protected function saveRaw ($raw) {
+		$fileName	= $this -> getFileName ();
+		
+		// Disable warning level messages while writing the file
+		$prevLevel	= error_reporting ();
+		error_reporting ($prevLevel & (~E_WARNING));
+		
+		// Save file
+		$written	= file_put_contents ($fileName, $raw, (LOCK_EX));
+		
+		// Restore previous error_reporting mode
+		error_reporting ($prevLevel);
 
+		if (false === $written) {
+			$lastErr	= error_get_last ();
+			throw new \RuntimeException ("Failed to write class map file $fileName. Error message: '$lastErr[message]'");
+		}
+
+		return $this;
+	}
+	
 	/**
 	 * Validate the given path
 	 *
